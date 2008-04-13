@@ -1,0 +1,58 @@
+# 
+# Purpose: build libcellsgtk.so
+#
+#  NOTE THAT THERE IS A libcellsgtk.dll FOR WIN32 AT: 
+#   ftp://common-lisp.net/pub/project/cells-gtk/libcellsgtk.dll
+#  If you try it, I'd be interested to know if you have problems due to 
+#  version mismatch with your GTK+ installation
+#
+#  You don't need libCellsGtk.so to run the demo, but you will to:
+#   - add an entry text widget to a dialog
+#   - add menu items using populate-popup (see GTK textview).
+#   - Use a TreeModel (hierarchical arrangment of items) in a ComboBox.
+#   - Use GTK text iters (used for marking text in text-buffers). 
+#   - Use the drawing function: setting colors, getting the window of a widget
+#
+#  As of this writing, those are the only situations where it is needed. 
+#  But this list is getting longer with each release.
+#  See FAQ.txt for more of the motivation.
+#
+#  I build libcellsgtk.dll under cygwin. I use the win32 development directories from the site
+#  ftp://ftp.gtk.org/pub/gtk/v2.8/win32 and also ftp://ftp.gtk.org/pub/gtk/v2.8/dependencies
+#  I tried also the gtk-devel stuff you can get directly 
+#  with cygwin setup.exe, but it doesn't seem to have everything you need. When you get it all
+#  downloaded, modify the '.pc' files in   /local/win32/gtk/lib/pkgconfig so that prefix=
+#  is set to wherever you placed the stuff.
+#  Here is a list of the pc (package config) files....
+# 
+#  -rwx------  1 pdenno users  267 2005-11-13 15:02 atk.pc
+#  -rwx------  1 pdenno users  267 2005-11-13 15:02 cairo.pc
+#  -rwx------  1 pdenno users  336 2005-11-13 15:03 gdk-2.0.pc
+#  -rwx------  1 pdenno users  287 2005-11-13 15:03 gdk-pixbuf-2.0.pc
+#  -rwx------  1 pdenno users  336 2005-11-13 15:03 gdk-win32-2.0.pc
+#  -rwx------  1 pdenno users  355 2005-11-13 15:03 glib-2.0.pc
+#  -rwx------  1 pdenno users  260 2005-11-13 15:04 gmodule-2.0.pc
+#  -rwx------  1 pdenno users  259 2005-11-13 15:04 gmodule-no-export-2.0.pc
+#  -rwx------  1 pdenno users  251 2005-11-13 15:04 gobject-2.0.pc
+#  -rwx------  1 pdenno users  229 2005-11-13 15:05 gthread-2.0.pc
+#  -rwx------  1 pdenno users  362 2005-11-13 15:05 gtk+-2.0.pc
+#  -rwx------  1 pdenno users  362 2005-11-13 15:05 gtk+-win32-2.0.pc
+#  -rwx------  1 pdenno users  229 2005-11-13 15:07 libpng.pc
+#  -rwx------  1 pdenno users  229 2005-11-13 14:20 libpng12.pc
+#  -rwx------  1 pdenno users  229 2005-11-13 14:20 libpng13.pc
+#  -rwx------  1 pdenno users  322 2005-11-13 15:07 pango.pc
+#  -rwx------  1 pdenno users  315 2005-11-13 15:07 pangocairo.pc
+#  -rwx------  1 pdenno users  403 2005-11-13 15:08 pangoft2.pc
+#  -rwx------  1 pdenno users  276 2005-11-13 15:08 pangowin32.pc
+#
+#  ...and where is what the first line of one looks like on my machine: 
+#  prefix=/local/win32/gtk 
+#  Some like libpng have prefix=/usr ... because that is where it is (cygwin default).
+#
+#  Once built, place the library in the directory containing libgtk.
+
+all:
+	gcc -mno-cygwin -c gtk-adds.c `pkg-config --cflags --libs gtk+-2.0`
+	dlltool -e exports.o -z cellsgtk.def -l cellsgtk.lib gtk-adds.o
+	gcc -mno-cygwin -mwindows -mdll -L/usr/lib/mingw gtk-adds.o exports.o -o libcellsgtk.dll `pkg-config --cflags --libs gtk+-2.0` -specs=specs.new
+

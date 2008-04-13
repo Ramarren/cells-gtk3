@@ -1,0 +1,46 @@
+
+
+You don't need to read this file if you are installing from a snapshot tarball.
+This only concerns the situation where you get the pieces cells, hello-c, cells-gtk etc, individually.
+
+#############################################################################################################
+The notes below apply to the UFFI port of Cells-gtk done by Ken Tilton. (Actually I have forked UFFI and 
+call it Hello-C, but the idea is the same: portable FFI.)
+
+For the original version by Vasilis Margioulas, which uses native CLisp FFI to
+good advantage, grab this:
+
+ http://common-lisp.net/cgi-bin/viewcvs.cgi/cells-gtk/clisp-cgtk/clisp-cgtk.tar.gz?tarball=1&cvsroot=cells-gtk
+
+...and follow the INSTALL.TXT in that.
+
+##############################################################################################################
+
+Dependencies:
+Utils-kt: http://common-lisp.net/cgi-bin/viewcvs.cgi/cell-cultures/utils-kt/utils-kt.tar.gz?tarball=1&cvsroot=cells
+Hello-C: http://common-lisp.net/cgi-bin/viewcvs.cgi/cell-cultures/hello-c/hello-c.tar.gz?tarball=1&cvsroot=cells
+Cells: http://common-lisp.net/cgi-bin/viewcvs.cgi/cell-cultures/cells/cells.tar.gz?tarball=1&cvsroot=cells
+
+On windows install
+   Gtk: http://prdownloads.sourceforge.net/gimp-win/gtk%2B-2.4.10-20041001-setup.zip?download
+
+Add the gtk libs to your PATH variable:
+
+   Start>Settings>Control Panel>System>Advanced>Environment Variables>
+
+    Then select PATH and hit "Edit". Append to existing value:
+
+        "C:\Program Files\Common Files\GTK\2.0\bin"; ..prior values...
+
+Edit load.lisp and follow the instructions there. No, you cannot just load it.
+
+
+Note: On windows under emacs with slime, the gtk window does not popup. You must start the application from a dos prompt.
+
+Tested on:
+    Windows xp with gtk 2.4.10 and clisp 2.33, using AllegroCL 6.2 Enterprise and Lispworks 4.3 Personal
+
+Known bugs:
+    On Windows: Clisp crash if    
+    [My Computer]-> [Properties]-> [Advanced]-> [Perfomance Settings]-> [Show windows contents while dragging] is set 
+    and resize the window while viewing a listbox or treebox.
