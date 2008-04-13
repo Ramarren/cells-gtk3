@@ -152,6 +152,8 @@
 ;;; Helper functions convering the life cycle of an application
 ;;; 
 
+(defvar *using-thread* 'undecided)
+
 ;;; Initialize GDK
 
 ;;; When we have libcellsgtk, we can use a glib function to check whether
@@ -235,39 +237,38 @@ splash screen, if applicable.  A threadsafe replacement for \"make-be\".  To sim
 (defun main-loop ()
   "Run GTK Main until user signal quit.  Errors are caught and displayed in a dialog, providing the user with the option to \"recklessly continue\" -- not to be called directly"
   (unwind-protect
-       (loop until
-	    (gtk-main)
-	  
-	    #+off-for-now
-	    (restart-case
-		(handler-bind
-		    ((gtk-continuable-error #'(lambda (condition) (invoke-restart  'continue-from-error condition )))
-		     (error #'(lambda (con) (invoke-restart 'report-error con))))
-		  #-lispworks
-		  (gtk-main)
-		  ;; Despite a workaround for Slime (see FAQ), the gtk-main-iteration-do loop, 
-		  ;; still appears to be necessary for LW. Otherwise, LW consumes 99% of CPU.
-		  #+lispworks		; give slime a chance.
-		  (loop 
-		     (loop while (gtk-events-pending) do 
-			  (gtk-main-iteration-do nil))
-		     (process-wait-with-timeout .01 "GTK event loop waiting"))
-		  t)
-	      ;; Restart cases
-	      (continue-from-error (c1)
-		(trc "show message")
-		(show-message (format nil "Cells-GTK Error: ~a" c1)
-			      :message-type :error :title "Cells-GTK Error")
-		(trc "showed the message"))
-	      (report-error (c2)
-		(trc "show error message")
-		(when (eql (show-message (format nil "Lisp Error: ~a~%~%Recklessly continue?" c2)
-					 :message-type :error
-					 :title "Lisp Error"
-					 :buttons-type :yes-no)
-			   :no)
-		  (trc ">>>> ERROR REPORTING -->" c2)
-		  (error c2)))))
+       (if (eql *using-thread* 'yes)
+	   (loop until
+		(restart-case
+		    (handler-bind
+			((gtk-continuable-error #'(lambda (condition) (invoke-restart  'continue-from-error condition )))
+			 (error #'(lambda (con) (invoke-restart 'report-error con))))
+		      #-lispworks
+		      (gtk-main)
+		      ;; Despite a workaround for Slime (see FAQ), the gtk-main-iteration-do loop, 
+		      ;; still appears to be necessary for LW. Otherwise, LW consumes 99% of CPU.
+		      #+lispworks	; give slime a chance.
+		      (loop 
+			 (loop while (gtk-events-pending) do 
+			      (gtk-main-iteration-do nil))
+			 (process-wait-with-timeout .01 "GTK event loop waiting"))
+		      t)
+		  ;; Restart cases
+		  (continue-from-error (c1)
+		    (trc "show message")
+		    (show-message (format nil "Cells-GTK Error: ~a" c1)
+				  :message-type :error :title "Cells-GTK Error")
+		    (trc "showed the message"))
+		  (report-error (c2)
+		    (trc "show error message")
+		    (when (eql (show-message (format nil "Lisp Error: ~a~%~%Recklessly continue?" c2)
+					     :message-type :error
+					     :title "Lisp Error"
+					     :buttons-type :yes-no)
+			       :no)
+		      (trc ">>>> ERROR REPORTING -->" c2)
+		      (error c2)))))
+	   (gtk-main))
 
     ;; clean-up forms  -- application windows are taken down by gtk-quit-add callbacks
     (loop for i below (gtk-main-level)
@@ -285,11 +286,15 @@ splash screen, if applicable.  A threadsafe replacement for \"make-be\".  To sim
   "Start in application within the main thread (only return when application window is closed.
 To run gtk in a background thread, use start-win instead."
   (let ((*gtk-debug* debug))
+    (case *using-thread*
+      ('yes (error "Cannot mix start-win and start-app in one lisp session.  Use start-win or restart lisp"))
+      (t (setf *using-thread* 'no)))
     (with-trcs
       (init-gtk)
       (show-win app-name :terminate-on-close t)
       (when *gtk-debug* (trc nil "STARTING GTK-MAIN") (force-output))
-      (main-loop))))
+      (main-loop)))
+  0)
 
 
 ;;;
@@ -340,6 +345,10 @@ To run gtk in a background thread, use start-win instead."
  (defun start-win (app-class &rest initargs)
    "Starts app-class with initargs in its own thread.  Use :terminate-on-close t to close all other
  windows once this one is closed."
+   (case *using-thread*
+     ('no (error "Cannot mix start-win and start-app in one lisp session.  Use start-app or restart lisp"))
+     (t (setf *using-thread* 'yes)))
    (start-gtk-main)
-   (apply #'show-win app-class initargs)))
+   (apply #'show-win app-class initargs)
+   0))
 

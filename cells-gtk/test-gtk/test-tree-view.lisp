@@ -61,7 +61,7 @@
   '(data (upper self test-tree-view)))
 
 (defmodel test-tree-view (notebook)
-  ((data :accessor data :initform (c-in (make-sample-tree "tree" 1)))
+  ((data :accessor data :initform (c-in (make-sample-tree "tree" 3)))
    (items :accessor items :initarg :items 
 	  :initform (c? (and (value (fm-other :hscale))
 			     (loop for i from 1 to (value (fm-other :hscale)) collect
