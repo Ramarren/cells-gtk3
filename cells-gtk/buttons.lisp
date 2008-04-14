@@ -81,7 +81,7 @@
 
 (def-widget radio-button (check-button)
   () () ()
-  :new-tail (c? (and (upper self box)
+  :new-tail (c_1 (and (upper self box)
 		     (not (eql (first (kids (fm-parent self))) self))
 		     '-from-widget))
 			 

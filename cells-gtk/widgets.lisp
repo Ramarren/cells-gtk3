@@ -24,9 +24,9 @@
    (def-gtk-class-name :accessor def-gtk-class-name :initarg :def-gtk-class-name :initform nil)
    (new-function-name :accessor new-function-name :initarg :new-function-name 
 		      :initform (c_1 (intern (format nil "GTK-~a-NEW~a"
-						    (def-gtk-class-name self)
-						    (or (new-tail self) ""))
-					    :gtk-ffi)))
+						     (def-gtk-class-name self)
+						     (or (new-tail self) ""))
+					     :gtk-ffi)))
    (new-args :accessor new-args :initarg :new-args :initform nil)
    (new-tail :accessor new-tail :initarg :new-tail :initform nil)
    (id :initarg :id :accessor id 
@@ -36,6 +36,7 @@
 		       (let ((id (apply (symbol-function (new-function-name self))
 					(new-args self))))
 			 (gtk-object-store id self)
+			 (gtk-signal-connect-swap id "configure-event" (cffi:get-callback 'reshape-widget-handler) :data id)
 			 id))))
    
    (callbacks :cell nil :accessor callbacks
@@ -47,13 +48,18 @@
 
 ;; --------- provide id-to-clos lookup ------
 
-(defvar *gtk-objects* nil)
+;;;
+;;; gtk object registry
+;;; 
 
+(defvar *gtk-objects* nil)
 (defvar *widgets* nil)
 
 (defun gtk-objects-init ()
   (setf *gtk-objects* (make-hash-table :size 100 :rehash-size 100)
 	*widgets* (make-hash-table :test #'equal)))
+
+;;; id lookup
 
 (defun gtk-object-store (gtk-id gtk-object &aux (hash-id (cffi:pointer-address gtk-id)))
   (unless *gtk-objects*
@@ -88,9 +94,10 @@
         (gtk-report-error gtk-object-id-error "gtk.object.find ID not found ~a" hash-id))         
       clos-widget)))
 
+;;; name lookup
+
 (defun find-widget (name &optional default)
   (gethash name *widgets* default))
-
 
 (defmacro with-widget ((widget name &optional alternative) &body body)
   `(bif (,widget (find-widget ,name))
@@ -104,12 +111,13 @@
 	   (progn ,@body)
 	   ,alternative))))
 
-(defun widget-value (name default &key (accessor 'value))
+(defun widget-value (name &optional default (accessor 'value))
   (with-widget-value (val name :accessor accessor :alternative default)
     val))
 
-
-
+;;;
+;;; callbacks
+;;;
 
 ;; ----- fake callbackable closures ------------
 
@@ -120,8 +128,6 @@
 
 (defun callback-recover (self callback-key)
   (cdr (assoc callback-key (callbacks self))))
-
-; ------------------------------------------
 
 ;;;
 ;;; callback table
@@ -143,7 +149,6 @@
     *gtk-global-callbacks*
     (when n (aref *gtk-global-callbacks* n)))
   (funcall (aref *gtk-global-callbacks* n)))
-
 
 
 (defmethod configure ((self gtk-object) gtk-function value)
@@ -321,14 +326,35 @@
    (x-pad :accessor x-pad :initarg :x-pad :initform (c? (padding? self)))
    (y-pad :accessor y-pad :initarg :y-pad :initform (c? (padding? self)))
    (width :accessor width :initarg :width :initform nil)
-   (height :accessor height :initarg :height :initform nil))
+   (height :accessor height :initarg :height :initform nil)
+   (allocated-width :accessor allocated-width :initform (c-in 0))
+   (allocated-height :accessor allocated-height :initform (c-in 0))
+   )
   ()
   (focus show hide delete-event destroy-event)
   ;; this is called unless the user overwrites this routine
   :on-delete-event (c-in #'(lambda (self widget event data)
 			     (declare (ignore widget event data))
+			     (trc "on-delete")
 			     (gtk-object-forget (id self) self)
 			     0)))
+
+#+libcellsgtk
+(cffi:defcallback reshape-widget-handler :int ((widget :pointer) (event :pointer) (data :pointer))
+  (declare (ignore data event))
+  (bwhen (self (gtk-object-find widget))
+    (let ((new-width (gtk-adds-widget-width widget))
+	  (new-height (gtk-adds-widget-height widget)))
+      (trc "reshape widget to new size" self widget new-width new-height)
+      (with-integrity (:change :adjust-widget-size)
+	(setf (allocated-width self) new-width
+	      (allocated-height self) new-height))))
+  0)
+
+(defmethod initialize-instance :after ((self widget) &rest initargs)
+  (declare (ignore initargs))
+  #+libcellsgtk-
+  )
 
 (defmethod focus ((self widget))
   (gtk-widget-grab-focus (id self)))

@@ -14,7 +14,8 @@ asm (".ascii \" -export:gtk_adds_color_new\"");
 asm (".ascii \" -export:gtk_adds_color_set_rgb\"");
 asm (".ascii \" -export:gtk_adds_ok\"");
 asm (".ascii \" -export:gtk_adds_g_thread_supported\"");
-
+asm (".ascii \" -export:gtk_adds_widget_height\"");
+asm (".ascii \" -export:gtk_adds_widget_width\"");
 /*  Return a pointer to the vbox of a dialog. 
  *  Useful for adding widgets to dialogs. For example,
  *  if you need a dialog with text entry capability. 
@@ -99,5 +100,18 @@ int
 gtk_adds_g_thread_supported ()
 {
   return g_thread_supported ();
+}
+
+/* This is to return the new allocated height/width after the user reshapes a widget */
+int
+gtk_adds_widget_height (GtkWidget *wid)
+{
+  return wid->allocation.height;
+}
+
+int
+gtk_adds_widget_width (GtkWidget *wid)
+{
+  return wid->allocation.width;
 }
 

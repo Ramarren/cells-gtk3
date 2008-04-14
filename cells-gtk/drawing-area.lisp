@@ -123,10 +123,26 @@ Cells-GTK drawable
   (declare (ignore rest))
   (let ((widget (id self)))
     (trc "registering handlers for" widget)
-   (gtk-widget-add-events widget 772) ; 512 + 256 + 4 button_press, release, motion
-   (gtk-signal-connect-swap widget "button-press-event" (cffi:get-callback 'drawing-button-handler) :data widget)
-   (gtk-signal-connect-swap widget "button-release-event" (cffi:get-callback 'drawing-button-handler) :data widget)
-   (gtk-signal-connect-swap widget "motion-notify-event" (cffi:get-callback 'drawing-pointer-motion-handler) :data widget)
-   (gtk-signal-connect-swap widget "expose-event" (cffi:get-callback 'drawing-expose-handler) :data widget)))
+    (gtk-widget-add-events widget 772) ; 512 + 256 + 4 button_press, release, motion
+    (gtk-signal-connect-swap widget "button-press-event" (cffi:get-callback 'drawing-button-handler) :data widget)
+    (gtk-signal-connect-swap widget "button-release-event" (cffi:get-callback 'drawing-button-handler) :data widget)
+    (gtk-signal-connect-swap widget "motion-notify-event" (cffi:get-callback 'drawing-pointer-motion-handler) :data widget)
+    (gtk-signal-connect-swap widget "expose-event" (cffi:get-callback 'drawing-expose-handler) :data widget)))
+
+
+;;;
+;;; redraw method (called to trigger a refresh) 
+;;;
+
+;;; a handler if redraw called on nil
+(export! redraw)
+
+(defmethod redraw (self))
+
+(defmethod redraw ((self drawing-area))
+  "Queues a redraw with GTK."
+  (trc nil "queue redraw" self)
+  (gtk-widget-queue-draw (id self)))
+
 
 

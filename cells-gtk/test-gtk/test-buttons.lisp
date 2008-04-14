@@ -5,13 +5,13 @@
   (:default-initargs
       :kids (c? (the-kids
                  (mk-label :text (c? (format nil "Toggled button active = ~a" 
-                                       (value (fm-other :toggled-button)))))
+                                       (widget-value :toggled-button))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Check button checked = ~a" 
-                                       (value (fm-other :check-button)))))
+                                       (widget-value :check-button))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Radio button selected = ~a" 
-                                       (value (fm-other :radio-group)))))
+                                       (widget-value :radio-group))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Button clicked ~a times" 
                                        (nclics (upper self test-buttons))))
@@ -39,10 +39,10 @@
                                          "_Check Button")))))
                  (mk-hbox
                   :md-name :radio-group
-                  :kids (c? (the-kids
-                             (mk-radio-button :md-name :radio-1
-                               :label "Radio 1")
-                             (mk-radio-button :md-name :radio-2
-                               :label "Radio 2" :init t)
-                             (mk-radio-button :md-name :radio-3
-                               :label "Radio 3"))))))))
+                  :kids (kids-list?
+			 (mk-radio-button :md-name :radio-1
+					  :label "Radio 1")
+			 (mk-radio-button :md-name :radio-2
+					  :label "Radio 2" :init t)
+			 (mk-radio-button :md-name :radio-3
+					  :label "Radio 3")))))))

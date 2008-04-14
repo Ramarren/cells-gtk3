@@ -216,19 +216,6 @@ call NEXT-METHOD and finally map itself over all kids."
   (deb "done."))
 
 
-;;;; -----------------------------------------------------------
-;;;;        redraw method (called to trigger a refresh) 
-;;;; -----------------------------------------------------------
-
-;;; a handler if redraw called on nil
-(defmethod redraw (self))
-
-(defmethod redraw ((self cairo-drawing-area))
-  "Queues a redraw with GTK.  This is called whenever a primitve is modified"
-  (trc nil "queue redraw" self)
-  (gtk-ffi:gtk-widget-queue-draw (widget-id self)))
-
-
 (defobserver prims ((self cairo-drawing-area))
   (redraw self))
 

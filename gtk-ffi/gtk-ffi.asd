@@ -17,6 +17,7 @@
 	       :pod-utils
 	       :cffi
 	       :cffi-uffi-compat
+	       :utils-kt
 	       #+cells-gtk-threads :bordeaux-threads
 	       )
   :components

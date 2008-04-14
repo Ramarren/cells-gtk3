@@ -77,5 +77,6 @@
 	   #:gdk-event-button-state
 	   #:gdk-event-motion-x
 	   #:gdk-event-motion-y
-	   #:event-type))
+	   #:event-type
 
+	   #:gl-init))

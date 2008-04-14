@@ -164,7 +164,63 @@
     :kids (kids-list? (make-instance 'test-cairo-drawing :fm-parent *parent*))))
 
 
+;;;
+;;; GL drawing
+;;;
+
 (defparameter *da* nil)
 
+(defmodel teapot (gl-drawing-area)
+  ()
+  (:default-initargs
+      :width (c-in 200) :height (c-in 200) :expand t :fill t
+      :init #'(lambda (self)
+		(declare (ignorable self))
+		(gl:clear-color 0 0 0 0)
+		(gl:cull-face :back)
+		(gl:depth-func :less)
+		(gl:disable :dither)
+		(gl:shade-model :smooth)
+		(gl:light-model :light-model-local-viewer 1)
+		(gl:color-material :front :ambient-and-diffuse)
+		(gl:enable :light0 :lighting :cull-face :depth-test))
+      :resize #'(lambda (self)
+		  (with-matrix-mode (:projection)
+		    (glu:perspective 50 (/ (allocated-width self) (allocated-height self)) 0.5 20)))
+      :draw #'(lambda (self)
+		(declare (ignore self))
+		(gl:load-identity)
+		(gl:translate 0 0 -5)
+		(gl:rotate 30 1 1 0)
+		(gl:light :light0 :position '(0 1 1 0))
+		(gl:light :light0 :diffuse '(0.2 0.4 0.6 0))
+		(gl:clear :color-buffer-bit :depth-buffer-bit)
+		(gl:color 1 1 1)
+		(gl:front-face :cw)
+		(trc "drawing teapot with size" (/ (with-widget (w :teapot-size 130)
+						     (trc "found widget teapot-size" w (value w))
+						     (value w)) 100))
+		(glut:solid-teapot (/ (widget-value :teapot-size 130) 100))
+		(gl:front-face :ccw)
+		(gl:flush))))
+
+(defmodel test-gl-drawing (gtk-app)
+  ()
+  (:default-initargs
+      :kids (kids-list?
+	     (make-kid 'hbox
+		       :kids (kids-list?
+			      (make-kid 'vbox
+					:kids (kids-list?
+					       (mk-spin-button :md-name :teapot-size
+							       :min 1 :max 200 :step 1 :init 130
+							       :on-value-changed (callback (w e d)
+										   (with-widget (teapot :teapot)
+										     (trc "redrawing teapot")
+										     (redraw teapot))))))
+			      (make-kid 'teapot :md-name :teapot))))))
+
+
 (defun test-drawing ()
-  (setf *da* (first (kids (first (kids (start-win 'test-cairo-drawing)))))))
+  ;  (setf *da* (first (kids (first (kids (start-app 'test-gl-drawing))))))
+  (start-app 'test-gl-drawing))

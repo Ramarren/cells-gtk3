@@ -17,7 +17,7 @@
 (pushnew :cells-gtk-cairo *features*)
 
 ;;; drawing-area widget using OpenGL (requires libgtkglext1)
-;(pushnew :cells-gtk-opengl *features*)
+(pushnew :cells-gtk-opengl *features*)
 
 (asdf:defsystem :cells-gtk
   :name "cells-gtk"
@@ -27,7 +27,10 @@
 	       :gtk-ffi
 	       :ph-maths
 	       #+cells-gtk-cairo :cl-cairo2
-	       #+cells-gtk-threads :bordeaux-threads)
+	       #+cells-gtk-threads :bordeaux-threads
+	       #+cells-gtk-opengl :cl-opengl
+	       #+cells-gtk-opengl :cl-glu
+	       #+cells-gtk-opengl :cl-glut)
   :serial t
   :components
   ((:file "packages")   

@@ -892,7 +892,9 @@
 			   (green :unsigned-int)
 			   (blue :unsigned-int)))
   (gtk-adds-ok :int ())
-  (gtk-adds-g-thread-supported :int ()))
+  (gtk-adds-g-thread-supported :int ())
+  (gtk-adds-widget-width :int ((widget :pointer)))
+  (gtk-adds-widget-height :int ((widget :pointer))))
 
 
 #-libcellsgtk

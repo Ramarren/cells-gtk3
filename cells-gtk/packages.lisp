@@ -44,11 +44,15 @@
 	     #:cells-tree-node
 	     #:cells-tree-store
 	     #:cells-gtk-init
+
 	     #:title
 	     #:icon
 	     #:tooltips
 	     #:tooltips-enable
 	     #:tooltips-delay
+	     #:allocated-width
+	     #:allocated-height
+	     
 	     #:start-app
 	     #:start-win
 	     #:stop-gtk-main
@@ -142,4 +146,9 @@
 	     #:on-dragged ; (on-dragged [widget] [button] [primitive] [start-pos] [end-pos])
 	     #:hover	  ; the primitive the mouse is currently over
 	     #:dragging	  ; the primitive currently being dragged
+
+	     #:gl-drawing-area
+	     #:with-gl-context
+	     #:init
+	     #:draw
 	     ))

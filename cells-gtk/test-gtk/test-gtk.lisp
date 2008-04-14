@@ -48,7 +48,7 @@
 			     "Addon"
 			     "Entry"
 			     "Tree-view"
-			     "Drawing")))
+			     #+(or cells-gtk-cairo cells-gtk-opengl) "Drawing")))
                  (list (mk-notebook 
                         :tab-labels tabs
                         :kids (c? (the-kids

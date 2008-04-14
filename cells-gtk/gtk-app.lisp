@@ -127,28 +127,6 @@
   (with-trc (gtk-quit-remove (slot-value self 'cb-quit-id))))
 
 ;;;
-;;; callback table
-;;; 
-
-(defvar *gtk-global-callbacks* nil)
-
-(defun gtk-reset ()
-  (cells-reset)
-  (gtk-objects-init)
-  (setf *gtk-global-callbacks*
-	(make-array 128 :adjustable t :fill-pointer 0)))
-
-(defun gtk-global-callback-register (callback)
-  (vector-push-extend callback *gtk-global-callbacks* 16))
-
-(defun gtk-global-callback-funcall (n)
-  (trc nil "gtk-global-callback-funcall >" n
-    *gtk-global-callbacks*
-    (when n (aref *gtk-global-callbacks* n)))
-  (funcall (aref *gtk-global-callbacks* n)))
-
-
-;;;
 ;;; Helper functions convering the life cycle of an application
 ;;; 
 
@@ -184,6 +162,7 @@
 	    (gdk-threads-init)
 	    (assert (gtk-init-check +c-null+ +c-null+))
 	    (gtk-init +c-null+ +c-null+)
+	    #+cells-gtk-opengl (gl-init)
 	    (gtk-reset)
 	    #-libcellsgtk (setf threading-initialized t)))))
 
@@ -349,6 +328,5 @@ To run gtk in a background thread, use start-win instead."
      ('no (error "Cannot mix start-win and start-app in one lisp session.  Use start-app or restart lisp"))
      (t (setf *using-thread* 'yes)))
    (start-gtk-main)
-   (apply #'show-win app-class initargs)
-   0))
+   (apply #'show-win app-class initargs)))
 

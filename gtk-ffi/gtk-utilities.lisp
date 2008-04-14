@@ -43,7 +43,6 @@
 (defun wrap-func (func-address) ;; vestigial. func would never be nil. i think.
   (or func-address 0))
 
-
 (defun gtk-signal-connect-swap (widget signal fun &key (after t) (data +c-null+) (destroy-data +c-null+)) ; pod 0216
   (g-signal-connect-closure widget signal
     (g-cclosure-new-swap (wrap-func fun) data destroy-data) after))

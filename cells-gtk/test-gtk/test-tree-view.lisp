@@ -63,16 +63,16 @@
 (defmodel test-tree-view (notebook)
   ((data :accessor data :initform (c-in (make-sample-tree "tree" 3)))
    (items :accessor items :initarg :items 
-	  :initform (c? (and (value (fm-other :hscale))
-			     (loop for i from 1 to (value (fm-other :hscale)) collect
-				  (make-be 'listbox-test-item
-					   :string (format nil "Item ~d" i)
-					   :icon (nth (random 5) (list "home" "open" "save" "ok" "cancel"))
-					   :int i 
-					   :float (coerce (* (+ i 1) (/ 1 (1+ (random 100)))) 'single-float) 
-					   :double (coerce (* (+ i 2) (/ 1 (1+ (random 1000)))) 'double-float) 
-					   :boolean (oddp i)
-					   :date (- (get-universal-time) (random 10000000))))))))
+	  :initform (c? (with-widget-value (hscale :hscale)
+			  (loop for i from 1 to hscale collect
+			       (make-be 'listbox-test-item
+					:string (format nil "Item ~d" i)
+					:icon (nth (random 5) (list "home" "open" "save" "ok" "cancel"))
+					:int i 
+					:float (coerce (* (+ i 1) (/ 1 (1+ (random 100)))) 'single-float) 
+					:double (coerce (* (+ i 2) (/ 1 (1+ (random 1000)))) 'double-float) 
+					:boolean (oddp i)
+					:date (- (get-universal-time) (random 10000000))))))))
   (:default-initargs
       :tab-labels (list "Listbox" "Treebox" "Cells-Tree-View")
     :kids (kids-list?
@@ -84,7 +84,7 @@
                            (mk-listbox
                             :columns (def-columns
 				       (:string (:title "Selection")))
-                            :items (c? (let ((sel (value (fm-other :listbox))))
+                            :items (c? (with-widget-value (sel :listbox)
                                          (if (listp sel) sel (list sel))))
                             :print-fn (lambda (item)
 					(list (format nil "~a" item))))))
@@ -142,7 +142,7 @@
                     :kids (kids-list?
                            (mk-listbox
                             :md-name :listbox
-                            :selection-mode (c? (value (fm-other :selection-mode)))
+                            :selection-mode (c? (widget-value :selection-mode))
                             :columns (def-columns
 				       (:string (:title "String")
 						#'(lambda (val)
@@ -160,7 +160,7 @@
 									  '(:foreground "navy" :strikethrough t))))
                                        (:boolean (:title "Boolean"))
                                        (:date (:title "Date")))
-                            :select-if (c? (value (fm^ :selection-predicate)))
+                            :select-if (c? (widget-value :selection-predicate))
                             :items (c? (items (upper self test-tree-view)))
                             :print-fn (lambda (item)
 					(list (string$ item) (icon$ item) (int$ item) (float$ item)
@@ -172,7 +172,7 @@
                     :kids (kids-list?
                            (mk-listbox
                             :columns (def-columns (:string (:title "Selection")))
-                            :items (c? (let ((sel (value (fm-other :treebox))))
+                            :items (c? (with-widget-value (sel :treebox)
                                          (mapcar #'(lambda (item)
                                                      (list (format nil "~a" (class-name (class-of item)))))
 						 (if (listp sel) sel (list sel))))))))
@@ -209,8 +209,8 @@
                     :kids (kids-list?
                            (mk-treebox
                             :md-name :treebox
-                            :selection-mode (c? (value (fm^ :tree-selection-mode)))
-                            :select-if (c? (value (fm^ :tree-selection-predicate)))
+                            :selection-mode (c? (widget-value :tree-selection-mode))
+                            :select-if (c? (widget-value :tree-selection-predicate))
                             :columns (def-columns				    
 				       (:string (:title "Widget class")
 						#'(lambda (val)

@@ -15,7 +15,7 @@ This is taken from
 
 (in-package :gtk-ffi)
 
-(export '(with-gl-drawable with-swap-buffers))
+;(export '(with-gl-drawable with-swap-buffers))
 
 (cffi:define-foreign-library libgtkglext
   (:unix "libgtkglext-x11-1.0.so")
@@ -105,3 +105,5 @@ This is taken from
       (if (gdk-gl-drawable-is-double-buffered ,drawable)
 	  (gdk-gl-drawable-swap-buffers ,drawable))
       (gdk-gl-drawable-gl-end ,drawable))))
+
+

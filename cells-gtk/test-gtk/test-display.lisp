@@ -4,11 +4,13 @@
 (defmodel test-display (vbox)
   ()                 
   (:default-initargs ;; g_timeout_add a function that will move the bar until the "Pulse" toggle is false.
-      :value (c? (when (value (fm-other :pulse))
-                   (timeout-add (value (fm-other :timeout))
-                     (lambda ()
-                       (pulse (fm-other :pbar2))
-                       (value (fm-other :pulse))))))
+      :value (c? (with-widget-value (val :pulse)
+		   (with-widget-value (timeout :timeout)
+		       (timeout-add timeout 
+				    (lambda ()
+				      (with-widget (pbar :pbar2)
+					(pulse pbar))
+				      (widget-value :pulse))))))
     :expand t :fill t
     :kids (kids-list?
            (mk-hbox
@@ -25,7 +27,7 @@
            (mk-hbox 
             :kids (kids-list?							    
                    (mk-progress-bar :md-name :pbar
-                     :fraction (c? (value (fm^ :fraction-value))))
+                     :fraction (c? (widget-value :fraction-value 1)))
                    (mk-hscale :md-name :fraction-value
                      :value-type 'single-float
                      :min 0 :max 1
@@ -34,17 +36,17 @@
                    (mk-button :label "Show in status bar"
                      :on-clicked 
                      (callback (widget event data)
-                       (push-message (fm-other :statusbar)
-                         (format nil "~a" (fraction (fm-other :pbar))))))))
+		       (with-widget (w :statusbar)
+			(push-message w (format nil "~a" (fraction (fm-other :pbar)))))))))
            (mk-hbox
             :kids (kids-list?
                    (mk-progress-bar :md-name :pbar2				      
-                     :pulse-step (c? (value (fm^ :step)))
+                     :pulse-step (c? (widget-value :step .1))
                      :fraction (c-in .1))
                    (mk-toggle-button :md-name :pulse :label "Pulse")
                    (mk-label :text "Interval")
                    (mk-spin-button :md-name :timeout
-                     :sensitive (c? (not (value (fm^ :pulse))))
+                     :sensitive (c? (not (widget-value :pulse)))
                      :min 10 :max 1000
                      :init 100)
                    (mk-label :text "Pulse step")
@@ -53,7 +55,7 @@
                      :min 0.01 :max 1 :step 0.01				     
                      :init 0.1)
                    (mk-image :md-name :pulse-image
-                     :stock (c? (if (value (fm^ :pulse)) :yes :no)))))
+                     :stock (c? (if (widget-value :pulse) :yes :no)))))
            (mk-alignment 
             :expand t :fill t
             :xalign 0 :yalign 1
