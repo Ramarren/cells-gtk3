@@ -36,7 +36,7 @@
 		       (let ((id (apply (symbol-function (new-function-name self))
 					(new-args self))))
 			 (gtk-object-store id self)
-			 (gtk-signal-connect-swap id "configure-event" (cffi:get-callback 'reshape-widget-handler) :data id)
+			 #+libcellsgtk (gtk-signal-connect-swap id "configure-event" (cffi:get-callback 'reshape-widget-handler) :data id)
 			 id))))
    
    (callbacks :cell nil :accessor callbacks
@@ -75,13 +75,16 @@
 
 
 (defun gtk-object-forget (gtk-id gtk-object)
-  (remhash (md-name gtk-object) *widgets*)
-  (when gtk-id
-    (assert *gtk-objects*)
-    (remhash (cffi:pointer-address gtk-id) *gtk-objects*)
-    (mapc (lambda (k)
-            (gtk-object-forget (slot-value k 'id) k))
-      (slot-value gtk-object '.kids))))
+  (when (and gtk-id gtk-object)
+    (trc nil "    forgetting id/obj" gtk-id gtk-object)
+    (let ((ptr (cffi:pointer-address gtk-id)))
+      (assert *widgets*)
+      (when (eql (gethash (md-name gtk-object) *widgets*) gtk-object)
+	(remhash (md-name gtk-object) *widgets*))
+      (assert *gtk-objects*)
+      (remhash ptr *gtk-objects*)
+      (mapc (lambda (k) (gtk-object-forget (slot-value k 'id) k))
+	    (slot-value gtk-object '.kids)))))
 
 (defun gtk-object-find (gtk-id &optional must-find-p &aux (hash-id (cffi:pointer-address gtk-id)))
   (when *gtk-objects*
@@ -101,7 +104,9 @@
 
 (defmacro with-widget ((widget name &optional alternative) &body body)
   `(bif (,widget (find-widget ,name))
-	(progn ,@body)
+	(progn
+	  (trc "with widget" ,widget ',body)
+	  ,@body)
 	,alternative))
 
 (defmacro with-widget-value ((val name &key (accessor '(quote value)) (alternative nil)) &body body)
@@ -333,15 +338,12 @@
   ()
   (focus show hide delete-event destroy-event)
   ;; this is called unless the user overwrites this routine
-  :on-delete-event (c-in #'(lambda (self widget event data)
-			     (declare (ignore widget event data))
-			     (trc "on-delete")
-			     (gtk-object-forget (id self) self)
-			     0)))
+  )
 
 #+libcellsgtk
 (cffi:defcallback reshape-widget-handler :int ((widget :pointer) (event :pointer) (data :pointer))
   (declare (ignore data event))
+  (trc "reshape" widget)
   (bwhen (self (gtk-object-find widget))
     (let ((new-width (gtk-adds-widget-width widget))
 	  (new-height (gtk-adds-widget-height widget)))
@@ -351,10 +353,6 @@
 	      (allocated-height self) new-height))))
   0)
 
-(defmethod initialize-instance :after ((self widget) &rest initargs)
-  (declare (ignore initargs))
-  #+libcellsgtk-
-  )
 
 (defmethod focus ((self widget))
   (gtk-widget-grab-focus (id self)))
@@ -389,7 +387,9 @@
     (trc "WIDGET DESTROY" (md-name self) (type-of self) self)
     (force-output))
   (gtk-object-forget (slot-value self 'id) self)
-  (gtk-widget-destroy (slot-value self 'id)))
+  (trc nil "not-to-be destroys" self (slot-value self 'id))
+  (gtk-widget-destroy (slot-value self 'id))
+  (trc nil "  done"))
 
 (defun assert-bin (container)
   (assert (null (rest (kids container))) 

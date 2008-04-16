@@ -111,7 +111,8 @@
 
 
 (cffi:defcallback cb-quit :unsigned-int ((data :pointer))
-  (when-bind (self (with-trc (gtk-object-find data)))
+  (trc "cb quit" data (gtk-object-find data))
+  (bwhen (self (gtk-object-find data))
     (setf *system* (delete self *system*))
     (not-to-be self))
   0)

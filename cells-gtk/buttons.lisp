@@ -54,11 +54,15 @@
   (toggled)
   :active (c-in nil)
   :on-toggled (callback (widget event data)
-                ;;(print (list :toggle-button :on-toggled-cb widget))
+                (trc "toggle-button toggled" widget)
                 (with-integrity (:change 'tggle-button-on-toggled-cb)
                   (let ((state (gtk-toggle-button-get-active widget)))
-                    ;;(print (list :toggledstate state))
                     (setf (value self) state)))))
+
+(defobserver .value ((self toggle-button))
+  (trc "observing toggle-button .value" self (value self))
+  (with-integrity (:change 'toggle-button-value)
+    (trc "with integrity")))
 
 #+test
 (DEF-GTK WIDGET TOGGLE-BUTTON (BUTTON) ((INIT :ACCESSOR INIT :INITARG :INIT :INITFORM NIL))

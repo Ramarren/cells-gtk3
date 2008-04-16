@@ -53,6 +53,7 @@
  				 (when (fourth col-def)
  				   (list pos (fourth col-def))))))
    (columns :accessor columns
+	    :owning t
      :initform (c? (mapcar #'(lambda (col-init)
                                (apply #'make-be 'tree-view-column
                                       :container self
@@ -478,7 +479,7 @@ Creates an observer node observing source.  To be specialized on subclasses of f
 	     (progn #+msg(print (list "CALCULATE KIDS for family observer" self "on" (^value) "-- parent" (upper self)))
 		    (bwhen (val (^value)) ;; not sure why not
 		      (unless (deadp val)
-			(trcx "creating kids" val (slot-value val 'cells::.md-state) (kids val))
+			(trcx nil "creating kids" val (slot-value val 'cells::.md-state) (kids val))
 			(mapcar #'(lambda (src) (mk-observer self src)) (kids val))))))))
 
 ;;; here do cleanup work, children get called before parents

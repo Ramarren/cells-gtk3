@@ -5,13 +5,16 @@
   (:default-initargs
       :kids (c? (the-kids
                  (mk-label :text (c? (format nil "Toggled button active = ~a" 
-                                       (widget-value :toggled-button))))
+                                       (with-widget (w :toggled-button)
+					 (trc "calculating toggled button" w (value w))
+					 (value w)))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Check button checked = ~a" 
                                        (widget-value :check-button))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Radio button selected = ~a" 
-                                       (widget-value :radio-group))))
+                                       (with-widget (w :radio-group)
+					 (value w)))))
                  (mk-hseparator)
                  (mk-label :text (c? (format nil "Button clicked ~a times" 
                                        (nclics (upper self test-buttons))))
