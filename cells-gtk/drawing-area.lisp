@@ -27,7 +27,7 @@ Cells-GTK drawable
 
 (def-widget drawing-area ()
   ((mouse-pos     :accessor mouse-pos     :cell t   :initform (c-in (2d:v 0 0)))
-   (canvas        :accessor canvas        :cell t   :initform (c-in nil) :initarg :canvas)
+   (canvas        :accessor canvas        :cell t   :initform (c-in nil) :initarg :canvas :owning t)
    ; (on-draw self)
    (on-draw :accessor on-draw :cell nil :initarg :on-draw :initform nil)
    ;n/a 
@@ -142,7 +142,8 @@ Cells-GTK drawable
 (defmethod redraw ((self drawing-area))
   "Queues a redraw with GTK."
   (trc nil "queue redraw" self)
-  (gtk-widget-queue-draw (id self)))
+  (unless (mdead self)
+   (gtk-widget-queue-draw (id self))))
 
 
 

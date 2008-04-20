@@ -110,10 +110,10 @@ neesds to be wrapped in parens."
 
 (defmodel cairo-drawing-area (drawing-area)
   ((cairo-context :accessor cairo-context :cell nil :initform nil)
-   (canvas        :accessor canvas        :cell t   :initform (c-in nil) :initarg :canvas)
-   (.canvas :accessor .canvas :initform (c-in nil))
+   (canvas        :accessor canvas        :initform (c-in nil) :initarg :canvas :owning t)
+   (.canvas :accessor .canvas :initform (c-in nil) :owning t)
    (prims :reader prims :initform (c? (append (canvas self) (.canvas self))))
-   (widget        :reader widget          :cell t   :initform (c? self))
+   (widget        :reader widget          :initform (c? self))
    ;; the primitive the mouse is currently hovering over
    (hover         :accessor hover         :cell nil :initform nil)
    (hover-history :accessor hover-history :cell nil :initform nil)
@@ -122,7 +122,7 @@ neesds to be wrapped in parens."
    ;; callback (on-dragged [widget] [button] [primtitive] [start] [end])
    (on-dragged    :accessor on-dragged    :cell nil :initform nil :initarg :on-dragged)
    
-   (dragging      :accessor dragging      :cell t   :initform (c-in nil))
+   (dragging      :accessor dragging      :initform (c-in nil))
    
    (drag-start    :accessor drag-start    :cell nil :initform nil)
    (drag-offset   :accessor drag-offset   :cell nil :initform nil)
@@ -131,7 +131,7 @@ neesds to be wrapped in parens."
    
    (selection-color :accessor selection-color :cell nil :initform '(1 1 .27))
    (drag-threshold :accessor drag-threshold :cell nil :initform 3 :initarg :drag-threshold)
-   (selection     :accessor selection     :cell t :initform (c-in nil)))
+   (selection     :accessor selection     :initform (c-in nil)))
    (:default-initargs
        :on-pressed #'cairo-drawing-area-button-press
      :on-released #'cairo-drawing-area-button-release
@@ -312,6 +312,11 @@ the parent of the newly created object, OBJECT to the newly created object, and 
 
 ;;;; ------ destroy methods ----------------------------------------------
 
+(defmethod not-to-be :before ((self cairo-drawing-area))
+  (trc "not-to-be cairo-drawing area erasing everything" self)
+  (setf (canvas self) nil
+	(.canvas self) nil))
+
 (defgeneric remove-primitive (primitive)
   (:documentation "Removes primitive"))
 
@@ -479,8 +484,12 @@ anchor-point."))
    ((polar (2d:polar-coords (^delta)))
     (mouse-over-p (when (^widget)
 		    (with-accessors ((mouse mouse-pos)) (widget self)
-		      (and (2d:point-in-box-p mouse (^p1) (^p2) :tol (line-width self))
-			   (< (2d:distance-point-line mouse (^p1) (^p2)) (* (^line-width) 2)))))))
+		      (when-bind* ((p1 (^p1))
+				   (p2 (^p2))
+				   (line-width (^line-width)))
+		       (and mouse
+			    (2d:point-in-box-p mouse p1 p2 :tol line-width)
+			    (< (2d:distance-point-line mouse p1 p2) (* line-width 2))))))))
    :no-redraw (polar mouse-over-p)))
 
 

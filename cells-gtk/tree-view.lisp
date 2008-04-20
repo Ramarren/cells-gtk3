@@ -363,7 +363,7 @@
   (when old-value 
     (loop for col in old-value do
         (gtk-tree-view-remove-column (id self) (id col))
-        (gtk-object-forget (id col) col)))  
+        #+not-necessary (gtk-object-forget (id col) col)))  ; ph 042008
   (when new-value
     (loop for col in new-value
 	for pos from 0

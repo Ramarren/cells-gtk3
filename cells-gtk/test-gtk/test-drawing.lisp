@@ -61,7 +61,7 @@
 						      (col1 (random-color))
 						      (col2 (random-color)))
 						 (trcx "rect" p1 p2 col1 col2)
-						 (mk-primitive (fm-other :draw) :rectangle
+						 (mk-primitive (find-widget :draw) :rectangle
 							       :p1 (c-in p1)
 							       :p2 (c-in p2)
 							       :rgb (rgb? col1)
@@ -76,7 +76,7 @@
 						      (radius (rnd 10 40))
 						      (col1 (random-color))
 						      (col2 (random-color)))
-						 (mk-primitive (fm-other :draw) :arc
+						 (mk-primitive (find-widget :draw) :arc
 							       :p (c-in p)
 							       :radius (c-in radius)
 							       :rgb (rgb? col1)
@@ -99,7 +99,7 @@
 	      'cairo-drawing-area
 	      :md-name :draw-sun :expand t :fill t :width 500 :height 500
 	      :fm-parent *parent*
-	      :canvas (c? (let ((draw self))
+	      :canvas (c?n (let ((draw self))
 			    (declare (ignorable draw))
 			    (list
 			     (make-instance

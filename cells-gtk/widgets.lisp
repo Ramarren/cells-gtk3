@@ -57,34 +57,33 @@
 
 (defun gtk-objects-init ()
   (setf *gtk-objects* (make-hash-table :size 100 :rehash-size 100)
-	*widgets* (make-hash-table :test #'equal)))
+	*widgets* (make-instance 'cells-store)))
 
 ;;; id lookup
 
 (defun gtk-object-store (gtk-id gtk-object &aux (hash-id (cffi:pointer-address gtk-id)))
   (unless *gtk-objects*
     (gtk-objects-init))
-  (setf (gethash (md-name gtk-object) *widgets*) gtk-object)
+  (bwhen (name (md-name gtk-object))    
+    (store-add name *widgets* gtk-object))
   (let ((known (gethash hash-id *gtk-objects*)))
     (cond
      ((eql known gtk-object))
      (t
-      (when known
+      #+ssh (when known
 	(warn (format nil "Object ~a has been reclaimed by GTK.  Cells-gtk might have stale references" known)))
       (setf (gethash hash-id *gtk-objects*) gtk-object)))))
 
 
 (defun gtk-object-forget (gtk-id gtk-object)
   (when (and gtk-id gtk-object)
-    (trc nil "    forgetting id/obj" gtk-id gtk-object)
+    (trc "    forgetting id/obj" gtk-id gtk-object)
     (let ((ptr (cffi:pointer-address gtk-id)))
-      (assert *widgets*)
-      (when (eql (gethash (md-name gtk-object) *widgets*) gtk-object)
-	(remhash (md-name gtk-object) *widgets*))
       (assert *gtk-objects*)
       (remhash ptr *gtk-objects*)
-      (mapc (lambda (k) (gtk-object-forget (slot-value k 'id) k))
-	    (slot-value gtk-object '.kids)))))
+      #+unnecessary (mapc (lambda (k) (gtk-object-forget (slot-value k 'id) k))
+			  (slot-value gtk-object '.kids)))   ; unnecessary, ph
+    (trc "    done" gtk-id gtk-object)))
 
 (defun gtk-object-find (gtk-id &optional must-find-p &aux (hash-id (cffi:pointer-address gtk-id)))
   (when *gtk-objects*
@@ -99,15 +98,13 @@
 
 ;;; name lookup
 
-(defun find-widget (name &optional default)
-  (gethash name *widgets* default))
-
 (defmacro with-widget ((widget name &optional alternative) &body body)
-  `(bif (,widget (find-widget ,name))
-	(progn
-	  (trc "with widget" ,widget ',body)
-	  ,@body)
-	,alternative))
+  `(bwhen-c-stored (,widget ,name *widgets* ,alternative)
+     ,@body))
+
+(defun find-widget (name &optional default)
+  (with-widget (w name default)
+    w))
 
 (defmacro with-widget-value ((val name &key (accessor '(quote value)) (alternative nil)) &body body)
   (with-gensyms (widget)
@@ -382,14 +379,24 @@
       (gtk-widget-show (id self))
     (gtk-widget-hide (id self))))
 
-(defmethod not-to-be :after ((self widget))
+(defmethod not-to-be :around ((self gtk-object))
+  (trc "gtk-object not-to-be :around" (md-name self) self)
+  (trc "  store-remove")
+  (when (eql (store-lookup (md-name self) *widgets*) self)
+    (store-remove (md-name self) *widgets*))
+  (trc "  object-forget")
+  (gtk-object-forget (id self) self)
+
+  (trc "  call-next-method")
+  (call-next-method)
+
+  (trc "  widget-destroy")
   (when  *gtk-debug*
-    (trc "WIDGET DESTROY" (md-name self) (type-of self) self)
+    (trc "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
     (force-output))
-  (gtk-object-forget (slot-value self 'id) self)
-  (trc nil "not-to-be destroys" self (slot-value self 'id))
   (gtk-widget-destroy (slot-value self 'id))
-  (trc nil "  done"))
+  (trc "  done"))
+
 
 (defun assert-bin (container)
   (assert (null (rest (kids container))) 

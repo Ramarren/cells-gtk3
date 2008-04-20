@@ -59,11 +59,6 @@
                   (let ((state (gtk-toggle-button-get-active widget)))
                     (setf (value self) state)))))
 
-(defobserver .value ((self toggle-button))
-  (trc "observing toggle-button .value" self (value self))
-  (with-integrity (:change 'toggle-button-value)
-    (trc "with integrity")))
-
 #+test
 (DEF-GTK WIDGET TOGGLE-BUTTON (BUTTON) ((INIT :ACCESSOR INIT :INITARG :INIT :INITFORM NIL))
          (MODE ACTIVE) (TOGGLED) :ACTIVE (C-IN NIL) :ON-TOGGLED

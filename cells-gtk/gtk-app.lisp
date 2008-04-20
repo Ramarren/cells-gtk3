@@ -187,7 +187,8 @@ splash screen, if applicable.  A threadsafe replacement for \"make-be\".  To sim
 				      :visible (c-in nil)))
 	  (gtk-window-set-auto-startup-notification nil)
 	  (to-be splash)
-	  (setf (visible splash) t)
+	  (with-integrity (:change :make-splash-visible)
+	   (setf (visible splash) t))
 	  (not-to-be (make-instance 'window)) ; kick gtk ... ugly
 	  (loop while (gtk-events-pending) do
 	       (gtk-main-iteration)))))
@@ -205,8 +206,9 @@ splash screen, if applicable.  A threadsafe replacement for \"make-be\".  To sim
     (when splash
       (not-to-be splash)
       (gtk-window-set-auto-startup-notification t))
-    
-    (setf (visible app) t)
+
+    (with-integrity (:change :make-app-visible)
+     (setf (visible app) t))
     
     (not-to-be (make-instance 'window :visible nil))	; ph: kick gtk ... ugly
     app))
