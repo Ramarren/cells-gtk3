@@ -42,8 +42,8 @@
 	   prepend breadth-first-search update with-stack-size pprint-without-strings chop setx
 	   reuse-cons intersect-predicates
 	   defmemo system-clear-memoized-fns system-add-memoized-fn system-list-memoized-fns
-	   system-forget-memoized-fns with-gensyms fail))
-; ph: removed last1 new-reslist reslist-pop reslist-push reslist-fillptr now
+	   system-forget-memoized-fns fail))
+; ph: removed last1 new-reslist reslist-pop reslist-push reslist-fillptr now with-gensyms
 
 
 (in-package :pod-utils)

@@ -85,27 +85,27 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
 (cffi:define-foreign-library :gobject
-  (cffi-features:unix "libgobject-2.0.so")
+  (cffi-features:unix (:or "libgobject-2.0.so" "libgobject-2.0.so.0"))
   (cffi-features:windows "libgobject-2.0-0.dll")
   (cffi-features:darwin "libgobject-2.0-0.dylib"))
 
 (cffi:define-foreign-library :glib
-  (cffi-features:unix "libglib-2.0.so")
+  (cffi-features:unix (:or "libglib-2.0.so" "libglib-2.0.so.0"))
   (cffi-features:windows "libglib-2.0-0.dll")
   (cffi-features:darwin "libglib-2.0-0.dylib"))
 
 (cffi:define-foreign-library :gthread
-  (cffi-features:unix "libgthread-2.0.so")
+  (cffi-features:unix (:or "libgthread-2.0.so" "libgthread-2.0.so.0"))
   (cffi-features:windows "libgthread-2.0-0.dll")
   (cffi-features:darwin "libgthread-2.0-0.dylib"))
 
 (cffi:define-foreign-library :gdk
-  (cffi-features:unix "libgdk-x11-2.0.so")
+  (cffi-features:unix (:or "libgdk-x11-2.0.so" "libgdk-x11-2.0.so.0"))
   (cffi-features:windows "libgdk-win32-2.0-0.dll")
   (cffi-features:darwin "libgdk-win32-2.0-0.dylib")) ; pod ???
 
 (cffi:define-foreign-library :gtk
-  (cffi-features:unix "libgtk-x11-2.0.so")
+  (cffi-features:unix (:or "libgtk-x11-2.0.so" "libgtk-x11-2.0.so.0"))
   (cffi-features:windows "libgtk-win32-2.0-0.dll")
   (cffi-features:darwin "libgtk-win32-2.0-0.dylib")) ; pod ???
 
