@@ -30,21 +30,19 @@
         :expand t :fill t
         :markup (c? (with-markup (:font-desc "24") 
                       (with-markup (:foreground :blue 
-                                     :font-family "Arial" 
-                                     :font-desc (if (value (fm-other :spin))
-                                                    (truncate (value (fm-other :spin)))
-                                                  10))
-                        (value (fm-other :entry)))
+						:font-family "Arial" 
+						:font-desc (with-widget-value (s :spin :alternative 10)
+							     (truncate s)))
+                        (widget-value :entry))
                       (with-markup (:underline :double 
-                                     :weight :bold 
-                                     :foreground :red
-                                     :font-desc (if (value (fm-other :hscale))
-                                                    (truncate (value (fm-other :hscale)))
-                                                  10))
+					       :weight :bold 
+					       :foreground :red
+					       :font-desc (with-widget-value (s :hscale :alternative 10)
+							    (truncate s)))
                         "is")
-                      (with-markup (:strikethrough (value (fm^ :cool)))
+                      (with-markup (:strikethrough (widget-value :cool))
                         "boring")
-                      (with-markup (:strikethrough (not (value (fm^ :cool))))
+                      (with-markup (:strikethrough (not (widget-value :cool)))
                         "cool!")))
         :selectable t)
        (mk-entry :md-name :entry :auto-update t :init "Testing"))))
@@ -61,8 +59,8 @@
                              :init t
                              :label "Visible")))
                    (mk-hscale :md-name :hscale 
-                     :visible (c? (value (fm^ :visible)))
-                     :sensitive (c? (value (fm^ :sensitive)))
+                     :visible (c? (widget-value :visible))
+                     :sensitive (c? (widget-value :sensitive))
                      :expand t :fill t
                      :min 0 :max 100
                      :init 10)))))))

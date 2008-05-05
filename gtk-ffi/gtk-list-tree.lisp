@@ -54,7 +54,7 @@
 			 ((tree-store :pointer)
 			  (iter :pointer)
 			  (parent :pointer)))
-  (gtk-tree-store-remove :gtk-boolean
+  (gtk-tree-store-remove gtk-boolean
 			 ((tree-store :pointer)
 			  (iter :pointer)))
   (gtk-tree-store-clear :void
@@ -74,7 +74,7 @@
   (gtk-tree-view-get-selection :pointer
 			       ((tree-view
 				 :pointer)))
-  (gtk-tree-view-get-path-at-pos :gtk-boolean
+  (gtk-tree-view-get-path-at-pos gtk-boolean
 				 ((tree-view :pointer)
 				  (x :int)
 				  (y :int)
@@ -104,19 +104,19 @@
 		       (column :int)
 		       (data :pointer)
 		       (eof :int)))
-  (gtk-tree-model-get-iter :gtk-boolean
+  (gtk-tree-model-get-iter gtk-boolean
 			   ((tree-model :pointer)
 			    (iter :pointer)
 			    (path :pointer)))
   ;;tree-model
-  (gtk-tree-model-get-iter-from-string :gtk-boolean
+  (gtk-tree-model-get-iter-from-string gtk-boolean
 				       ((tree-model :pointer)
 					(iter :pointer)
-					(path :gtk-string)))
+					(path gtk-string)))
   ;;tree-path
   (gtk-tree-path-new-from-string :pointer
-				 ((path :gtk-string)))
-  (gtk-tree-path-to-string :gtk-string
+				 ((path gtk-string)))
+  (gtk-tree-path-to-string gtk-string
 			   ((path :pointer)))
   (gtk-tree-path-free :void ((path :pointer)))
   (gtk-tree-model-get-path :pointer
@@ -126,7 +126,7 @@
   (gtk-tree-row-reference-new :pointer
 			      ((tree-model :pointer)
 			       (path :pointer)))
-  (gtk-tree-row-reference-valid :gtk-boolean
+  (gtk-tree-row-reference-valid gtk-boolean
 				((tree-row-reference :pointer)))
   (gtk-tree-row-reference-get-model :pointer
 				    ((tree-row-reference :pointer)))
@@ -143,7 +143,7 @@
   (gtk-tree-selection-select-path :void
 				  ((sel :pointer)
 				   (path :pointer)))
-  (gtk-tree-selection-get-selected :gtk-boolean
+  (gtk-tree-selection-get-selected gtk-boolean
 				   ((sel :pointer)
 				    (model :pointer)
 				    (iter :pointer)))
@@ -158,30 +158,30 @@
   (gtk-tree-view-column-pack-start :void
 				   ((tree-column :pointer)
 				    (renderer :pointer)
-				    (expand :gtk-boolean)))
+				    (expand gtk-boolean)))
   (gtk-tree-view-column-add-attribute :void
 				      ((tree-column :pointer)
 				       (renderer :pointer)
-				       (attribute :gtk-string)
+				       (attribute gtk-string)
 				       (column :int)))
   (gtk-tree-view-column-set-spacing :void
 				    ((tree-column :pointer)
 				     (spacing :int)))
   (gtk-tree-view-column-set-visible :void
 				    ((tree-column :pointer)
-				     (spacing :gtk-boolean)))
+				     (spacing gtk-boolean)))
   (gtk-tree-view-column-set-reorderable :void
 					((tree-column :pointer)
-					 (resizable :gtk-boolean)))
+					 (resizable gtk-boolean)))
   (gtk-tree-view-column-set-sort-column-id :void
 					   ((tree-column :pointer)
 					    (col-id :int)))
   (gtk-tree-view-column-set-sort-indicator :void
 					   ((tree-column :pointer)
-					    (resizable :gtk-boolean)))
+					    (resizable gtk-boolean)))
   (gtk-tree-view-column-set-resizable :void 
 				      ((tree-column :pointer)
-				       (resizable :gtk-boolean)))
+				       (resizable gtk-boolean)))
   (gtk-tree-view-column-set-fixed-width :void
 					((tree-column :pointer)
 					 (fixed-width :int)))
@@ -193,15 +193,15 @@
 				       (max-width :int)))
   (gtk-tree-view-column-set-title :void
 				  ((tree-column :pointer)
-				   (title :gtk-string)))
+				   (title gtk-string)))
   (gtk-tree-view-column-set-expand :void
 				   ((tree-column :pointer)
-				    (expand :gtk-boolean)))
+				    (expand gtk-boolean)))
   (gtk-tree-view-column-set-clickable :void
 				      ((tree-column
 					:pointer)
 				       (clickable
-					:gtk-boolean)))
+					gtk-boolean)))
   (gtk-tree-view-column-set-cell-data-func :void
 					   ((tree-column :pointer)
 					    (cell-renderer :pointer)

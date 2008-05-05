@@ -19,7 +19,7 @@
 (in-package :cl-user)
 
 (defpackage :gtk-ffi
-  (:use :common-lisp :pod)
+  (:use :common-lisp :pod :utils-kt)
   (:export #:+c-null+
 	   #:int-slot-indexed
 	   #:load-gtk-libs
@@ -38,6 +38,8 @@
 	   #:long
 	   #:single-float
 	   #:double-float
+	   #:gtk-string
+	   #:gtk-boolean
 	   #:otherwise
 	   #:*gtk-debug*
 	   #:load-gtk-libs
@@ -79,4 +81,4 @@
 	   #:gdk-event-motion-y
 	   #:event-type
 
-	   #:gl-init))
+	   #:gtk-gl-init))

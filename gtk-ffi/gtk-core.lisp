@@ -26,14 +26,14 @@
 		 ((milliseconds :unsigned-int)
 		  (func :pointer)
 		  (data :pointer)))
-  (g-locale-from-utf8 :gtk-string
+  (g-locale-from-utf8 gtk-string
 		      ((utf8-string :pointer)
 		       (len :int)
 		       (bytes-read :pointer)
 		       (bytes-written :pointer)
 		       (gerror :pointer)))
   (g-locale-to-utf8 :pointer
-		    ((local-string :gtk-string)
+		    ((local-string gtk-string)
 		     (len :int)
 		     (bytes-read :pointer)
 		     (bytes-written :pointer)
@@ -100,27 +100,27 @@
 			(destroy-data :pointer)))
   (g-signal-connect-closure :unsigned-long
 			    ((instance :pointer)
-			     (detailed-signal :gtk-string)
+			     (detailed-signal gtk-string)
 			     (closure :pointer)
-			     (after :gtk-boolean)))
+			     (after gtk-boolean)))
   (g-object-set-valist :void
 		       ((object :pointer)
-			(first-prop :gtk-string)
+			(first-prop gtk-string)
 			(varargs :pointer)))
   (g-object-set-property :void
 			 ((object :pointer)
-			  (property-name :gtk-string)
+			  (property-name gtk-string)
 			  (value :pointer)))
   (g-value-init :pointer ((value :pointer)
 			  (type :unsigned-long)))
   (g-value-unset :void ((value :pointer)))
   (g-value-set-string :void
-		      ((value :pointer) (str :gtk-string)))
+		      ((value :pointer) (str gtk-string)))
   (g-value-set-int :void ((value :pointer) (int :int)))
   (g-value-set-long :void ((value :pointer) (long :long)))
   (g-value-set-boolean :void
 		       ((value :pointer)
-			(bool :gtk-boolean)))
+			(bool gtk-boolean)))
   (g-value-set-float :void
 		     ((value :pointer) (float :float)))
   (g-value-set-double :void

@@ -29,13 +29,13 @@
   (gtk-toolbar-set-show-arrow
    :void
    ((toolbar :pointer)
-    (show-arrow :gtk-boolean)))
+    (show-arrow gtk-boolean)))
   (gtk-toolbar-set-orientation
    :void
    ((toolbar :pointer) (orientation :int)))
   (gtk-toolbar-set-tooltips
    :void
-   ((toolbar :pointer) (enable :gtk-boolean)))
+   ((toolbar :pointer) (enable gtk-boolean)))
   (gtk-toolbar-set-style
    :void
    ((toolbar :pointer) (style :int)))
@@ -46,8 +46,8 @@
    :void
    ((tooltips :pointer)
     (widget :pointer)
-    (tip-text :gtk-string)
-    (tip-private :gtk-string)))
+    (tip-text gtk-string)
+    (tip-private gtk-string)))
   (gtk-tooltips-enable
    :void
    ((tooltips :pointer)))
@@ -63,24 +63,24 @@
   (gtk-tool-item-set-homogeneous
    :void
    ((tool-item :pointer)
-    (homogeneous :gtk-boolean)))
+    (homogeneous gtk-boolean)))
   (gtk-tool-item-set-expand
    :void
-   ((tool-item :pointer) (expand :gtk-boolean)))
+   ((tool-item :pointer) (expand gtk-boolean)))
   (gtk-tool-item-set-tooltip
    :void
    ((tool-item :pointer)
     (tooltips :pointer)
-    (tip-text :gtk-string)
-    (tip-private :gtk-string)))
+    (tip-text gtk-string)
+    (tip-private gtk-string)))
   (gtk-tool-item-set-is-important
    :void
    ((tool-item :pointer)
-    (is-important :gtk-boolean)))
+    (is-important gtk-boolean)))
   (gtk-separator-tool-item-new :pointer ())
   (gtk-separator-tool-item-set-draw
    :void
-   ((item :pointer) (draw :gtk-boolean)))
+   ((item :pointer) (draw gtk-boolean)))
 
   ;;tool-button
   (gtk-tool-button-new
@@ -88,17 +88,17 @@
    ((icon-widget :pointer) (label :pointer)))
   (gtk-tool-button-new-from-stock
    :pointer
-   ((stock-id :gtk-string)))
+   ((stock-id gtk-string)))
   (gtk-tool-button-set-label
    :void
    ((tool-button :pointer) (label :pointer)))
   (gtk-tool-button-set-use-underline
    :void
    ((tool-button :pointer)
-    (use-underline :gtk-boolean)))
+    (use-underline gtk-boolean)))
   (gtk-tool-button-set-stock-id
    :void
-   ((tool-button :pointer) (stock-id :gtk-string)))
+   ((tool-button :pointer) (stock-id gtk-string)))
   (gtk-tool-button-set-icon-widget
    :void
    ((tool-button :pointer)

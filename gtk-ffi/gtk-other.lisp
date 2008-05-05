@@ -23,13 +23,13 @@
   ;; main-loop
   (gtk-init :void
 	    ((argc :pointer) (argv :pointer)))
-  (gtk-init-check :gtk-boolean
+  (gtk-init-check gtk-boolean
 		  ((argc :pointer)
 		   (argv :pointer)))
-  (gtk-events-pending :gtk-boolean ())
-  (gtk-main-iteration :gtk-boolean ())
-  (gtk-main-iteration-do :gtk-boolean
-			 ((blocking :gtk-boolean)))
+  (gtk-events-pending gtk-boolean ())
+  (gtk-main-iteration gtk-boolean ())
+  (gtk-main-iteration-do gtk-boolean
+			 ((blocking gtk-boolean)))
   (gtk-main :void ())
   (gtk-main-quit :void ())
   (gtk-quit-add :unsigned-int
@@ -62,8 +62,8 @@
   (gtk-box-pack-start :void
 		      ((box :pointer)
 		       (widget :pointer)
-		       (expand :gtk-boolean)
-		       (fill :gtk-boolean)
+		       (expand gtk-boolean)
+		       (fill gtk-boolean)
 		       (padding :int)))
   (gtk-box-pack-start-defaults :void
 			       ((box :pointer)
@@ -72,15 +72,15 @@
   (gtk-box-set-homogeneous :void
 			   ((box :pointer)
 			    (homogeneous
-			     :gtk-boolean)))
+			     gtk-boolean)))
   (gtk-box-set-spacing :void
 		       ((box :pointer)
 			(spacing :int)))
   (gtk-hbox-new :pointer
-		((homogeneous :gtk-boolean)
+		((homogeneous gtk-boolean)
 		 (spacing :int)))
   (gtk-vbox-new :pointer
-		((homogeneous :gtk-boolean)
+		((homogeneous gtk-boolean)
 		 (spacing :int)))
   (gtk-drawing-area-new :pointer ())
 
@@ -88,7 +88,7 @@
   (gtk-table-new :pointer
 		 ((rows :unsigned-int)
 		  (columns :unsigned-int)
-		  (homogeneous :gtk-boolean)))
+		  (homogeneous gtk-boolean)))
   (gtk-table-attach :void
 		    ((table :pointer)
 		     (child :pointer)
@@ -114,7 +114,7 @@
   (gtk-table-set-homogeneous :void
 			     ((table :pointer)
 			      (homogeneous
-			       :gtk-boolean)))
+			       gtk-boolean)))
 
   ;;paned
   (gtk-paned-add1 :void
@@ -131,27 +131,27 @@
 
   ;;expander
   (gtk-expander-new :pointer
-		    ((label :gtk-string)))
+		    ((label gtk-string)))
   (gtk-expander-set-expanded :void
 			     ((expander :pointer)
 			      (expanded
-			       :gtk-boolean)))
+			       gtk-boolean)))
   (gtk-expander-set-spacing :void
 			    ((expander :pointer)
 			     (spacing :pointer)))
   (gtk-expander-set-label :void
 			  ((expander :pointer)
-			   (label :gtk-string)))
+			   (label gtk-string)))
   (gtk-expander-set-use-underline :void
 				  ((expander
 				    :pointer)
 				   (use-underline
-				    :gtk-boolean)))
+				    gtk-boolean)))
   (gtk-expander-set-use-markup :void
 			       ((expander
 				 :pointer)
 				(use-markup
-				 :gtk-boolean)))
+				 gtk-boolean)))
   (gtk-expander-set-label-widget :void
 				 ((expander
 				   :pointer)
@@ -172,10 +172,10 @@
 		      (yscale :float)))
 
   ;;frame
-  (gtk-frame-new :pointer ((label :gtk-string)))
+  (gtk-frame-new :pointer ((label gtk-string)))
   (gtk-frame-set-label :void
 		       ((frame :pointer)
-			(label :gtk-string)))
+			(label gtk-string)))
   (gtk-frame-set-label-widget :void
 			      ((frame :pointer)
 			       (label-widget
@@ -190,12 +190,12 @@
 
   ;;aspect-frame
   (gtk-aspect-frame-new :pointer
-			((label :gtk-string)
+			((label gtk-string)
 			 (xalign :float)
 			 (yalign :float)
 			 (ratio :float)
 			 (obey_child
-			  :gtk-boolean)))
+			  gtk-boolean)))
   ;; separator
   (gtk-hseparator-new :pointer ())
   (gtk-vseparator-new :pointer ())
@@ -262,13 +262,13 @@
 			     (pos :int)))
   (gtk-notebook-set-show-tabs :void
 			      ((notebook :pointer)
-			       (show-tabs :gtk-boolean)))
+			       (show-tabs gtk-boolean)))
   (gtk-notebook-set-show-border :void
 				((notebook :pointer)
-				 (show-border :gtk-boolean)))
+				 (show-border gtk-boolean)))
   (gtk-notebook-set-scrollable :void
 			       ((notebook :pointer)
-				(scrollable :gtk-boolean)))
+				(scrollable gtk-boolean)))
   (gtk-notebook-set-tab-border :void
 			       ((notebook :pointer)
 				(border-width :int)))
@@ -278,7 +278,7 @@
 			      ((notebook :pointer)))
   (gtk-notebook-set-homogeneous-tabs :void
 				     ((notebook :pointer)
-				      (homogeneous-tabs :gtk-boolean)))
+				      (homogeneous-tabs gtk-boolean)))
   (gtk-notebook-get-nth-page :pointer
 			     ((notebook :pointer)
 			      (n :int)))
@@ -286,30 +286,30 @@
 			    ((notebook :pointer)))
 
   ;;label
-  (gtk-label-new :pointer ((text :gtk-string)))
+  (gtk-label-new :pointer ((text gtk-string)))
   (gtk-label-set-text :void
 		      ((label :pointer)
-		       (text :gtk-string)))
+		       (text gtk-string)))
   (gtk-label-set-text-with-mnemonic :void
 				    ((label :pointer)
-				     (text :gtk-string)))
+				     (text gtk-string)))
   (gtk-label-set-line-wrap :void
 			   ((label :pointer)
-			    (wrap :gtk-boolean)))
+			    (wrap gtk-boolean)))
   (gtk-label-set-selectable :void
 			    ((label :pointer)
-			     (selectable :gtk-boolean)))
+			     (selectable gtk-boolean)))
   (gtk-label-set-use-markup :void
 			    ((label :pointer)
-			     (use-markup :gtk-boolean)))
+			     (use-markup gtk-boolean)))
   (gtk-label-set-markup :void
 			((label :pointer)
-			 (markup :gtk-string)))
+			 (markup gtk-string)))
   (gtk-label-set-markup-with-mnemonic :void
 				      ((label :pointer)
-				       (markup :gtk-string)))
+				       (markup gtk-string)))
   (gtk-accel-label-new :pointer
-		       ((str :gtk-string)))
+		       ((str gtk-string)))
   (gtk-accel-label-set-accel-widget :void
 				    ((label :pointer)
 				     (widget :pointer)))
@@ -319,7 +319,7 @@
   (gtk-progress-bar-pulse :void ((pbar :pointer)))
   (gtk-progress-bar-set-text :void
 			     ((pbar :pointer)
-			      (text :gtk-string)))
+			      (text gtk-string)))
   (gtk-progress-bar-set-fraction :void
 				 ((pbar :pointer)
 				  (fraction :double)))
@@ -347,13 +347,13 @@
 
   ;;image
   (gtk-image-new-from-file :pointer
-			   ((filename :gtk-string)))
+			   ((filename gtk-string)))
   (gtk-image-new-from-stock :pointer
-			    ((stock :gtk-string)
+			    ((stock gtk-string)
 			     (icon-size :int)))
   (gtk-image-set-from-stock :void
 			    ((image :pointer)
-			     (stock :gtk-string)
+			     (stock gtk-string)
 			     (icon-size :int)))
   (gtk-image-get-pixbuf :pointer
 			((image :pointer)))
@@ -364,7 +364,7 @@
 				((factory :pointer)))
   (gtk-icon-factory-add :void
 			((factory :pointer)
-			 (stock-id :gtk-string)
+			 (stock-id gtk-string)
 			 (icon-set :pointer)))
 
   ;;icon-set
@@ -375,11 +375,11 @@
   (gtk-statusbar-new :pointer ())
   (gtk-statusbar-get-context-id :unsigned-int
 				((sbar :pointer)
-				 (description :gtk-string)))
+				 (description gtk-string)))
   (gtk-statusbar-push :unsigned-int
 		      ((sbar :pointer)
 		       (context-id :unsigned-int)
-		       (text :gtk-string)))
+		       (text gtk-string)))
   (gtk-statusbar-pop :void
 		     ((sbar :pointer)
 		      (context-id :unsigned-int)))
@@ -389,7 +389,7 @@
 			 (message-id :unsigned-int)))
   (gtk-statusbar-set-has-resize-grip :void
 				     ((sbar :pointer)
-				      (setting :gtk-boolean)))
+				      (setting gtk-boolean)))
 
   ;;widget
   (gtk-widget-show :void ((widget :pointer)))
@@ -401,7 +401,7 @@
   (gtk-widget-destroy :void ((widget :pointer)))
   (gtk-widget-set-sensitive :void
 			    ((widget :pointer)
-			     (sensitive :gtk-boolean)))
+			     (sensitive gtk-boolean)))
   (gtk-widget-set-size-request :void
 			       ((widget :pointer)
 				(width :int)
@@ -410,7 +410,7 @@
 				((widget :pointer)))
   (gtk-widget-add-accelerator :void
 			      ((widget :pointer)
-			       (gsignal :gtk-string)
+			       (gsignal gtk-string)
 			       (accel-group :pointer)
 			       (key :unsigned-int)
 			       (mods :int)
@@ -430,10 +430,10 @@
   (gtk-window-new :pointer ((type :int)))
   (gtk-window-set-title :void
 			((widget :pointer)
-			 (title :gtk-string)))
-  (gtk-window-set-icon-from-file :gtk-boolean
+			 (title gtk-string)))
+  (gtk-window-set-icon-from-file gtk-boolean
 				 ((window :pointer)
-				  (filename :gtk-string)
+				  (filename gtk-string)
 				  (err :pointer)))
   (gtk-window-set-default-size :void
 			       ((widget :pointer)
@@ -441,13 +441,13 @@
 				(height :int)))
   (gtk-window-set-resizable :void
 			    ((widget :pointer)
-			     (resizable :gtk-boolean)))
+			     (resizable gtk-boolean)))
   (gtk-window-set-decorated :void
 			    ((widget :pointer)
-			     (decorated :gtk-boolean)))
+			     (decorated gtk-boolean)))
   (gtk-window-set-auto-startup-notification :void
 					    ((setting
-					      :gtk-boolean)))
+					      gtk-boolean)))
   (gtk-window-set-position :void
 			   ((widget :pointer)
 			    (position :int)))
@@ -468,7 +468,7 @@
   (gtk-entry-new :pointer ())
   (gtk-entry-set-text :void
 		      ((entry :pointer)
-		       (text :gtk-string)))
+		       (text gtk-string)))
   (gtk-entry-get-text :pointer ((entry :pointer)))
   (gtk-entry-set-max-length :void
 			    ((entry :pointer)
@@ -476,13 +476,13 @@
   (gtk-entry-set-editable :void
 			  ((entry :pointer)
 			   (editable
-			    :gtk-boolean)))
+			    gtk-boolean)))
   (gtk-entry-set-completion :void
 			    ((entry :pointer)
 			     (completion :pointer)))
   (gtk-entry-set-has-frame :void
 			   ((entry :pointer)
-			    (has-frame :gtk-boolean)))
+			    (has-frame gtk-boolean)))
 
   ;;entry-completion
   (gtk-entry-completion-new :pointer ())
@@ -504,7 +504,7 @@
   (gtk-range-set-inverted :void
 			  ((range :pointer)
 			   (inverted
-			    :gtk-boolean)))
+			    gtk-boolean)))
   (gtk-range-set-increments :void
 			    ((range :pointer)
 			     (step :double)
@@ -517,7 +517,7 @@
   ;;scale
   (gtk-scale-set-draw-value :void
 			    ((scale :pointer)
-			     (draw-value :gtk-boolean)))
+			     (draw-value gtk-boolean)))
   (gtk-scale-set-value-pos :void
 			   ((scale :pointer)
 			    (pos-type :int)))
@@ -545,7 +545,7 @@
   (gtk-combo-box-new-text :pointer ())
   (gtk-combo-box-append-text :void
 			     ((combo-box :pointer)
-			      (text :gtk-string)))
+			      (text gtk-string)))
   (gtk-combo-box-remove-text :void
 			     ((combo-box :pointer)
 			      (position :int)))
@@ -557,7 +557,7 @@
   (gtk-combo-box-set-model :void
 			   ((combo-box :pointer)
 			    (model :pointer)))
-  (gtk-combo-box-get-active-iter :gtk-boolean
+  (gtk-combo-box-get-active-iter gtk-boolean
 				 ((combo-box :pointer)
 				  (iter :pointer)))
   (gtk-combo-box-set-active-iter :void
@@ -608,7 +608,7 @@
   (gtk-dialog-add-button :pointer
 			 ((dialog :pointer)
 			  (button-text
-			   :gtk-string)
+			   gtk-string)
 			  (response-id :int)))
   (gtk-dialog-add-action-widget :void
 				((dialog :pointer)
@@ -616,7 +616,7 @@
 				 (response-id :pointer)))
   (gtk-dialog-set-has-separator :void
 				((dialog :pointer)
-				 (has-separator :gtk-boolean)))
+				 (has-separator gtk-boolean)))
   (gtk-dialog-set-default-response :void
 				   ((dialog :pointer)
 				    (response-id :int)))
@@ -627,11 +627,11 @@
 			   (flags :int)
 			   (type :int)
 			   (buttons :int)
-			   (message :gtk-string)))
+			   (message gtk-string)))
   (gtk-message-dialog-set-markup :void
 				 ((dialog
 				   :pointer)
-				  (str :gtk-string)))
+				  (str gtk-string)))
 
   ;;file-chooser
   (gtk-file-chooser-set-action :void
@@ -639,42 +639,42 @@
 				(action :int)))
   (gtk-file-chooser-set-local-only :void
 				   ((chooser :pointer)
-				    (local-only :gtk-boolean)))
+				    (local-only gtk-boolean)))
   (gtk-file-chooser-set-select-multiple :void
 					((chooser :pointer)
-					 (select-multiple :gtk-boolean)))
+					 (select-multiple gtk-boolean)))
   (gtk-file-chooser-set-current-name :void 
 				     ((chooser :pointer)
-				      (name :gtk-string)))
-  (gtk-file-chooser-set-filename :gtk-boolean 
+				      (name gtk-string)))
+  (gtk-file-chooser-set-filename gtk-boolean 
 				 ((chooser :pointer)
-				  (filename :gtk-string)))
-  (gtk-file-chooser-get-filename :gtk-string
+				  (filename gtk-string)))
+  (gtk-file-chooser-get-filename gtk-string
 				 ((chooser :pointer)))
   (gtk-file-chooser-get-filenames :pointer
 				  ((chooser :pointer)))
-  (gtk-file-chooser-set-current-folder :gtk-boolean
+  (gtk-file-chooser-set-current-folder gtk-boolean
 				       ((chooser :pointer)
-					(folder :gtk-string)))
-  (gtk-file-chooser-get-current-folder :gtk-string
+					(folder gtk-string)))
+  (gtk-file-chooser-get-current-folder gtk-string
 				       ((chooser :pointer)))
-  (gtk-file-chooser-set-uri :gtk-boolean
+  (gtk-file-chooser-set-uri gtk-boolean
 			    ((chooser :pointer)
-			     (uri :gtk-string)))
-  (gtk-file-chooser-get-uri :gtk-string
+			     (uri gtk-string)))
+  (gtk-file-chooser-get-uri gtk-string
 			    ((chooser :pointer)))
-  (gtk-file-chooser-select-uri :gtk-boolean
+  (gtk-file-chooser-select-uri gtk-boolean
 			       ((chooser :pointer)))
   (gtk-file-chooser-get-uris :pointer
 			     ((chooser :pointer)))
-  (gtk-file-chooser-set-current-folder-uri :gtk-boolean
+  (gtk-file-chooser-set-current-folder-uri gtk-boolean
 					   ((chooser :pointer)
-					    (folder :gtk-string)))
-  (gtk-file-chooser-get-current-folder-uri :gtk-string
+					    (folder gtk-string)))
+  (gtk-file-chooser-get-current-folder-uri gtk-string
 					   ((chooser :pointer)))
   (gtk-file-chooser-set-use-preview-label :void
 					  ((chooser :pointer)
-					   (use-label :gtk-boolean)))
+					   (use-label gtk-boolean)))
   (gtk-file-chooser-add-filter :void
 			       ((chooser :pointer)
 				(filter :pointer)))
@@ -688,12 +688,12 @@
 
   ;;file-chooser-dialog
   (gtk-file-chooser-dialog-new :pointer
-			       ((title :gtk-string)
+			       ((title gtk-string)
 				(parent :pointer)
 				(action :int)
-				(cancel-text :gtk-string)
+				(cancel-text gtk-string)
 				(cancel-response-id :int)
-				(accept-text :gtk-string)
+				(accept-text gtk-string)
 				(accept-response-id :int)
 				(null :pointer)))
 
@@ -701,13 +701,13 @@
   (gtk-file-filter-new :pointer ())
   (gtk-file-filter-set-name :void
 			    ((filter :pointer)
-			     (name :gtk-string)))
+			     (name gtk-string)))
   (gtk-file-filter-add-mime-type :void
 				 ((filter :pointer)
-				  (mime-type :gtk-string)))
+				  (mime-type gtk-string)))
   (gtk-file-filter-add-pattern :void
 			       ((filter :pointer)
-				(pattern :gtk-string)))
+				(pattern gtk-string)))
   ;;text-view
   (gtk-text-view-new :pointer ())
   (gtk-text-view-set-buffer :void
@@ -720,12 +720,12 @@
 				(wrap-mode :int)))
   (gtk-text-view-set-editable :void
 			      ((text-view :pointer)
-			       (setting :gtk-boolean)))
-  (gtk-text-view-scroll-to-iter :gtk-boolean
+			       (setting gtk-boolean)))
+  (gtk-text-view-scroll-to-iter gtk-boolean
 				((text-view :pointer)
 				 (iter :pointer)
 				 (within-margin :double)
-				 (use-align :gtk-boolean)
+				 (use-align gtk-boolean)
 				 (xalign :double)
 				 (yalign :double)))
   (gtk-text-view-scroll-mark-onscreen :void
@@ -734,15 +734,15 @@
   ;;text-buffer
   (gtk-text-buffer-new :pointer
 		       ((table :pointer)))
-  (gtk-text-buffer-get-text :gtk-string
+  (gtk-text-buffer-get-text gtk-string
 			    ((buffer :pointer)
 			     (start :pointer)
 			     (end :pointer)
-			     (include-hidden-chars :gtk-boolean)))
+			     (include-hidden-chars gtk-boolean)))
   (gtk-text-buffer-insert :void
 			  ((buffer :pointer)
 			   (iter :pointer)
-			   (text :gtk-string)
+			   (text gtk-string)
 			   (len :int)))
   (gtk-text-buffer-delete :void
 			  ((buffer :pointer)
@@ -750,7 +750,7 @@
 			   (end :pointer)))
   (gtk-text-buffer-set-text :void
 			    ((buffer :pointer)
-			     (text :gtk-string)
+			     (text gtk-string)
 			     (len :int)))
   (gtk-text-buffer-get-char-count :int
 				  ((buffer :pointer)))
@@ -760,9 +760,9 @@
 				     (len :int)))
   (gtk-text-buffer-create-tag :pointer
 			      ((buffer :pointer)
-			       (tag-name :gtk-string)
-			       (first-property-name :gtk-string)
-			       (second-property-name :gtk-string)
+			       (tag-name gtk-string)
+			       (first-property-name gtk-string)
+			       (second-property-name gtk-string)
 			       (eof :pointer)))
   (gtk-text-buffer-remove-all-tags :void
 				   ((buffer :pointer)
@@ -782,9 +782,9 @@
 			      (end :pointer)))
   (gtk-text-buffer-create-mark :pointer
 			       ((buffer :pointer)
-				(mark-name :gtk-string)
+				(mark-name gtk-string)
 				(where :pointer)
-				(left-gravity :gtk-boolean)))
+				(left-gravity gtk-boolean)))
   (gtk-text-buffer-get-iter-at-mark :void
 				    ((buffer :pointer)
 				     (iter :pointer)
@@ -796,12 +796,12 @@
 				(mark :pointer)))
   (gtk-text-buffer-get-mark :pointer
 			    ((buffer :pointer)
-			     (name :gtk-string)))
-  (gtk-text-buffer-get-modified :gtk-boolean
+			     (name gtk-string)))
+  (gtk-text-buffer-get-modified gtk-boolean
 				((buffer :pointer)))
   (gtk-text-buffer-set-modified :void
 				((buffer :pointer)
-				 (setting :gtk-boolean)))
+				 (setting gtk-boolean)))
   (gtk-text-buffer-move-mark :void
 			     ((buffer :pointer)
 			      (mark :pointer)
@@ -819,7 +819,7 @@
   (gtk-ui-manager-new :pointer ())
   (gtk-ui-manager-set-add-tearoffs :void
 				   ((ui-manager :pointer)
-				    (add-tearoffs :gtk-boolean)))
+				    (add-tearoffs gtk-boolean)))
   (gtk-ui-manager-insert-action-group :void
 				      ((ui-manager :pointer)
 				       (action-group :pointer)
@@ -830,13 +830,13 @@
 
   ;;action-group
   (gtk-action-group-new :pointer
-			((name :gtk-string)))
+			((name gtk-string)))
   (gtk-action-group-set-sensitive :void
 				  ((action-group :pointer)
-				   (sensitive :gtk-boolean)))
+				   (sensitive gtk-boolean)))
   (gtk-action-group-set-visible :void
 				((action-group :pointer)
-				 (visible :gtk-boolean)))
+				 (visible gtk-boolean)))
   (gtk-action-group-add-action :void
 			       ((action-group :pointer)
 				(action :pointer)))
@@ -846,30 +846,30 @@
   (gtk-action-group-add-action-with-accel :void
 					  ((action-group :pointer)
 					   (action :pointer)
-					   (accel :gtk-string)))
+					   (accel gtk-string)))
 
   ;;action
   (gtk-action-new :pointer
-		  ((name :gtk-string)
+		  ((name gtk-string)
 		   (label :pointer)
 		   (tooltip :pointer)
-		   (stock-id :gtk-string)))
+		   (stock-id gtk-string)))
   (gtk-event-box-new :pointer ())
   (gtk-event-box-set-above-child :void
 				 ((event-box :pointer)
-				  (above :gtk-boolean)))
+				  (above gtk-boolean)))
   (gtk-event-box-set-visible-window :void
 				    ((event-box :pointer)
-				     (visible-window :gtk-boolean)))
+				     (visible-window gtk-boolean)))
 
   ;;miscellaneous
-  (gtk-check-version :gtk-string
+  (gtk-check-version gtk-string
 		     ((required-major :unsigned-int)
 		      (required-minor :unsigned-int)
 		      (required-micro :unsigned-int)))
   (gtk-widget-create-pango-layout :pointer
 				  ((widget :pointer)
-				   (text :gtk-string))))
+				   (text gtk-string))))
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk

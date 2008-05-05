@@ -38,7 +38,8 @@
 			      :on-clicked 
 			      (callback (widget event data)
 				(with-widget (w :statusbar)
-				  (push-message w (format nil "~a" (fraction (fm-other :pbar)))))))))
+				  (with-widget (pbar :pbar)
+				   (push-message w (format nil "~a" (fraction pbar)))))))))
            (mk-hbox
             :kids (kids-list?
                    (mk-progress-bar :md-name :pbar2				      

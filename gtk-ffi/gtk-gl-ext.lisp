@@ -18,7 +18,7 @@ This is taken from
 ;(export '(with-gl-drawable with-swap-buffers))
 
 (cffi:define-foreign-library libgtkglext
-  (:unix "libgtkglext-x11-1.0.so")
+  (:unix (:or "libgtkglext-x11-1.0.so" "libgtkglext-x11-1.0.so.0"))
   (t (:default "libgtkglext")))
    
 (cffi:use-foreign-library libgtkglext)

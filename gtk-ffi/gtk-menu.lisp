@@ -19,7 +19,7 @@
 (in-package :gtk-ffi)
 
 (def-gtk-function :gtk gtk-check-menu-item-set-active :void 
-  ((check-menu :pointer) (active :gtk-boolean)))
+  ((check-menu :pointer) (active gtk-boolean)))
 
 #+test
 (def-gtk-lib-functions :gtk
@@ -40,7 +40,7 @@
   (gtk-menu-bar-new :pointer ())
   (gtk-menu-new :pointer ())
   (gtk-menu-set-title :void
-		      ((menu :pointer) (title :gtk-string)))
+		      ((menu :pointer) (title gtk-string)))
   (gtk-menu-attach :void
 		   ((menu :pointer) (child :pointer)
 		    (lattach :unsigned-int)
@@ -63,7 +63,7 @@
 				((label :pointer)))
   (gtk-menu-item-set-right-justified :void
 				     ((menu-item :pointer)
-				      (right-justified :gtk-boolean)))
+				      (right-justified gtk-boolean)))
   (gtk-menu-item-set-submenu :void
 			     ((menu-item :pointer)
 			      (submenu :pointer)))
@@ -81,7 +81,7 @@
   (gtk-check-menu-item-new :pointer ())
   (gtk-check-menu-item-new-with-label :pointer
 				      ((label :pointer)))
-  (gtk-check-menu-item-get-active :gtk-boolean
+  (gtk-check-menu-item-get-active gtk-boolean
 				  ((check-menu :pointer)))
   (gtk-radio-menu-item-new :pointer ((group :pointer)))
   (gtk-radio-menu-item-new-from-widget :pointer
@@ -90,12 +90,12 @@
 				      ((group :pointer)))
   (gtk-radio-menu-item-new-with-label-from-widget :pointer
 						  ((radio :pointer)
-						   (label :gtk-string)))
+						   (label gtk-string)))
   (gtk-radio-menu-item-get-group :pointer ((radio :pointer)))
   (gtk-image-menu-item-new :pointer ())
-  (gtk-image-menu-item-new-with-label :pointer ((label :gtk-string)))
+  (gtk-image-menu-item-new-with-label :pointer ((label gtk-string)))
   (gtk-image-menu-item-new-from-stock :pointer
-				      ((stock-id :gtk-string)
+				      ((stock-id gtk-string)
 				       (accel-group :pointer)))
   (gtk-image-menu-item-set-image :void
 				 ((menu-item :pointer)

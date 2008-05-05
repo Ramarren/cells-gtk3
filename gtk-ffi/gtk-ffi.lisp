@@ -24,8 +24,8 @@
   "Convert hello-c to uffi to cffi types. Swap order of arguments."
   (flet ((convert-type (type)
 	  (case type
-	    (c-string :gtk-string)
-	    (boolean :gtk-boolean)
+	    (c-string 'gtk-string)
+	    (boolean 'gtk-boolean)
 	    (t (cffi-uffi-compat::convert-uffi-type (ffi-to-uffi-type type))))))
   (dbind (ignore module &rest funcs) body
      (pprint `(,ignore 
@@ -54,25 +54,44 @@
 (defvar *gtk-debug* nil)
 
 ;;; ==============  Define CFFI types, and their translations.... 
-(eval-when (:compile-toplevel :load-toplevel :execute) 	; ph:  help SBCL
-  (cffi:defctype :gtk-string :pointer :documentation "string type for cffi type translation")
-  (cffi:defctype :gtk-boolean :pointer :documentation "boolean type for cffi type translation"))
+#+nil (eval-when (:compile-toplevel :load-toplevel :execute) 	; ph:  help SBCL
+  (cffi:defctype gtk-string :pointer "string type for cffi type translation")
+  (cffi:defctype gtk-boolean :pointer "boolean type for cffi type translation"))
 
-(defmethod cffi:translate-to-foreign (value (type (eql :gtk-boolean)))
+(cffi:define-foreign-type gtk-boolean-type ()
+  ()
+  (:actual-type :pointer)
+  #-sbcl (:simple-parser gtk-boolean))
+
+#+sbcl (cffi:define-parse-method gtk-boolean (&rest cffi::args)
+  (apply #'make-instance 'gtk-boolean-type cffi::args))
+
+(cffi:define-foreign-type gtk-string-type ()
+  ()
+  (:actual-type :pointer)
+  #-sbcl (:simple-parser gtk-string))
+
+#+sbcl (cffi:define-parse-method gtk-string (&rest cffi::args)
+  (apply #'make-instance 'gtk-string-type cffi::args))
+
+
+(defmethod cffi:translate-to-foreign (value (type gtk-boolean-type))
   (cffi:make-pointer (if value 1 0)))
 
-(defmethod cffi:translate-from-foreign (value (type (eql :gtk-boolean)))
+(defmethod cffi:translate-from-foreign (value (type gtk-boolean-type))
   #-clisp(not (zerop (cffi::pointer-address value))) ; pod strange!
   #+clisp(if (null value) ; pod something really wrong here!
 	     nil
 	   (not (zerop (cffi::pointer-address value)))))
 
-(defmethod cffi:translate-to-foreign (value (type (eql :gtk-string)))
+(defmethod cffi:translate-to-foreign (value (type gtk-string-type))
   (when (null value) (setf value "")) ; pod ??? 
   (cffi:foreign-string-alloc value))
 
-(defmethod cffi:translate-from-foreign (value (type (eql :gtk-string)))
+(defmethod cffi:translate-from-foreign (value (type gtk-string-type))
   (utf-8-to-lisp (cffi:foreign-string-to-lisp value)))
+
+
 
 (defun int-slot-indexed (obj obj-type slot index)
   (declare (ignorable obj-type))
@@ -199,7 +218,7 @@
 	   ,(when (with-debug-p name)
 		  `(format *trace-output* "~%Calling (~A ~{~A~^ ~})" 
 			   ,(string-downcase (string name)) (list ,@(mapcar 'car arguments)))))
-	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'(lambda (arg) (if (eql (cadr arg) :gtk-string)
+	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'(lambda (arg) (if (eql (cadr arg) 'gtk-string)
 									    `(lisp-to-utf-8 ,(car arg))
 									    (car arg)))
 							arguments))))

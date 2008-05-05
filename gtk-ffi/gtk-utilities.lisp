@@ -234,8 +234,7 @@
   (defun deref-col-type-buffer (col-type buffer)
     (ecase col-type
       ((:string :icon)
-       (get-gtk-string
-        (cffi:make-pointer (cffi:mem-aref buffer :pointer 0))))
+       (get-gtk-string (cffi:make-pointer (cffi-sys:pointer-address (cffi:mem-aref buffer :pointer 0)))))
       (:boolean (not (zerop (cffi:mem-aref buffer :unsigned-char 0))))
       (:date (cffi:mem-aref buffer :FLOAT 0))
       (:int (cffi:mem-aref buffer :int 0))

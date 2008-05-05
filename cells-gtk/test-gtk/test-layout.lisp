@@ -6,7 +6,7 @@
       :expand t :fill t
       :scrollable t				     
       :tab-labels (list "_Table" "_Panes" "_Alignment")
-      :tab-pos (c? (value (fm-other :tab-pos)))
+      :tab-pos (c? (widget-value :tab-pos))
       :kids (kids-list?
 	     (mk-table
 	      :elements (cons
