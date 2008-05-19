@@ -253,11 +253,14 @@ splash screen, if applicable.  A threadsafe replacement for \"make-be\".  To sim
 	   (gtk-main))
 
     ;; clean-up forms  -- application windows are taken down by gtk-quit-add callbacks
+    (trc "cells-gtk clean-up code")
     (loop for i below (gtk-main-level)
+       do (trc "  gtk-main-quit")
        do (gtk-main-quit))
     ;; Next is a work-around for a problem with gtk and lispwork-created .exe files
     #+(and Lispworks win32)(loop for i from 1 to 30 do (gtk-main-quit))
     (loop while (gtk-events-pending)
+       do (trc "  gtk-main-iteration-do")
        do (gtk-main-iteration-do nil))))
 
 ;;;

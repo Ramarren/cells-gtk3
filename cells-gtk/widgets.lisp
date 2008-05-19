@@ -77,13 +77,13 @@
 
 (defun gtk-object-forget (gtk-id gtk-object)
   (when (and gtk-id gtk-object)
-    (trc "    forgetting id/obj" gtk-id gtk-object)
+    (trc nil "    forgetting id/obj" gtk-id gtk-object)
     (let ((ptr (cffi:pointer-address gtk-id)))
       (assert *gtk-objects*)
       (remhash ptr *gtk-objects*)
       #+unnecessary (mapc (lambda (k) (gtk-object-forget (slot-value k 'id) k))
 			  (slot-value gtk-object '.kids)))   ; unnecessary, ph
-    (trc "    done" gtk-id gtk-object)))
+    (trc nil "    done" gtk-id gtk-object)))
 
 (defun gtk-object-find (gtk-id &optional must-find-p &aux (hash-id (cffi:pointer-address gtk-id)))
   (when *gtk-objects*
@@ -340,11 +340,11 @@
 #+libcellsgtk
 (cffi:defcallback reshape-widget-handler :int ((widget :pointer) (event :pointer) (data :pointer))
   (declare (ignore data event))
-  (trc "reshape" widget)
+  (trc nil "reshape" widget)
   (bwhen (self (gtk-object-find widget))
     (let ((new-width (gtk-adds-widget-width widget))
 	  (new-height (gtk-adds-widget-height widget)))
-      (trc "reshape widget to new size" self widget new-width new-height)
+      (trc nil "reshape widget to new size" self widget new-width new-height)
       (with-integrity (:change :adjust-widget-size)
 	(setf (allocated-width self) new-width
 	      (allocated-height self) new-height))))
@@ -380,22 +380,22 @@
     (gtk-widget-hide (id self))))
 
 (defmethod not-to-be :around ((self gtk-object))
-  (trc "gtk-object not-to-be :around" (md-name self) self)
-  (trc "  store-remove")
+  (trc nil "gtk-object not-to-be :around" (md-name self) self)
+  (trc nil "  store-remove")
   (when (eql (store-lookup (md-name self) *widgets*) self)
     (store-remove (md-name self) *widgets*))
-  (trc "  object-forget")
+  (trc nil "  object-forget")
   (gtk-object-forget (id self) self)
 
-  (trc "  call-next-method")
+  (trc nil "  call-next-method")
   (call-next-method)
 
-  (trc "  widget-destroy")
+  (trc nil "  widget-destroy")
   (when  *gtk-debug*
-    (trc "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
+    (trc nil "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
     (force-output))
   (gtk-widget-destroy (slot-value self 'id))
-  (trc "  done"))
+  (trc nil "  done"))
 
 
 (defun assert-bin (container)

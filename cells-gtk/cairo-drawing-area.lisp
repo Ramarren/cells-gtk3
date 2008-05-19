@@ -509,7 +509,7 @@ anchor-point."))
 		    (with-accessors ((mouse mouse-pos)) (widget self)
 		      (and (2d:point-in-box-p mouse (^p1) (^p2) :tol (^line-width))
 			   (if (not (^filled))
-			       (not (2d:point-in-box-p mouse (^p1) (^p2) :tol (^line-width)))
+			       (2d:point-in-box-p mouse (^p1) (^p2) :tol (^line-width))
 			       t))))))
    :no-redraw (mouse-over-p)))
 
@@ -646,6 +646,8 @@ anchor-point."))
 									   (^arrow-length))))))))
 (defmodify arrow-line (arrow-angle arrow-length))
 
+(def-mk-primitive arrow-line (self initargs))
+
 ;;;; -----------------------------------------------------------
 ;;;;       event handlers 
 ;;;; -----------------------------------------------------------
@@ -666,7 +668,7 @@ anchor-point."))
   (setf (button-down-position self) pos)
   (case button
     (1
-     (trc "button down on" (hover self))
+     (trc nil "button down on" (hover self))
      (bif (prim (hover self))
 	  ;; prim  --> select/toggle
 	  (with-slot-accessors (selection) self
@@ -674,7 +676,7 @@ anchor-point."))
 				 (if (contains-any '(:shift :control) state)
 				     ;; toggle if ctrl/shift
 				     (progn
-				       (trc "CTRL/SHIFT -- toggeling" prim)
+				       (trc nil "CTRL/SHIFT -- toggeling" prim)
 				       (if (selected-p prim)
 					   (setf selection (delete prim selection))
 					   (push prim selection)))
@@ -684,7 +686,7 @@ anchor-point."))
 					;(deb "selection: ~a" selection)))
 	  ;; no prim --> draw a select box
 	  (progn
-	    (trc "START SELECT-BOX")
+	    (trc nil "START SELECT-BOX")
 	    (unless (contains-any '(:shift :control) state)
 	      (setf (selection self) nil))
 	    (setf (select-box self) (mk-primitive self
@@ -698,10 +700,10 @@ anchor-point."))
 						  :fill-alpha .1))
 	    (trc nil "select box is" (select-box self)))))
     (t (bwhen (box (select-box self))
-	 (trc "CANCEL SELECT-BOX")
+	 (trc nil "CANCEL SELECT-BOX")
 	 (setf box (remove-primitive box)))
        (when (dragging self)
-	 (trc "CANCEL DRAG")
+	 (trc nil "CANCEL DRAG")
 	 (dolist (prim (selection self))                                  
 	   (setf (dragged-p prim) nil))
 	 (setf (dragging self) nil
@@ -714,7 +716,7 @@ anchor-point."))
     (cond
       ((dragging self)
        ;; this is the button release after a dragging event
-       (trc "FINISH DRAGGING")
+       (trc nil "FINISH DRAGGING")
        (with-slot-accessors (dragging on-dragged drag-offset drag-start selection) self
 			    (dolist (prim selection)
 			      ;; call on-dragged [widget] [button] [primitive] [start-pos] [end-pos]
@@ -730,15 +732,15 @@ anchor-point."))
 				  drag-start nil
 				  drag-offset nil)))
       ((select-box self)
-       (trc "FINISH SELECT-BOX")
+       (trc nil "FINISH SELECT-BOX")
        (with-slot-accessors (selection prims button-down-position select-box) self
 	   (dolist (prim prims)
-	     (trc "checking" prim)
+	     (trc nil "checking" prim)
 	     (and (selectable prim)
 		  (2d:point-in-box-p (c-o-g prim) button-down-position pos)
 		  (push prim selection)
-		  (trc "--> selected " prim)))
-	   (trc "selection is now" selection)
+		  (trc nil "--> selected " prim)))
+	   (trc nil "selection is now" selection)
 	   (setf select-box (remove-primitive select-box))))
       (t (with-slot-accessors (selection hover) self
 			      (unless (contains-any '(:shift :control) state)
@@ -760,7 +762,7 @@ anchor-point."))
     ((bwhen (start-pos (button-down-position self))
        (and (not (select-box self))
 	    (> (2d:polar-radius (2d:v- start-pos pos)) (drag-threshold self))))
-     (trc "START DRAGGING")
+     (trc nil "START DRAGGING")
      ;; initiate dragging
      (with-slot-accessors (drag-offset drag-start selection dragging) self
 	 (setf drag-offset (make-hash-table)
