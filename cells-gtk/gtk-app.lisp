@@ -157,10 +157,12 @@
     (when close-all-windows
       (gtk-main-quit))
     (when #+libcellsgtk (= 0 (gtk-adds-g-thread-supported)) ; init only once
-	  #-libcellsgtk threading-initialized
+	  #-libcellsgtk (not threading-initialized)
 	  (with-trcs
-	    (g-thread-init +c-null+)	; init threading
-	    (gdk-threads-init)
+            #+cells-gtk-threads
+            (progn
+              (g-thread-init +c-null+)	; init threading
+              (gdk-threads-init))
 	    (assert (gtk-init-check +c-null+ +c-null+))
 	    (gtk-init +c-null+ +c-null+)
 	    #+cells-gtk-opengl (gl-init)
