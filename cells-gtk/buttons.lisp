@@ -38,8 +38,7 @@
 (defobserver .kids ((self button))
   (assert-bin self)
   (dolist (kid (kids self))
-    (gtk-container-add (id self) (id kid)))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id kid))))
 
 (defobserver stock ((self button))
   (when new-value
@@ -98,5 +97,4 @@
 (defobserver .value ((self radio-button))
   (when (and new-value (upper self box))
     (with-integrity (:change 'radio-up-to-box)
-      (setf (value (upper self box)) (md-name self))))
-  #+clisp (call-next-method))
+      (setf (value (upper self box)) (md-name self)))))

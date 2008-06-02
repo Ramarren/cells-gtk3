@@ -38,22 +38,23 @@
    (init :accessor init :initarg :init :initform nil))
   (editable has-frame max-length)
   (changed activate)
-  :on-changed (callback-if (auto-update self)
+  :on-changed (callback-if (auto-update self)  	; this is broken and never gets called
                   (widget event data)
                 (with-integrity (:change 'entry-changed-cb)
+		  (trc "entry on-changed")
                   (let ((txt (get-gtk-string (gtk-entry-get-text widget))))
-                    (trc  nil "ENTRY (ON-CHANGED)" txt) (force-output)
+                    (trc "ENTRY (ON-CHANGED)" txt) (force-output)
                     (setf (value self) txt))))
-  :on-activate (callback-if (not (auto-update self))
+  :on-activate (callback-if (not (auto-update self)) ; this is called on pressing enter
                    (widget event data)
+		 (trc "entry on-activate")
                  (with-integrity (:change 'entry-activate-cb)
                    (let ((txt (get-gtk-string (gtk-entry-get-text widget))))
                      (trc  nil "ENTRY (ON-ACTIVATE)" txt) (force-output)
                      (setf (value self) (if (equal txt "") nil txt))))))
 
 (defobserver text ((self entry))
-  (when new-value
-    (gtk-entry-set-text (id self) new-value)))
+  (gtk-entry-set-text (id self) (or new-value "")))
 
 (defobserver init ((self entry))
   (when (stringp new-value) ;; could be null or numeric for spin button

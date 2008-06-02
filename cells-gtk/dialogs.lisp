@@ -169,5 +169,15 @@
 		       +c-null+)))
 
 (defun file-chooser (&rest inits)
-  (apply #'show-dialog 'file-chooser-dialog inits))
+  (bwhen (fn-string (apply #'show-dialog 'file-chooser-dialog inits))
+    (let ((fn (parse-namestring fn-string))
+	  (action (getf inits :action)))
+      (flet ((fail (format-string &rest format-args)
+	       (show-message (apply #'format nil format-string format-args)
+			     :title (format nil "File ~(~a~) error" action))
+	       nil))
+       (case action
+	 (:open (or (and (file-namestring fn) (probe-file fn))
+		    (fail "\"~a\" is not a valid filename." fn-string)))
+	 (t fn-string))))))
 

@@ -20,9 +20,9 @@
 
 
 (def-gtk-lib-functions :gtk
-  ;; main-loop
-  (gtk-init :void
-	    ((argc :pointer) (argv :pointer)))
+    ;; main-loop
+    (gtk-init :void
+	      ((argc :pointer) (argv :pointer)))
   (gtk-init-check gtk-boolean
 		  ((argc :pointer)
 		   (argv :pointer)))
@@ -41,6 +41,15 @@
   (gtk-main-level :int ())
   (gtk-get-current-event-time :unsigned-int ())
 
+  ;; misc
+  (gtk-misc-set-alignment :void
+			  ((widget :pointer)
+			   (xalign :float)
+			   (yalign :float)))
+  (gtk-misc-set-padding :void
+			((widget :pointer)
+			 (xpad :float)
+			 (ypad :float)))
   ;;container
   (gtk-container-add :pointer
 		     ((container :pointer)
@@ -54,10 +63,10 @@
   (gtk-container-get-border-width :unsigned-int
 				  ((container :pointer)))
   (gtk-container-set-resize-mode :void
-				  ((container :pointer)
-				   (mode :unsigned-int)))
+				 ((container :pointer)
+				  (mode :unsigned-int)))
   (gtk-container-get-resize-mode :unsigned-int
-				  ((container :pointer)))
+				 ((container :pointer)))
   ;;box
   (gtk-box-pack-start :void
 		      ((box :pointer)
@@ -257,6 +266,8 @@
   (gtk-notebook-set-current-page :void
 				 ((notebook :pointer)
 				  (page-num :int)))
+  (gtk-notebook-get-current-page :int
+				 ((notebook :pointer)))
   (gtk-notebook-set-tab-pos :void
 			    ((notebook :pointer)
 			     (pos :int)))

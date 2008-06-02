@@ -160,8 +160,7 @@
   (assert-bin self)
   (when new-value
     (dolist (kid new-value)
-      (gtk-container-add (id self) (id kid))))
-  #+clisp (call-next-method))
+      (gtk-container-add (id self) (id kid)))))
 
 (def-widget separator-tool-item (tool-item)
   ()
@@ -202,8 +201,7 @@
 (defobserver .kids ((self menu-shell))  
   (when new-value
     (dolist (kid new-value)
-      (gtk-menu-shell-append (id self) (id kid))))
-  #+clisp (call-next-method))
+      (gtk-menu-shell-append (id self) (id kid)))))
 
 (def-widget menu-bar (menu-shell)
   () () ())
@@ -295,8 +293,7 @@
 (defobserver .value ((self radio-menu-item))
   (with-integrity (:change 'radio-menu-item-value)
    (when (and new-value (upper self menu-item))
-     (setf (value (upper self menu-item)) (md-name self))))
-  #+clisp (call-next-method))
+     (setf (value (upper self menu-item)) (md-name self)))))
 
 (def-widget image-menu-item (menu-item)
   ((stock :accessor stock :initarg :stock :initform nil)

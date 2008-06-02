@@ -29,7 +29,7 @@
   (format nil "gtk_server_connect(~A, ~A, :callback ~A)"
 	  (id self) event (register-callback self event fn)))
 
-(def-c-output bindings () ;;; (w widget) event fun)
+(defobserver bindings () ;;; (w widget) event fun)
   (loop for binding in new-value
         do (destructuring-bind (event . fn) binding
              (declare (ignorable event))

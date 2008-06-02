@@ -30,8 +30,7 @@
   (when new-value
     (dolist (kid new-value)
         (gtk-box-pack-start (id self) (id kid) 
-                            (expand? kid) (fill? kid) (padding? kid)))
-    #+clisp (call-next-method)))
+                            (expand? kid) (fill? kid) (padding? kid)))))
 
 (def-widget hbox (box)
   () () ()
@@ -93,8 +92,7 @@
     (and (cadr new-value)
 	 (gtk-paned-add2 (id self) (id (make-be 'frame 
 						    :shadow 'in
-						    :kids (kids-list? (cadr new-value)))))))
-  #+clisp (call-next-method))
+						    :kids (kids-list? (cadr new-value))))))))
 
 (def-widget vpaned ()
   ((divider-pos :accessor divider-pos :initarg :divider-pos :initform (c-in 0)))
@@ -113,9 +111,7 @@
     (and (cadr new-value)
 	 (gtk-paned-add2 (id self) (id (make-be 'frame 
 						    :shadow 'in
-						    :kids (kids-list? (cadr new-value)))))))
-  #+clisp (call-next-method))
-  
+						    :kids (kids-list? (cadr new-value))))))))
 
 (def-widget frame (container)
   ((shadow :accessor shadow? :initarg :shadow :initform nil)
@@ -143,8 +139,7 @@
 (defobserver .kids ((self frame))
   (assert-bin self)
   (dolist (kid new-value)
-    (gtk-container-add (id self) (id kid)))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id kid))))
 
 (def-widget aspect-frame (frame)
   ((xalign :accessor xalign :initarg :xalign :initform 0.5)
@@ -178,8 +173,7 @@
 (defobserver .kids ((self expander))
   (assert-bin self)
   (dolist (kid new-value)
-    (gtk-container-add (id self) (id kid)))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id kid))))
 
 (def-widget scrolled-window (container)
   ()
@@ -194,20 +188,25 @@
   (dolist (kid new-value)
     (if (member (class-name (class-of kid)) '(listbox treebox tree-view text-view layout) :test #'equal)
 	(gtk-container-add (id self) (id kid))
-	(gtk-scrolled-window-add-with-viewport (id self) (id kid))))
-  #+clisp (call-next-method))
+	(gtk-scrolled-window-add-with-viewport (id self) (id kid)))))
 
 (def-widget notebook (container)
   ((tab-labels :accessor tab-labels :initarg :tab-labels :initform (c-in nil))
    (tab-labels-widgets :accessor tab-labels-widgets :initform (c-in nil))
    (show-page :accessor show-page :initarg :show-page :initform (c-in 0))
-   (tab-pos :accessor tab-pos :initarg :tab-pos :initform (c-in nil)))
+   (tab-pos :accessor tab-pos :initarg :tab-pos :initform (c-in nil))
+   (selected-page :accessor selected-page :initform (c-in nil)))
   (current-page show-tabs show-border scrollable tab-border 
    homogeneous-tabs)
-  ()
+  (select-page)
   :current-page (c-in nil)
-  :show-tabs (c-in t))
-
+  :show-tabs (c-in t)
+  :on-select-page (callback (w e d)
+		    (with-integrity (:change :selected-page)
+		      (trc "on select page is called" self (when self (kids self)))
+		      (when (and self (kids self))
+		       (setf (selected-page self)
+			     (nth (gtk-notebook-get-current-page (id self)) (kids self)))))))
 
 (defobserver tab-pos ((self notebook))
   (when new-value
@@ -243,8 +242,7 @@
     (loop for page from 0 to (length new-value) do
 	 (setf (current-page self) page)) 
     (when (and (show-page self) (>= (show-page self) 0) (< (show-page self) (length new-value)))
-      (setf (current-page self) (show-page self)))
-    #+clisp (call-next-method)))
+      (setf (current-page self) (show-page self)))))
 
 (defobserver show-tabs ((self notebook))
  (gtk-notebook-set-show-tabs (id self) new-value))
@@ -304,5 +302,4 @@
 (defobserver .kids ((self alignment))
   (assert-bin self)
   (dolist (kid new-value)
-    (gtk-container-add (id self) (id kid)))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id kid))))

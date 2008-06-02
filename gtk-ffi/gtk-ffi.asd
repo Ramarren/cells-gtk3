@@ -9,7 +9,7 @@
 ;;; Step 2 -- If you built or downloaded the libcellsgtk library, uncomment the next line.
 
 ;;; features
-(pushnew :libcellsgtk *features*)
+;;(pushnew :libcellsgtk *features*)
 
 (asdf:defsystem :gtk-ffi
   :name "gtk-ffi"

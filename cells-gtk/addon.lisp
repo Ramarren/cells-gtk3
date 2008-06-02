@@ -42,7 +42,7 @@
     (setf (value self) new-value)))
 
 
-(def-widget arrow ()
+(def-widget arrow (widget misc)
   ((type :accessor arrow-type :initarg :type :initform nil)
    (type-id :accessor type-id 
 	    :initform (c? (case (arrow-type self)

@@ -49,14 +49,43 @@
       `(format nil "~a ~a </span>" ,markup-start (format nil "~{~a~}" (list ,@rest))))))
 	    
 
-(def-widget label ()
+;;;
+;;; misc
+;;;
+
+;;; adds padding and alignment to label, arrow, image, and (pixmap)
+
+(defmd misc ()
+  xalign :xalign (c-in .5)
+  yalign :yalign (c-in .5)
+  xpad :xpad (c-in 0.0)
+  ypad :ypad (c-in 0.0))
+
+(defobserver xalign ((self misc))
+  (gtk-misc-set-alignment (id self) (^xalign) (^yalign)))
+
+(defobserver yalign ((self misc))
+  (gtk-misc-set-alignment (id self) (^xalign) (^yalign)))
+
+(defobserver xpad ((self misc))
+  (gtk-misc-set-padding (id self) (^xpad) (^ypad)))
+
+(defobserver ypad ((self misc))
+  (gtk-misc-set-padding (id self) (^xpad) (^ypad)))
+
+;;;
+;;; label
+;;; 
+
+(def-widget label (widget misc)
   ((markup :accessor markup :initarg :markup :initform nil)
    (text :accessor text :initarg :text :initform nil))
   (line-wrap selectable use-markup)
   ()
   :text (c-in nil)
   :use-markup (c? (not (null (markup self))))
-  :new-args (c_1 (list nil)))
+  :new-args (c_1 (list nil))
+  :xalign (c-in 0.0))
 
 (defobserver text ((self label))
   (when new-value
@@ -72,7 +101,7 @@
   ()
   :id (c_1 (gtk-accel-label-new (text self))))
 
-(def-widget image ()
+(def-widget image (widget misc)
   ((filename :accessor filename :initarg :filename :initform nil)
    (stock :accessor stock :initarg :stock :initform nil)
    (stock-id :accessor stock-id

@@ -151,7 +151,7 @@
 	 (buf (gtk-text-view-get-buffer view)))
   (with-text-iters (s-iter)
      (gtk-text-buffer-get-iter-at-offset buf s-iter pos)
-     (gtk-text-view-scroll-to-iter view s-iter 0.0 nil 0.0 0.0))))
+     (gtk-text-view-scroll-to-iter view s-iter 0.0d0 nil 0.0d0 0.0d0))))
 
 ;;; The next two can be used to check and clear the the modified flag.
 ;;; The event is registered when you use :on-modified-changed on a text-buffer.

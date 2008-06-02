@@ -1,4 +1,4 @@
-
+ 
 
 (in-package :cgtk)
 
@@ -24,6 +24,7 @@
 
 (defun gl-init ()
   (gtk-gl-init +c-null+ +c-null+)
+  (glut:init)
   (setf *gl-config* (get-gl-config)))
 
 
@@ -66,12 +67,22 @@
 (defun %resize (self)
   (let ((width (allocated-width self))
 	(height (allocated-height self)))
-   (when (and (plusp width) (plusp height))
-     (trc "%resize to" width height)
-     (with-gl-context (self)
-       (gl:viewport 0 0 width height)
-       (bwhen (resize-fn (resize self))
-	 (funcall resize-fn self))))))
+    (when (and (plusp width) (plusp height))
+      (trc "%resize to" width height)
+      (with-gl-context (self)
+	(gl:viewport 0 0 width height)
+
+	;; set projection to account for aspect
+	(gl:matrix-mode :projection)
+	(gl:load-identity)
+	(glu:perspective 90 (/ width height) 0.5 20) ; 90 degrees field of view y, clip 0.5-20 z
+   
+	;; set modelview to identity
+	(gl:matrix-mode :modelview)
+	(gl:load-identity)
+	
+	(bwhen (resize-fn (resize self))
+	  (funcall resize-fn self))))))
 
 ;;;
 ;;; Widget

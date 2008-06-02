@@ -14,17 +14,17 @@
   ()
   :new-args (c_1 (list (name self) nil nil (stock-id self))))
 
-(def-c-output visible ((self action))
+(defobserver visible ((self action))
   (gtk-ffi::gtk-object-set-property (id self) "visible" 'boolean new-value))
-(def-c-output sensitive ((self action))
+(defobserver sensitive ((self action))
   (gtk-ffi::gtk-object-set-property (id self) "sensitive" 'boolean new-value))
 
-(def-c-output label ((self action))
+(defobserver label ((self action))
   (when new-value
     (gtk-ffi::with-gtk-string (str new-value)
       (gtk-ffi::gtk-object-set-property (id self) "label" 'c-pointer str))))
 
-(def-c-output tooltip ((self action))
+(defobserver tooltip ((self action))
   (when new-value
     (gtk-ffi::with-gtk-string (str new-value)      
       (gtk-ffi::gtk-object-set-property (id self) "tooltip" 'c-pointer str))))
@@ -37,18 +37,17 @@
   ()
   :new-args (c_1 (list (name self))))
 
-(def-c-output sensitive ((self action-group))
+(defobserver sensitive ((self action-group))
   (gtk-ffi::gtk-action-group-set-sensitive (id self) new-value))
 
-(def-c-output visible ((self action-group))
+(defobserver visible ((self action-group))
   (gtk-ffi::gtk-action-group-set-visible (id self) new-value))
 
-(def-c-output .kids ((self action-group))
+(defobserver .kids ((self action-group))
   (dolist (kid old-value)
     (gtk-ffi::gtk-action-group-remove-action (id self) (id kid)))
   (dolist (kid new-value)
-    (gtk-ffi::gtk-action-group-add-action-with-accel (id self) (id kid) (accel kid)))
-  #+clisp (call-next-method))
+    (gtk-ffi::gtk-action-group-add-action-with-accel (id self) (id kid) (accel kid))))
 
 (def-object ui-manager ()
   ((action-groups :accessor action-groups :initform (c-in nil))
@@ -56,7 +55,7 @@
   ()
   ())
 
-(def-c-output tearoffs ((self ui-manager))
+(defobserver tearoffs ((self ui-manager))
   (gtk-ffi::gtk-ui-manager-set-add-tearoffs (id self) new-value))
 
 (defmethod add-action-group ((self ui-manager) (group action-group) &optional pos)

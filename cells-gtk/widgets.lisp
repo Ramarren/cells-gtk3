@@ -190,6 +190,7 @@
 (def-gtk-event-handler delete-event)
 (def-gtk-event-handler destroy-event)
 (def-gtk-event-handler modified-changed)
+(def-gtk-event-handler select-page)
 
 (defparameter *widget-callbacks*
   (list (cons 'clicked (cffi:get-callback 'clicked-handler))
@@ -201,7 +202,8 @@
     (cons 'toggled (cffi:get-callback 'toggled-handler))
     (cons 'delete-event (cffi:get-callback 'delete-event-handler))
     (cons 'destroy-event (cffi:get-callback 'destroy-event-handler))    
-    (cons 'modified-changed (cffi:get-callback 'modified-changed-handler))))
+    (cons 'modified-changed (cffi:get-callback 'modified-changed-handler))
+    (cons 'select-page (cffi:get-callback 'select-page-handler))))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   
@@ -311,7 +313,7 @@
                   r))))
 	 (c-id (cffi:foreign-alloc :int :initial-element id)))
     (trc nil "timeout-add > passing cb data, *data" c-id (cffi:mem-aref c-id :int 0))
-    (g-timeout-add milliseconds (cffi:get-callback 'timeout-handler-callback) c-id)))
+    (g-timeout-add (floor milliseconds) (cffi:get-callback 'timeout-handler-callback) c-id)))
 
 (def-object widget ()
   ((tooltip :accessor tooltip :initarg :tooltip :initform (c-in nil))
@@ -473,8 +475,7 @@
   (dolist (kid new-value)
     ;    (when *gtk-debug* (format t "~% window ~A has kid ~A" self kid))
     (when *gtk-debug* (trc "WINDOW ADD KID" (md-name self) (md-name kid)) (force-output))
-    (gtk-container-add (id self) (id kid)))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id kid))))
 
 (def-widget event-box (container)
   ((visible-window :accessor visible-window :initarg :visible-window :initform nil))
