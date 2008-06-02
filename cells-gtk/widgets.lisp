@@ -36,7 +36,6 @@
 		       (let ((id (apply (symbol-function (new-function-name self))
 					(new-args self))))
 			 (gtk-object-store id self)
-			 #+libcellsgtk (gtk-signal-connect-swap id "configure-event" (cffi:get-callback 'reshape-widget-handler) :data id)
 			 id))))
    
    (callbacks :cell nil :accessor callbacks
@@ -351,6 +350,10 @@
 	(setf (allocated-width self) new-width
 	      (allocated-height self) new-height))))
   0)
+
+#+libcellsgtk
+(defmethod md-awaken :after ((self widget))
+  (gtk-signal-connect-swap (id self) "configure-event" (cffi:get-callback 'reshape-widget-handler) :data (id self)))
 
 
 (defmethod focus ((self widget))
