@@ -89,7 +89,7 @@
   (cffi:foreign-string-alloc value))
 
 (defmethod cffi:translate-from-foreign (value (type gtk-string-type))
-  (utf-8-to-lisp (cffi:foreign-string-to-lisp value)))
+  (cffi:foreign-string-to-lisp value))
 
 
 
@@ -218,10 +218,7 @@
 	   ,(when (with-debug-p name)
 		  `(format *trace-output* "~%Calling (~A ~{~A~^ ~})" 
 			   ,(string-downcase (string name)) (list ,@(mapcar 'car arguments)))))
-	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'(lambda (arg) (if (eql (cadr arg) 'gtk-string)
-									    `(lisp-to-utf-8 ,(car arg))
-									    (car arg)))
-							arguments))))
+	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'car arguments))))
 			     #+cells-gtk-threads (if (with-gdk-threads-p name) `(with-gdk-threads ,fn) fn)
 			     #-cells-gtk-threads fn)))
 	   (when *gtk-debug*
