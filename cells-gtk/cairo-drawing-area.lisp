@@ -653,7 +653,7 @@ anchor-point."))
 ;;;; -----------------------------------------------------------
 
 (defun cairo-drawing-area-draw (self)
-  (cl-cairo2:with-gtk-context (context (gtk-adds-widget-window (id self)))
+  (cl-cairo2::with-gtk-context (context (gtk-adds-widget-window (id self)))
     (setf (cairo-context self) context)
     (mapcar #'draw (prims self))))
 
