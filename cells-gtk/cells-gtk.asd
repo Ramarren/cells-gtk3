@@ -11,13 +11,13 @@
 ;;;
 
 ;;; run gtk in its own thread (requires bordeaux-threads)
-;;(pushnew :cells-gtk-threads *features*)
+(pushnew :cells-gtk-threads *features*)
 
 ;;; drawing-area widget using cairo (requires cl-cairo2)
-;;(pushnew :cells-gtk-cairo *features*)
+(pushnew :cells-gtk-cairo *features*)
 
 ;;; drawing-area widget using OpenGL (requires libgtkglext1)
-;;(pushnew :cells-gtk-opengl *features*)
+(pushnew :cells-gtk-opengl *features*)
 
 (asdf:defsystem :cells-gtk
   :name "cells-gtk"
@@ -27,6 +27,7 @@
 	       :gtk-ffi
 	       :ph-maths
 	       #+cells-gtk-cairo :cl-cairo2
+	       #+cells-gtk-cairo :cl-cairo2-x11
 	       #+cells-gtk-threads :bordeaux-threads
 	       #+cells-gtk-opengl :cl-opengl
 	       #+cells-gtk-opengl :cl-glu
