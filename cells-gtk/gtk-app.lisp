@@ -120,7 +120,7 @@
 (defmethod initialize-instance :after ((self window) &rest initargs)
   (declare (ignore initargs))
   (push self *system*)
-  (trcx "initialize-instance :after" self (id self))
+  ;; (trcx "initialize-instance :after" self (id self))
   (when (id self)
    (setf (slot-value self 'cb-quit-id) (gtk-quit-add 0 (cffi:get-callback 'cb-quit) (id self)))))
 
