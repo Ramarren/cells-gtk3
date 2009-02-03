@@ -299,8 +299,8 @@ To run gtk in a background thread, use start-win instead."
 (progn
  (let ((gtk-main-thread nil))
    (flet ((gtk-thread ()
-	    (gdk-threads-register-gtk-main (threads:current-thread))
-	    (setf gtk-main-thread (threads:current-thread))
+	    (gdk-threads-register-gtk-main (bt:current-thread))
+	    (setf gtk-main-thread (bt:current-thread))
 	    (loop (main-loop))))
      (defun gtk-main-thread ()
        "returns the gtk main thread -- not to be called directly"
@@ -308,10 +308,10 @@ To run gtk in a background thread, use start-win instead."
      (defun stop-gtk-main ()
        "Final clean up stuff -- need to RESTART lisp to access gtk again."
        ;        (terminate-gtk)
-       (threads:destroy-thread gtk-main-thread))
+       (bt:destroy-thread gtk-main-thread))
      (defun start-gtk-main ()
        "Fire up gtk main thread in the background. -- not to be called directly."
-       (if-bind (thread (find-if #'(lambda (thrd) (string= (threads:thread-name thrd) "gtk-main-thread")) (threads:all-threads)))
+       (if-bind (thread (find-if #'(lambda (thrd) (string= (bt:thread-name thrd) "gtk-main-thread")) (bt:all-threads)))
 		(unless (eq thread gtk-main-thread)
 		  #+msg (format t "~&INFO: there is another gtk-main thread.  Recover from recompiling cells-gtk in use.~%")
 		  (gdk-threads-register-gtk-main thread)
@@ -320,9 +320,9 @@ To run gtk in a background thread, use start-win instead."
 		    (let ((so *standard-output*))
 		      (init-gtk)
 		      #+msg (format t "~&starting gtk-main thread ...")
-		      (threads:make-thread #'(lambda () (let ((*standard-output* so)) (gtk-thread))) :name "gtk-main-thread"))
+		      (bt:make-thread #'(lambda () (let ((*standard-output* so)) (gtk-thread))) :name "gtk-main-thread"))
 		  (loop while (not gtk-main-thread)
-		     do (threads:thread-yield))
+		     do (bt:thread-yield))
 		  #+msg (format t " done~%"))))
      (defun close-all-windows ()
        "close all open windows by issuing gtk-main-quit"

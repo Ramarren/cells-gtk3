@@ -32,7 +32,7 @@ Macros to make threading a little less implemetation dependent.
   #+cells-gtk-threads
   (with-gensyms (bodyfn thrd)
     `(flet ((,bodyfn () ,@body))
-       (let ((,thrd (threads:current-thread)))
+       (let ((,thrd (bt:current-thread)))
 	 (cond
 	   ((eq ,thrd *gdk-lock-main-thread*) (,bodyfn)) ; free pass for the main thread, since it will have a lock -- trust gtk
 	   ((eq ,thrd *gdk-lock-owner*) (,bodyfn)) ; recursive attempt -- we already have the lock
