@@ -18,6 +18,7 @@
 
 (in-package :gtk-ffi)
 
+(load-gtk-libs)
 
 (def-gtk-lib-functions :glib
   (g-free :void ((data :pointer)))
