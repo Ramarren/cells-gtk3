@@ -1,15 +1,6 @@
+(load (merge-pathnames "features.lisp" *load-truename*))
 
 (in-package "CL-USER")
-;;;---------------------
-;;; Two steps:
-;;;---------------------
-
-;;; Step 1 -- Do nothing. (UFFI/Hello-C had a "Step 1," CFFI doesn't.)
-
-;;; Step 2 -- If you built or downloaded the libcellsgtk library, uncomment the next line.
-
-;;; features
-(pushnew :libcellsgtk *features*)
 
 (asdf:defsystem :gtk-ffi
     :name "gtk-ffi"

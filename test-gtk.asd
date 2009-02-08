@@ -1,14 +1,4 @@
-
-
-;;; run gtk in its own thread (requires bordeaux-threads)
-(pushnew :cells-gtk-threads *features*)
-
-;;; drawing-area widget using cairo 
-;;; (requires cl-cairo2, libgtkglext1 and libcellsgtk)
-(pushnew :cells-gtk-cairo *features*)
-(pushnew :cells-gtk-opengl *features*)
-(pushnew :libcellsgtk *features*)
-
+(load (merge-pathnames "features.lisp" *load-truename*))
 
 (asdf:defsystem :test-gtk
     :name "test-gtk"
