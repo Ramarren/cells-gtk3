@@ -6,9 +6,17 @@
 
 (defvar *test-img-dir*
   (make-pathname :name nil :type nil :version nil
-                 :defaults (merge-pathnames
-                            (make-pathname :directory '(:relative :back :back "test-images"))
-                            (parse-namestring *load-truename*))))
+                 :defaults
+                 #-asdf (merge-pathnames
+                         (make-pathname :directory '(:relative :back "test-images"))
+                         (parse-namestring *load-truename*))
+                 #+asdf (merge-pathnames (make-pathname :directory '(:relative "test-images"))
+                                         (make-pathname :directory
+                                                        (pathname-directory
+                                                         (truename
+                                                          (asdf:system-definition-pathname
+                                                           (asdf:find-system :test-gtk))))))))
+
 (defvar *splash-image*
   (make-pathname :name "splash" :type "png"
                  :defaults *test-img-dir*))
