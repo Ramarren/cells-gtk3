@@ -21,10 +21,15 @@
 (def-widget button (container)
   ((stock :accessor stock :initarg :stock :initform (c-in nil))
    (markup :accessor markup :initarg :markup :initform nil)
-   (label :accessor label :initarg :label :initform (c-in nil)))
+   (label :accessor label :initarg :label :initform (c-in nil))
+   (clicked :accessor clicked :initform (c-in nil) :cell :ephemeral))
   (relief use-stock)
   (activate clicked enter leave pressed released)
-  :kids (c-in nil))
+  :kids (c-in nil)
+  :on-clicked (callback (widget event data)
+                (trc "button clicked" widget)
+                (with-integrity (:change 'button-clicked-cb)
+                  (setf (clicked self) t))))
 
 (defobserver label ((self button))
   (when new-value
