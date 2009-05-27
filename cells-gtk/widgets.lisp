@@ -492,8 +492,7 @@
 (defobserver .kids ((self event-box))
   (assert-bin self)
   (when new-value
-    (gtk-container-add (id self) (id (first new-value))))
-  #+clisp (call-next-method))
+    (gtk-container-add (id self) (id (first new-value)))))
 
 (declaim (inline widget-id))
 (defun widget-id (widget)
