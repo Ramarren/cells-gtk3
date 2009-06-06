@@ -48,21 +48,20 @@
   (gdk-threads-leave :void ())
   (gdk-flush :void ()))
 
-(uffi:def-union g-value-data
+(cffi:defcunion g-value-data
   (v-int :int)
   (v-uint :unsigned-int)
   (v-long :long)
   (v-ulong :unsigned-long)
-  (v-int64-lo :int)
-  (v-int64-hi :int)
-  (v-uint64-lo :unsigned-int)
-  (v-uint64-hi :unsigned-int)
+  (v-int64 :int64)
+  (v-uint64 :uint64)
   (v-float :float)
   (v-double :double)
-  (v-pointer :pointer-void))
+  (v-pointer :pointer))
 
-(uffi:def-struct g-value
-    (g-type (:array :int 16)))
+(cffi:defcstruct g-value
+  (g-type :uint)
+  (g-data (:array g-value-data 2)))
 
 (defmacro with-g-value ((var) &body body)
   `(call-with-g-value (lambda (,var) ,@body)))
@@ -70,15 +69,18 @@
 (defun call-with-g-value (fn)
   (declare (optimize (speed 3) (safety 0) (space 0)))
   (let ((gva (cffi:foreign-alloc 'g-value)))
-    (unwind-protect
-	 (dotimes (n 16)
-	   (let* ((gv (cffi:mem-aref gva 'g-value 0))
-		  (ns (cffi:foreign-slot-value gv 'g-value 'g-type)))
-	     (setf (cffi:mem-aref ns ':int n) 0))))
-    (locally
-	#+sbcl (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-      (funcall fn gva))
-    (cffi:foreign-free gva)))
+    (locally #+sbcl(declare (sb-ext:muffle-conditions sb-ext:compiler-note))
+             (unwind-protect
+                  (progn
+                    (setf (cffi:foreign-slot-value gva 'g-value 'g-type) 0)
+                    (let ((data (cffi:foreign-slot-value gva 'g-value 'g-data)))
+                      (dotimes (n 2)
+                        (setf (cffi:foreign-slot-value
+                               (aref data n)
+                               'g-value-data 'v-uint64)
+                              0)))
+                    (funcall fn gva))
+               (cffi:foreign-free gva)))))
 
 #+test
 (def-gtk-lib-functions :gobject
