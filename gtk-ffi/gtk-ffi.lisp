@@ -18,34 +18,6 @@
 
 (in-package :gtk-ffi)
 
-;;; POD throw-away utility to convert hello-c/uffi to cffi
-#+nil
-(defun gtk-lib2cffi (body)
-  "Convert hello-c to uffi to cffi types. Swap order of arguments."
-  (flet ((convert-type (type)
-          (case type
-            (c-string 'gtk-string)
-            (boolean 'gtk-boolean)
-            (t (cffi-uffi-compat::convert-uffi-type (ffi-to-uffi-type type))))))
-  (dbind (ignore module &rest funcs) body
-     (pprint `(,ignore
-               ,module
-               ,@(mapcar
-                  #'(lambda (f)
-                      (dbind (name args &optional return-type) f
-                             ` (,name
-                                    ,(if return-type
-                                         (convert-type return-type)
-                                       :void)
-                                    ,(mapcar #'(lambda (a)
-                                                 (list
-                                                  (car a)
-                                                  (convert-type (cadr a))))
-                                             args))))
-                      funcs))
-             *standard-output*))))
-
-
 (defvar *gtk-debug* nil)
 
 (defun int-slot-indexed (obj obj-type slot index)
