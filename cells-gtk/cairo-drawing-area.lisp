@@ -183,8 +183,7 @@ call NEXT-METHOD and finally map itself over all kids."
 	     (,@(loop for slot in slots collecting `(,slot ,slot))
 	      (kids kids))
 	   self
-         (let ((context (cairo-context (widget self))))
-           (declare (ignorable context))
+         (cl-cairo2:with-context ((cairo-context (widget self)))
            ,@body
            (call-next-method-when)
 	   (trc nil "drawing kids?" kids (listp kids))
@@ -456,17 +455,17 @@ anchor-point."))
    (line-width 2)))
 
 (defdraw line-primitive (rgb alpha fill-rgb fill-alpha line-width stroked filled)
-  (cl-cairo2:set-line-width line-width context)
+  (cl-cairo2:set-line-width line-width)
   (when stroked
-    (cl-cairo2:set-source-rgba (first rgb) (second rgb) (third rgb) alpha context)
+    (cl-cairo2:set-source-rgba (first rgb) (second rgb) (third rgb) alpha)
     (if filled
-        (cl-cairo2:stroke-preserve context)
-        (cl-cairo2:stroke context)))
+        (cl-cairo2:stroke-preserve)
+        (cl-cairo2:stroke)))
   (when filled
     (let ((fill-rgb (or fill-rgb rgb))
           (fill-alpha (or fill-alpha alpha)))
-      (cl-cairo2:set-source-rgba (first fill-rgb) (second fill-rgb) (third fill-rgb) fill-alpha context))
-    (cl-cairo2:fill-path context)))
+      (cl-cairo2:set-source-rgba (first fill-rgb) (second fill-rgb) (third fill-rgb) fill-alpha))
+    (cl-cairo2:fill-path)))
 
  
 (defmodify line-primitive (rgb alpha fill-rgb fill-alpha line-width filled))
@@ -494,8 +493,8 @@ anchor-point."))
 
 
 (defdraw line (p1 p2)
-  (cl-cairo2:move-to (2d:x p1) (2d:y p1) context)
-  (cl-cairo2:line-to (2d:x p2) (2d:y p2) context))
+  (cl-cairo2:move-to (2d:x p1) (2d:y p1))
+  (cl-cairo2:line-to (2d:x p2) (2d:y p2)))
 
 (def-mk-primitive line (line initargs))
 
@@ -514,7 +513,7 @@ anchor-point."))
    :no-redraw (mouse-over-p)))
 
 (defdraw rectangle (p1 delta)
-  (cl-cairo2:rectangle (2d:x p1) (2d:y p1) (2d:x delta) (2d:y delta) context))
+  (cl-cairo2:rectangle (2d:x p1) (2d:y p1) (2d:x delta) (2d:y delta)))
 
 (def-mk-primitive rectangle (rect initargs))
 
@@ -552,7 +551,7 @@ anchor-point."))
 (defmodify arc (radius start-angle stop-angle))
 
 (defdraw arc (p radius start-angle stop-angle)
-  (cl-cairo2:arc (2d:x p) (2d:y p) radius start-angle stop-angle context))
+  (cl-cairo2:arc (2d:x p) (2d:y p) radius start-angle stop-angle))
 
 (def-mk-primitive arc (arc initargs))
 
@@ -571,13 +570,12 @@ anchor-point."))
    (vertical-alignment :center)))
 
 (defdraw text-label (p text font-face font-size italic bold alignment vertical-alignment rgb alpha)
-  (cl-cairo2:set-font-size font-size context)
+  (cl-cairo2:set-font-size font-size)
   (cl-cairo2:select-font-face font-face
                               (if italic :italic :normal)
-                              (if bold :italic :normal)
-                              context)
+                              (if bold :italic :normal))
   (multiple-value-bind (x-bearing y-bearing text-width text-height)
-      (cl-cairo2:text-extents text context)
+      (cl-cairo2:text-extents text)
     (let ((pos-x (- (2d:x p) (case alignment
 			       (:left x-bearing)
 			       (:center (+ x-bearing (/ text-width 2)))
@@ -588,10 +586,10 @@ anchor-point."))
 			       (:center (+ y-bearing (/ text-height 2))) 
 			       (:below y-bearing)
 			       (t (error "unknown vertical alignment ~a.  allowed:  :above, :center, :below" vertical-alignment))))))
-      (cl-cairo2:set-source-rgba (first rgb) (second rgb) (third rgb) alpha context)
-      (cl-cairo2:move-to pos-x pos-y context)
-      (cl-cairo2:show-text text context)
-      (cl-cairo2:stroke context))))
+      (cl-cairo2:set-source-rgba (first rgb) (second rgb) (third rgb) alpha)
+      (cl-cairo2:move-to pos-x pos-y)
+      (cl-cairo2:show-text text)
+      (cl-cairo2:stroke))))
 
                       
 (defmodify text-label (p text font-face font-size italic bold alignment vertical-alignment rgb alpha))
@@ -611,11 +609,11 @@ anchor-point."))
 
 (defdraw path (points closed)
   (when points
-    (cl-cairo2:move-to (2d:x (first points)) (2d:y (first points)) context)
+    (cl-cairo2:move-to (2d:x (first points)) (2d:y (first points)))
     (dolist (point (cdr points))
-      (cl-cairo2:line-to (2d:x point) (2d:y point) context))
+      (cl-cairo2:line-to (2d:x point) (2d:y point)))
     (when closed
-      (cl-cairo2:close-path context))))
+      (cl-cairo2:close-path))))
 
 (defmodify path (points closed))
 

@@ -109,7 +109,7 @@ Cells-GTK drawable
 		     (truncate (gdk-event-button-y signal))))
 	  (button (gdk-event-button-button signal))
 	  (state (gdk-event-button-state signal)))
-      (case (event-type (gdk-event-button-type signal))
+      (case (gdk-event-button-type signal)
 	(:button_press
 	 (when-bind (on-pressed (on-pressed self))
 	   (funcall on-pressed self button (gdk-modifiers state) pos)))

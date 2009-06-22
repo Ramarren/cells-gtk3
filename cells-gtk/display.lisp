@@ -58,8 +58,8 @@
 (defmd misc ()
   xalign :xalign (c-in .5)
   yalign :yalign (c-in .5)
-  xpad :xpad (c-in 0.0)
-  ypad :ypad (c-in 0.0))
+  xpad :xpad (c-in 0)
+  ypad :ypad (c-in 0))
 
 (defobserver xalign ((self misc))
   (gtk-misc-set-alignment (id self) (^xalign) (^yalign)))

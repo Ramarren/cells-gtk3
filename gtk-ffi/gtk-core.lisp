@@ -21,26 +21,27 @@
 (load-gtk-libs)
 
 (def-gtk-lib-functions :glib
-  (g-free :void ((data :pointer)))
-  (g-slist-free :void ((lst :pointer)))
-  (g-timeout-add :unsigned-int
-		 ((milliseconds :unsigned-int)
+    (g-free :void ((data gpointer)))
+  (g-slist-free :void ((lst (:pointer gslist))))
+  (g-timeout-add guint
+		 ((milliseconds guint)
 		  (func :pointer)
 		  (data :pointer)))
   (g-locale-from-utf8 gtk-string
-		      ((utf8-string :pointer)
-		       (len :int)
-		       (bytes-read :pointer)
-		       (bytes-written :pointer)
+		      ((utf8-string gtk-string)
+		       (len gssize)
+		       (bytes-read (:pointer gsize))
+		       (bytes-written (:pointer gsize))
 		       (gerror :pointer)))
   (g-locale-to-utf8 :pointer
 		    ((local-string gtk-string)
-		     (len :int)
-		     (bytes-read :pointer)
-		     (bytes-written :pointer)
+		     (len gssize)
+		     (bytes-read (:pointer gsize))
+		     (bytes-written (:pointer gsize))
 		     (gerror :pointer))))
 
-(def-gtk-lib-functions :gthread (g-thread-init :void ((vtable :pointer))))
+(def-gtk-lib-functions :gthread
+    (g-thread-init :void ((vtable :pointer))))
 
 (def-gtk-lib-functions :gdk
   (gdk-threads-init :void ())
@@ -48,21 +49,9 @@
   (gdk-threads-leave :void ())
   (gdk-flush :void ()))
 
-(uffi:def-union g-value-data
-  (v-int :int)
-  (v-uint :unsigned-int)
-  (v-long :long)
-  (v-ulong :unsigned-long)
-  (v-int64-lo :int)
-  (v-int64-hi :int)
-  (v-uint64-lo :unsigned-int)
-  (v-uint64-hi :unsigned-int)
-  (v-float :float)
-  (v-double :double)
-  (v-pointer :pointer-void))
-
-(uffi:def-struct g-value
-    (g-type (:array :int 16)))
+(cffi:defcstruct g-value
+  (g-type gtype)
+  (g-data (:array g-value-data 2)))
 
 (defmacro with-g-value ((var) &body body)
   `(call-with-g-value (lambda (,var) ,@body)))
@@ -70,15 +59,18 @@
 (defun call-with-g-value (fn)
   (declare (optimize (speed 3) (safety 0) (space 0)))
   (let ((gva (cffi:foreign-alloc 'g-value)))
-    (unwind-protect
-	 (dotimes (n 16)
-	   (let* ((gv (cffi:mem-aref gva 'g-value 0))
-		  (ns (cffi:foreign-slot-value gv 'g-value 'g-type)))
-	     (setf (cffi:mem-aref ns ':int n) 0))))
-    (locally
-	#+sbcl (declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-      (funcall fn gva))
-    (cffi:foreign-free gva)))
+    (locally #+sbcl(declare (sb-ext:muffle-conditions sb-ext:compiler-note))
+             (unwind-protect
+                  (progn
+                    (setf (cffi:foreign-slot-value gva 'g-value 'g-type) 0)
+                    (let ((data (cffi:foreign-slot-value gva 'g-value 'g-data)))
+                      (dotimes (n 2)
+                        (setf (cffi:foreign-slot-value
+                               (aref data n)
+                               'g-value-data 'v-uint64)
+                              0)))
+                    (funcall fn gva))
+               (cffi:foreign-free gva)))))
 
 #+test
 (def-gtk-lib-functions :gobject
@@ -89,6 +81,7 @@
 (def-gtk-function :gobject g-value-set-string
   :arguments ((value c-pointer) (str c-string))
   :return-type nil :call-direct t)
+
 (def-gtk-lib-functions :gobject
   ;; callbacks
   (g-cclosure-new :pointer
@@ -99,11 +92,11 @@
 		       ((callback-f :pointer)
 			(user-data :pointer)
 			(destroy-data :pointer)))
-  (g-signal-connect-closure :unsigned-long
+  (g-signal-connect-closure gulong
 			    ((instance :pointer)
 			     (detailed-signal gtk-string)
 			     (closure :pointer)
-			     (after gtk-boolean)))
+			     (after gboolean)))
   (g-object-set-valist :void
 		       ((object :pointer)
 			(first-prop gtk-string)
@@ -112,17 +105,22 @@
 			 ((object :pointer)
 			  (property-name gtk-string)
 			  (value :pointer)))
+  ;; gvalues
   (g-value-init :pointer ((value :pointer)
-			  (type :unsigned-long)))
+			  (type gtype)))
   (g-value-unset :void ((value :pointer)))
   (g-value-set-string :void
-		      ((value :pointer) (str gtk-string)))
-  (g-value-set-int :void ((value :pointer) (int :int)))
-  (g-value-set-long :void ((value :pointer) (long :long)))
+		      ((value :pointer)
+                       (str gtk-string)))
+  (g-value-set-int :void ((value :pointer)
+                          (int gint)))
+  (g-value-set-long :void ((value :pointer) (long glong)))
   (g-value-set-boolean :void
 		       ((value :pointer)
-			(bool gtk-boolean)))
+			(bool gboolean)))
   (g-value-set-float :void
-		     ((value :pointer) (float :float)))
+		     ((value :pointer)
+                      (float gfloat)))
   (g-value-set-double :void
-		      ((value :pointer) (double :double))))
+		      ((value :pointer)
+                       (double gdouble))))
