@@ -24,27 +24,27 @@
 ;;; there is Quartz based GTK
 
 (cffi:define-foreign-library :gobject
-  (cffi-features:darwin "libgobject-2.0-0.dylib")
+  (cffi-features:darwin "libgobject-2.0.dylib")
   (cffi-features:unix (:or "libgobject-2.0.so" "libgobject-2.0.so.0"))
   (cffi-features:windows "libgobject-2.0-0.dll"))
 
 (cffi:define-foreign-library :glib
-  (cffi-features:darwin "libglib-2.0-0.dylib")
+  (cffi-features:darwin "libglib-2.0.dylib")
   (cffi-features:unix (:or "libglib-2.0.so" "libglib-2.0.so.0"))
   (cffi-features:windows "libglib-2.0-0.dll"))
 
 (cffi:define-foreign-library :gthread
-  (cffi-features:darwin "libgthread-2.0-0.dylib")
+  (cffi-features:darwin "libgthread-2.0.dylib")
   (cffi-features:unix (:or "libgthread-2.0.so" "libgthread-2.0.so.0"))
   (cffi-features:windows "libgthread-2.0-0.dll"))
 
 (cffi:define-foreign-library :gdk
-  (cffi-features:darwin "libgdk-x11-2.0-0.dylib")
+  (cffi-features:darwin "libgdk-x11-2.0.dylib")
   (cffi-features:unix (:or "libgdk-x11-2.0.so" "libgdk-x11-2.0.so.0"))
   (cffi-features:windows "libgdk-win32-2.0-0.dll"))
 
 (cffi:define-foreign-library :gtk
-  (cffi-features:darwin "libgtk-x11-2.0-0.dylib")
+  (cffi-features:darwin "libgtk-x11-2.0.dylib")
   (cffi-features:unix (:or "libgtk-x11-2.0.so" "libgtk-x11-2.0.so.0"))
   (cffi-features:windows "libgtk-win32-2.0-0.dll"))
 
