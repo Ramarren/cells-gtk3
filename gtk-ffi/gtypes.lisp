@@ -228,6 +228,9 @@
   (:accelerator #.(ash 1 8))
   (:popup-with-accels #.(ash 1 9)))
 
+(cffi:defcenum gtk-selection-mode
+  :none :single :browse :multiple :extended)
+
 ;;; unions
 
 (cffi:defcunion g-value-data

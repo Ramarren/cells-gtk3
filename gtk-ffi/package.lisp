@@ -39,7 +39,7 @@
 	   #:single-float
 	   #:double-float
 	   #:gtk-string
-	   #:gtk-boolean
+	   #:gboolean
 	   #:otherwise
 	   #:*gtk-debug*
 	   #:load-gtk-libs
@@ -126,7 +126,7 @@
 	   #:gdk-event-button-y #:col-type-to-ffi-type #:gtk-cell-renderer-toggle-new #:sint32
 	   #:gtk-statusbar-pop #:gtk-adds-ok #:gtk-box-pack-start-defaults
 	   #:gtk-tree-view-column-set-visible #:gtk-adds-widget-visible-p #:make-gtk-tree-iter
-	   #:gtk-boolean #:gtk-ui-manager-set-add-tearoffs #:gtk-file-chooser-get-current-folder
+	   #:gboolean #:gtk-ui-manager-set-add-tearoffs #:gtk-file-chooser-get-current-folder
 	   #:gtk-combo-box-entry-set-text-column #:g-thread-init #:gtk-event-box-new
 	   #:gtk-label-set-text-with-mnemonic #:gtk-entry-set-text #:gtk-hpaned-new #:gtk-paned-add2
 	   #:gtk-frame-set-label-widget #:gtk-arrow-set #:gtk-menu-item-get-submenu #:g-timeout-add
