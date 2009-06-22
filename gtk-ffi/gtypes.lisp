@@ -90,6 +90,17 @@
 (defmethod cffi:translate-from-foreign (value (type gtk-string))
   (cffi:foreign-string-to-lisp value :encoding :utf-8))
 
+;; for return caller owned return values
+(cffi:define-foreign-type gtk-string-owned ()
+  ()
+  (:actual-type :pointer)
+  (:simple-parser gtk-string-owned))
+
+(defmethod cffi:translate-from-foreign (value (type gtk-string-owned))
+  (prog1
+      (cffi:foreign-string-to-lisp value :encoding :utf-8)
+    (cffi:foreign-string-free value)))
+
 ;;; gobject
 
 (cffi:defctype gtype gsize)

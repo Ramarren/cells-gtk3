@@ -95,9 +95,10 @@
 
 ;;; def-c-struct
 
-(defun compute-slot-def (field)
-  (destructuring-bind (name type) field
-    (list name (intern (string-upcase (format nil "~a-supplied-p" name))) type)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun compute-slot-def (field)
+    (destructuring-bind (name type) field
+      (list name (intern (string-upcase (format nil "~a-supplied-p" name))) type))))
 
 (defmacro def-c-struct (struct-name &rest fields)
   (let ((slot-defs (mapcar #'compute-slot-def fields)))
@@ -183,12 +184,12 @@
 
 (defun value-set-function (type)
   (ecase type
-    (c-string #'g-value-set-string)
-    (c-pointer #'g-value-set-string) ;; string-pointer
-    (integer #'g-value-set-int)
-    (single-float #'g-value-set-float)
-    (double-float #'g-value-set-double)
-    (boolean #'g-value-set-boolean)))
+    (gtk-string #'g-value-set-string)
+    (gpointer #'g-value-set-string) ;; string-pointer
+    (gint #'g-value-set-int)
+    (gfloat #'g-value-set-float)
+    (gdouble #'g-value-set-double)
+    (gboolean #'g-value-set-boolean)))
 
 (defun value-type-as-int (type)
   (ecase type

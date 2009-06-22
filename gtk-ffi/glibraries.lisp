@@ -16,6 +16,8 @@
  
 |#
 
+(in-package :gtk-ffi)
+
 ;;;; Library loading
 
 ;;; note: on Intel Macs sbcl built from Macports has both unix and darwin features, also I think

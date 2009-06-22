@@ -33,7 +33,7 @@
 		       (bytes-read (:pointer gsize))
 		       (bytes-written (:pointer gsize))
 		       (gerror :pointer)))
-  (g-locale-to-utf8 gtk-string
+  (g-locale-to-utf8 :pointer
 		    ((local-string gtk-string)
 		     (len gssize)
 		     (bytes-read (:pointer gsize))

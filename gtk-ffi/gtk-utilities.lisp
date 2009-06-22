@@ -28,7 +28,7 @@
 
 (cffi:defcfun ("g_signal_connect_data" g_signal_connect_data) gulong
   (instance :pointer)
-  (detailed-signal gtk-string)
+  (detailed-signal :pointer)
   (c-handler :pointer) 
   (data :pointer)
   (destroy-data :pointer)
@@ -68,26 +68,14 @@
   (typecase pointer
     (string pointer)
     (otherwise
-     (pod::trc nil "get-gtk-string sees" pointer (type-of pointer))
-     #+allegro (uffi:convert-from-cstring pointer)
-     #+lispworks (uffi:convert-from-foreign-string pointer
-                   :null-terminated-p t)
-     #-(or allegro lispworks)
-     (uffi:with-foreign-object (bytes-written :int)
-       (g-locale-from-utf8 pointer -1 +c-null+ bytes-written +c-null+)))))
-
-(defun to-gtk-string (str)
-  "!!!! remember to free returned str pointer"
-  (uffi:with-foreign-object (bytes-written :int)
-    (g-locale-to-utf8 str -1 +c-null+ bytes-written +c-null+)))
-
+     (cffi:mem-ref pointer 'gtk-string))))
 
 (cffi:defcallback button-press-event-handler :int
                   ((widget :pointer) (signal :pointer) (data :pointer))
   (declare (ignore data))
   (let ((event (gdk-event-button-type signal)))
-    (when (or (eql (event-type event) :button_press)
-              (eql (event-type event) :button_release))
+    (when (or (eql event :button_press)
+              (eql event :button_release))
       (when (= (gdk-event-button-button signal) 3)
         (gtk-menu-popup widget +c-null+ +c-null+ +c-null+ +c-null+ 3
 			(gdk-event-button-time signal)))))
@@ -186,23 +174,23 @@
   "Returns the item at column-no if column-no [0,<num-columns-1>] or a
    a string like '(0 1 0)', which navigates to the selected item, if 
    column-no = num-columns. (See gtk-tree-store-set-kids)."
-  (uffi:with-foreign-object (item :pointer-void)
+  (cffi:with-foreign-object (item :pointer)
     (gtk-tree-model-get model iter column-no item -1)
-  (case cell-type
-    (:string (uffi:convert-from-cstring (uffi:deref-pointer item :cstring)))
-    (t (cast item (as-gtk-type-name cell-type))))))
+    (case cell-type
+      (:string (cffi:mem-ref item 'gtk-string))
+      (t (cffi:mem-ref item (as-gtk-type-name cell-type))))))
 
 (defun parse-cell-attrib (attribs)
   (loop for (attrib val) on attribs by #'cddr collect
 	(ecase attrib
-	  (:foreground (list "foreground" 'c-string val))
-	  (:background (list "background" 'c-string val))
-	  (:font (list "font" 'c-string val))
-	  (:size (list "size-points" 'double-float (coerce val 'double-float)))
-	  (:strikethrough (list "strikethrough" 'boolean val))
-	  (:editable (list "editable" 'boolean val))
-	  (:activatable (list "activatable" 'boolean val))
-	  (:radio (list "radio" 'boolean val)))))
+	  (:foreground (list "foreground" 'gtk-string val))
+	  (:background (list "background" 'gtk-string val))
+	  (:font (list "font" 'gtk-string val))
+	  (:size (list "size-points" 'gdouble (coerce val 'double-float)))
+	  (:strikethrough (list "strikethrough" 'gboolean val))
+	  (:editable (list "editable" 'gboolean val))
+	  (:activatable (list "activatable" 'gboolean val))
+	  (:radio (list "radio" 'gboolean val)))))
 
 (defun gtk-cell-renderer-set-attribs (cell-renderer attribs)
   "Set the properties of cell-render according to attribs"
@@ -210,22 +198,9 @@
 	   do (apply #'gtk-object-set-property cell-renderer property)))
 
 (defun gtk-tree-model-get-typed-item-value (model iter col col-type)
-  (let ((return-buffer (cffi:foreign-alloc :int :count 16)))
-    (gtk-tree-model-get model iter col
-			return-buffer -1)
-    (let* ((returned-value (deref-pointer-runtime-typed return-buffer
-							(ffi-to-uffi-type
-							 (col-type-to-ffi-type col-type))))
-	   (ret$ (when (find col-type '(:string :icon))
-		   returned-value)))
-      (prog1
-	  (cond 
-	    (ret$ (utf-8-to-lisp (uffi:convert-from-cstring ret$))) ; ph 01/2008: here we need to convert back from gtk utf-8 to lisp
-	    ((eq col-type :boolean)
-	     (not (zerop returned-value)))
-	    (t returned-value))
-	(when ret$ (cffi:foreign-free ret$))
-	(cffi:foreign-free return-buffer)))))
+  (cffi:with-foreign-object (return-buffer :int 16)
+    (gtk-tree-model-get model iter col return-buffer -1)
+    (cffi:mem-ref return-buffer (as-gtk-type-name col-type))))
 
 (progn
   (defun alloc-col-type-buffer (col-type)

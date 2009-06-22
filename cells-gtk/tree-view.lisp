@@ -277,10 +277,10 @@
        
 	(apply #'gtk-object-set-property cell-renderer 
 	       (case col-type 
-		 (:boolean (list "active" 'boolean item-value))
-		 (:icon (list "stock-id" 'c-string
+		 (:boolean (list "active" 'gboolean item-value))
+		 (:icon (list "stock-id" 'gtk-string
 			      (string-downcase (format nil "gtk-~a" item-value))))
-		 (t (list "text" 'c-string
+		 (t (list "text" 'gtk-string
 			  (case col-type
 			    (:date (multiple-value-bind (sec min hour day month year) 
 				       (decode-universal-time (truncate item-value))
@@ -332,7 +332,7 @@
 	      (with-tree-iter (iter)
 		(gtk-tree-model-get-iter-from-string (id (tree-model tree)) iter path)
 		(let ((new-val (case col-type
-				 (:boolean (= 0 (gtk-tree-model-get-cell model iter col :boolean))) ; toggle boolean cell,
+				 (:boolean (not (gtk-tree-model-get-cell model iter col :boolean))) ; toggle boolean cell,
 				 (t new-value))))
 		  #+msg (format t "~&Setting value for ~a to ~a ..." node new-val)
 		  (gtk-tree-store-set-cell model iter col col-type new-val)

@@ -468,7 +468,7 @@
   (gtk-entry-set-text :void
 		      ((entry :pointer)
 		       (text gtk-string)))
-  (gtk-entry-get-text :pointer ((entry :pointer)))
+  (gtk-entry-get-text gtk-string ((entry :pointer)))
   (gtk-entry-set-max-length :void
 			    ((entry :pointer)
 			     (max-length gint)))

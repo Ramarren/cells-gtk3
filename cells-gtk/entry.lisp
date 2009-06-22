@@ -42,7 +42,7 @@
                   (widget event data)
                 (with-integrity (:change 'entry-changed-cb)
 		  (trc "entry on-changed")
-                  (let ((txt (get-gtk-string (gtk-entry-get-text widget))))
+                  (let ((txt (gtk-entry-get-text widget)))
                     (trc "ENTRY (ON-CHANGED)" txt) (force-output)
                     (setf (value self) txt))))
   :on-activate (callback-if (not (auto-update self)) ; this is called on pressing enter
