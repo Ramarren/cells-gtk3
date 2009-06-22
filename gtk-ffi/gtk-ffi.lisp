@@ -4,16 +4,16 @@
 
  Copyright (c) 2004 by Vasilis Margioulas <vasilism@sch.gr>
 
- You have the right to distribute and use this software as governed by 
+ You have the right to distribute and use this software as governed by
  the terms of the Lisp Lesser GNU Public License (LLGPL):
 
     (http://opensource.franz.com/preamble.html)
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  Lisp Lesser GNU Public License for more details.
- 
+
 |#
 
 (in-package :gtk-ffi)
@@ -23,27 +23,27 @@
 (defun gtk-lib2cffi (body)
   "Convert hello-c to uffi to cffi types. Swap order of arguments."
   (flet ((convert-type (type)
-	  (case type
-	    (c-string 'gtk-string)
-	    (boolean 'gtk-boolean)
-	    (t (cffi-uffi-compat::convert-uffi-type (ffi-to-uffi-type type))))))
+          (case type
+            (c-string 'gtk-string)
+            (boolean 'gtk-boolean)
+            (t (cffi-uffi-compat::convert-uffi-type (ffi-to-uffi-type type))))))
   (dbind (ignore module &rest funcs) body
-     (pprint `(,ignore 
-	       ,module
-	       ,@(mapcar
-		  #'(lambda (f)
-		      (dbind (name args &optional return-type) f
-			     ` (,name 
-				    ,(if return-type
-					 (convert-type return-type)
-				       :void)
-				    ,(mapcar #'(lambda (a)
-						 (list
-						  (car a)
-						  (convert-type (cadr a))))
-					     args))))
-		      funcs))
-	     *standard-output*))))
+     (pprint `(,ignore
+               ,module
+               ,@(mapcar
+                  #'(lambda (f)
+                      (dbind (name args &optional return-type) f
+                             ` (,name
+                                    ,(if return-type
+                                         (convert-type return-type)
+                                       :void)
+                                    ,(mapcar #'(lambda (a)
+                                                 (list
+                                                  (car a)
+                                                  (convert-type (cadr a))))
+                                             args))))
+                      funcs))
+             *standard-output*))))
 
 
 (defvar *gtk-debug* nil)
@@ -67,18 +67,18 @@
 (eval-when (:compile-toplevel :load-toplevel)
   #+cells-gtk-threads
   (defparameter *without-gtk-lock* '("GTK-ADDS-G-THREAD-SUPPORTED"
-				     "G-THREAD-INIT"
-				     "GTK-MAIN-LEVEL"
-				     "GDK-THREADS-INIT"
-				     "GTK-INIT-CHECK"
-				     "GDK-THREADS-ENTER"
-				     "GDK-THREADS-LEAVE"
-				     "GDK-FLUSH"))
+                                     "G-THREAD-INIT"
+                                     "GTK-MAIN-LEVEL"
+                                     "GDK-THREADS-INIT"
+                                     "GTK-INIT-CHECK"
+                                     "GDK-THREADS-ENTER"
+                                     "GDK-THREADS-LEAVE"
+                                     "GDK-FLUSH"))
   (defparameter *without-debug-msg* '("GTK-EVENTS-PENDING"
-				      "GTK-MAIN-ITERATION-DO"
-				      "GDK-THREADS-ENTER"
-				      "GDK-THREADS-LEAVE"
-				      ))
+                                      "GTK-MAIN-ITERATION-DO"
+                                      "GDK-THREADS-ENTER"
+                                      "GDK-THREADS-LEAVE"
+                                      ))
   #+cells-gtk-threads
   (defun with-gdk-threads-p (sym)
     "returns t if sym needs to be wrapped in with-gdk-threads"
@@ -94,66 +94,66 @@
     `(progn
        (cffi:defcfun (,gtk-name$ ,gtk-name) ,return-type ,@arguments)
        (defun ,name ,(mapcar 'car arguments)
-	 (when *gtk-debug*
-	   ,(when (with-debug-p name)
-              `(format *trace-output* "~%Calling (~A ~{~A~^ ~})" 
+         (when *gtk-debug*
+           ,(when (with-debug-p name)
+              `(format *trace-output* "~%Calling (~A ~{~A~^ ~})"
                        ,(string-downcase (string name)) (list ,@(mapcar 'car arguments)))))
-	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'car arguments))))
+         (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'car arguments))))
                           #+cells-gtk-threads (if (with-gdk-threads-p name) `(with-gdk-threads ,fn) fn)
                           #-cells-gtk-threads fn)))
-	   (when *gtk-debug*
-	     ,(when (with-debug-p name)
-                `(format *trace-output* "~%  (~A ~{~A~^ ~}) returns ~A" 
+           (when *gtk-debug*
+             ,(when (with-debug-p name)
+                `(format *trace-output* "~%  (~A ~{~A~^ ~}) returns ~A"
                          ,(string-downcase (string name)) (list ,@(mapcar 'car arguments))
                          result)))
-	   result))
+           result))
        (eval-when (:compile-toplevel :load-toplevel :execute)
-	 (export ',name)))))
+         (export ',name)))))
 
 (defmacro def-gtk-lib-functions (library &rest functions)
   `(progn
      ,@(loop for function in functions collect
-             (destructuring-bind (name return-type (&rest args)) function
-               `(def-gtk-function ,library ,name ,return-type ,args)))))
+       (destructuring-bind (name return-type (&rest args)) function
+         `(def-gtk-function ,library ,name ,return-type ,args)))))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defmacro callback-function ((&rest arguments) &optional return-type)
     (declare (ignore arguments return-type))
-        `'c-pointer))
+    `'c-pointer))
 
 (defmacro def-c-struct (struct-name &rest fields)
   (let ((slot-defs (loop for field in fields
                          collecting (destructuring-bind (name type) field
                                       (list name
-                                        (intern (string-upcase
-                                                 (format nil "~a-supplied-p" name)))
-                                        (ffi-to-uffi-type type))))))
+                                            (intern (string-upcase
+                                                     (format nil "~a-supplied-p" name)))
+                                            (ffi-to-uffi-type type))))))
     `(progn
        (uffi:def-struct ,struct-name
-           ,@(loop for (name nil type) in slot-defs
-                   collecting (list name type)))
+         ,@(loop for (name nil type) in slot-defs
+                 collecting (list name type)))
        ;; --- make-<struct-name> ---
        ,(let ((obj (gensym)))
           `(defun ,(intern (string-upcase (format nil "make-~a" struct-name)))
-             (&key ,@(loop for (name supplied nil) in slot-defs
-                         collecting (list name nil supplied)))
+               (&key ,@(loop for (name supplied nil) in slot-defs
+                             collecting (list name nil supplied)))
              (let ((,obj (uffi:allocate-foreign-object ',struct-name)))
                ,@(loop for (name supplied nil) in slot-defs
-                     collecting `(when ,supplied
-                                   (setf (cffi:foreign-slot-value ,obj ',struct-name ',name) ,name)))
+                       collecting `(when ,supplied
+                                     (setf (cffi:foreign-slot-value ,obj ',struct-name ',name) ,name)))
                ,obj)))
 
        ;; --- accessors ---
        ,@(mapcar (lambda (slot-def &aux
-                           (slot-name (car slot-def))
-                           (accessor (intern (format nil "~a-~a" struct-name slot-name))))
+                          (slot-name (car slot-def))
+                          (accessor (intern (format nil "~a-~a" struct-name slot-name))))
                    `(progn
                       (defun ,accessor (self)
                         (cffi:foreign-slot-value self ',struct-name ',slot-name))
                       (defun (setf ,accessor) (new-value self)
                         (setf (cffi:foreign-slot-value self ',struct-name ',slot-name)
-                          new-value))))
-           slot-defs))))
+                              new-value))))
+                 slot-defs))))
 
 (def-c-struct gdk-event-button
   (type int)
@@ -213,7 +213,7 @@
     (0 :delete)
     (1 :destroy)
     (2 :expose)
-    (3 :notify) ; that is, pointer motion notify
+    (3 :notify)                         ; that is, pointer motion notify
     (4 :button_press)
     (5 :2button_press)
     (6 :3button_press)
@@ -246,7 +246,7 @@
     (33 :setting)))
 
 (uffi:def-struct list-boolean
-    (value :unsigned-int)
+  (value :unsigned-int)
   (end :pointer-void))
 
 (defmacro with-gtk-string ((var string) &rest body)
@@ -254,14 +254,14 @@
      ,@body)
   #+not
   `(let ((,var (to-gtk-string ,string)))
-     (unwind-protect 
-           (progn ,@body)
-        (g-free ,var))))
+     (unwind-protect
+          (progn ,@body)
+       (g-free ,var))))
 
 (defun value-set-function (type)
   (ecase type
     (c-string #'g-value-set-string)
-    (c-pointer #'g-value-set-string)  ;; string-pointer
+    (c-pointer #'g-value-set-string) ;; string-pointer
     (integer #'g-value-set-int)
     (single-float #'g-value-set-float)
     (double-float #'g-value-set-double)
@@ -277,7 +277,7 @@
     (boolean (* 5 4))))
 
 (def-c-struct type-val
-    (type long)
+  (type long)
   (val double-float)
   (val2 double-float))
 
@@ -338,6 +338,3 @@
 
 (defun cast (ptr type)
   (deref-pointer-runtime-typed ptr (ffi-to-uffi-type type)))
-
-
-
