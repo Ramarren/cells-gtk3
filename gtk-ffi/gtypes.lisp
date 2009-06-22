@@ -89,3 +89,59 @@
 
 (defmethod cffi:translate-from-foreign (value (type gtk-string))
   (cffi:foreign-string-to-lisp value :encoding :utf-8))
+
+;;; gobject
+
+(cffi:defctype gtype gsize)
+
+;;; enums
+
+(cffi:defcenum gdk-event-type
+  (:nothing -1)
+  (:delete 0)
+  (:destroy 1)
+  (:expose 2)
+  (:notify 3)                           ; that is, pointer motion notify
+  (:button_press 4)
+  (:2button_press 5)
+  (:3button_press 6)
+  (:button_release 7)
+  (:key_press 8)
+  (:key_release 9)
+  (:enter_notify 10)
+  (:leave_notify 11)
+  (:focus_change 12)
+  (:configure 13)
+  (:map 14)
+  (:unmap 15)
+  (:property_notify 16)
+  (:selection_clear 17)
+  (:selection_request 18)
+  (:selection_notify 19)
+  (:proximity_in 20)
+  (:proximity_out 21)
+  (:drag_enter 22)
+  (:drag_leave 23)
+  (:drag_motion 24)
+  (:drag_status 25)
+  (:drop_start 26)
+  (:drop_finished 27)
+  (:client_event 28)
+  (:visibility_notify 29)
+  (:no_expose 30)
+  (:scroll 31)
+  (:window_state 32)
+  (:setting 33))
+
+;;; unions
+
+(cffi:defcunion gvalue-data
+  (v_int gint)
+  (v_uint guint)
+  (v_long glong)
+  (v_ulong gulong)
+  (v_int64 gint64)
+  (v_uint64 guint64)
+  (v_float gfloat)
+  (v_double gdouble)
+  (v_pointer gpointer))

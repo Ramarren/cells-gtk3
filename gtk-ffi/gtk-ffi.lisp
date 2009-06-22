@@ -121,15 +121,16 @@
     (declare (ignore arguments return-type))
     `'c-pointer))
 
+;;; def-c-struct
+
+(defun compute-slot-def (field)
+  (destructuring-bind (name type) field
+    (list name (intern (string-upcase (format nil "~a-supplied-p" name))) type)))
+
 (defmacro def-c-struct (struct-name &rest fields)
-  (let ((slot-defs (loop for field in fields
-                         collecting (destructuring-bind (name type) field
-                                      (list name
-                                            (intern (string-upcase
-                                                     (format nil "~a-supplied-p" name)))
-                                            (ffi-to-uffi-type type))))))
+  (let ((slot-defs (mapcar #'compute-slot-def fields)))
     `(progn
-       (uffi:def-struct ,struct-name
+       (cffi:defcstruct ,struct-name
          ,@(loop for (name nil type) in slot-defs
                  collecting (list name type)))
        ;; --- make-<struct-name> ---
@@ -137,12 +138,11 @@
           `(defun ,(intern (string-upcase (format nil "make-~a" struct-name)))
                (&key ,@(loop for (name supplied nil) in slot-defs
                              collecting (list name nil supplied)))
-             (let ((,obj (uffi:allocate-foreign-object ',struct-name)))
+             (let ((,obj (cffi:foreign-alloc ',struct-name)))
                ,@(loop for (name supplied nil) in slot-defs
                        collecting `(when ,supplied
                                      (setf (cffi:foreign-slot-value ,obj ',struct-name ',name) ,name)))
                ,obj)))
-
        ;; --- accessors ---
        ,@(mapcar (lambda (slot-def &aux
                           (slot-name (car slot-def))
@@ -156,107 +156,58 @@
                  slot-defs))))
 
 (def-c-struct gdk-event-button
-  (type int)
-  (window c-pointer)
-  (send-event uint8)
-  (time uint32)
-  (x double-float)
-  (y double-float)
-  (axes (c-ptr double-float))
-  (state uint)
-  (button uint)
-  (device c-pointer)
-  (x_root double-float)
-  (y_root double-float))
+  (type gdk-event-type)
+  (window :pointer)
+  (send-event gint8)
+  (time guint32)
+  (x gdouble)
+  (y gdouble)
+  (axes (:pointer gdouble))
+  (state guint)
+  (button guint)
+  (device :pointer)
+  (x_root gdouble)
+  (y_root gdouble))
 
 (def-c-struct gdk-event-key
-  (type int)
-  (window c-pointer)
-  (send-event uint8)
-  (time uint32)
-  (state uint)
-  (keyval uint)
-  (length int)
-  (string c-pointer)
-  (hardware-keycode uint16)
-  (group uint8))
+  (type gdk-event-type)
+  (window :pointer)
+  (send-event gint8)
+  (time guint32)
+  (state guint)
+  (keyval guint)
+  (length gint)
+  (string :pointer)
+  (hardware_keycode guint16)
+  (group guint8)
+  (is_modifier guint8) ; actually a bitfield?
+  )
 
 (def-c-struct gdk-event-expose
-  (type int)
-  (window c-pointer)
-  (send-event uint8)
+  (type gdk-event-type)
+  (window :pointer)
+  (send-event gint8)
   ;; This is probably wrong. alignment issues...
-  (area-x int)
-  (area-y int)
-  (area-width int)
-  (area-height int)
-  (region c-pointer)
-  (count int))
+  (area-x gint)
+  (area-y gint)
+  (area-width gint)
+  (area-height gint)
+  (region :pointer)
+  (count gint))
 
 (def-c-struct gdk-event-motion
-  (type int)
-  (window c-pointer)
-  (send-event uint8)
-  (time int)
-  (x double-float)
-  (y double-float)
-  (axes c-pointer)
-  (state int)
-  (is-hint uint16)
-  (device c-pointer)
-  (x-root double-float)
-  (y-root double-float))
-
-(defun event-type (event)
-  (ecase event
-    (-1 :nothing)
-    (0 :delete)
-    (1 :destroy)
-    (2 :expose)
-    (3 :notify)                         ; that is, pointer motion notify
-    (4 :button_press)
-    (5 :2button_press)
-    (6 :3button_press)
-    (7 :button_release)
-    (8 :key_press)
-    (9 :key_release)
-    (10 :enter_notify)
-    (11 :leave_notify)
-    (12 :focus_change)
-    (13 :configure)
-    (14 :map)
-    (15 :unmap)
-    (16 :property_notify)
-    (17 :selection_clear)
-    (18 :selection_request)
-    (19 :selection_notify)
-    (20 :proximity_in)
-    (21 :proximity_out)
-    (22 :drag_enter)
-    (23 :drag_leave)
-    (24 :drag_motion)
-    (25 :drag_status)
-    (26 :drop_start)
-    (27 :drop_finished)
-    (28 :client_event)
-    (29 :visibility_notify)
-    (30 :no_expose)
-    (31 :scroll)
-    (32 :window_state)
-    (33 :setting)))
-
-(uffi:def-struct list-boolean
-  (value :unsigned-int)
-  (end :pointer-void))
-
-(defmacro with-gtk-string ((var string) &rest body)
-  `(let ((,var ,string))
-     ,@body)
-  #+not
-  `(let ((,var (to-gtk-string ,string)))
-     (unwind-protect
-          (progn ,@body)
-       (g-free ,var))))
+  (type gdk-event-type)
+  (window :pointer)
+  (send-event gint8)
+  (time guint32)
+  (x gdouble)
+  (y gdouble)
+  (axes (:pointer gdouble))
+  (state guint)
+  (is_hint gint16)
+  (device :pointer)
+  (x_root gdouble)
+  (y_root gdouble))
 
 (defun value-set-function (type)
   (ecase type
@@ -269,72 +220,54 @@
 
 (defun value-type-as-int (type)
   (ecase type
-    (c-string (* 16 4))
-    (c-pointer (* 16 4)) ;; string-pointer
-    (integer (* 6 4))
-    (single-float (* 14 4))
-    (double-float (* 15 4))
-    (boolean (* 5 4))))
+    (gtk-string (* 16 4))
+    (gpointer (* 16 4)) ;; string-pointer
+    (gint (* 6 4))
+    (gfloat (* 14 4))
+    (gdouble (* 15 4))
+    (gboolean (* 5 4))))
 
 (def-c-struct type-val
-  (type long)
-  (val double-float)
-  (val2 double-float))
+  (type gtype)
+  (val gvalue-data)
+  (val2 gvalue-data))
 
 (def-c-struct gslist
-  (data c-pointer)
-  (next c-pointer))
+  (data gpointer)
+  (next gpointer))
 
 (def-c-struct gtk-tree-iter
-  (stamp int)
-  (user-data c-pointer)
-  (user-data2 c-pointer)
-  (user-data3 c-pointer))
+  (stamp gint)
+  (user-data gpointer)
+  (user-data2 gpointer)
+  (user-data3 gpointer))
 
 (defmacro with-tree-iter ((iter-var) &body body)
-  `(uffi:with-foreign-object (,iter-var 'gtk-tree-iter)
+  `(cffi:with-foreign-object (,iter-var 'gtk-tree-iter)
      (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'stamp) 0)
      (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data) +c-null+)
      (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data2) +c-null+)
      (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data3) +c-null+)
      ,@body))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun as-gtk-type-name (type)
-    (ecase type
-      (:string 'c-string)
-      (:icon 'c-string)
-      (:int 'int)
-      (:long 'long)
-      (:date 'float)
-      (:float 'single-float)
-      (:double 'double-float)
-      (:boolean 'boolean)))
-  (defun as-gtk-type (type)
-    (ecase type
-      (:string (* 16 4))
-      (:icon (* 16 4))
-      (:int (* 6 4))
-      (:long (* 8 4))
-      (:date (* 14 4))
-      (:float (* 14 4))
-      (:double (* 15 4))
-      (:boolean (* 5 4)))))
+(defun as-gtk-type-name (type)
+  (ecase type
+    (:string 'gtk-string)
+    (:icon 'gtk-string)
+    (:int 'gint)
+    (:long 'glong)
+    (:date 'gfloat)
+    (:float 'gfloat)
+    (:double 'gdouble)
+    (:boolean 'gboolean)))
 
-(defun col-type-to-ffi-type (col-type)
-  (cdr (assoc col-type '((:string . c-string) ;;2004:12:15-00:17 was c-pointer
-                         (:icon . c-pointer)
-                         (:boolean . boolean)
-                         (:int . int)
-                         (:long . long)
-                         (:date . single-float)
-                         (:float . single-float)
-                         (:double . double-float)))))
-
-(defmacro deref-pointer-runtime-typed (ptr type)
-  "Returns a object pointed"
-  (declare (ignorable type))
-  `(uffi:deref-pointer ,ptr ,type))
-
-(defun cast (ptr type)
-  (deref-pointer-runtime-typed ptr (ffi-to-uffi-type type)))
+(defun as-gtk-type (type)
+  (ecase type
+    (:string (* 16 4))
+    (:icon (* 16 4))
+    (:int (* 6 4))
+    (:long (* 8 4))
+    (:date (* 14 4))
+    (:float (* 14 4))
+    (:double (* 15 4))
+    (:boolean (* 5 4))))
