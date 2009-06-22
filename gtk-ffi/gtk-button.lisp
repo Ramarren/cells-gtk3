@@ -31,17 +31,17 @@
    ((button :pointer) (style :int)))
   (gtk-button-set-use-stock
    :void
-   ((button :pointer) (use-stock gtk-boolean)))
+   ((button :pointer) (use-stock gboolean)))
   (gtk-toggle-button-new :pointer ())
   (gtk-toggle-button-set-mode
    :void
    ((button :pointer)
-    (draw-indicator gtk-boolean)))
+    (draw-indicator gboolean)))
   (gtk-toggle-button-set-active
    :void
-   ((button :pointer) (active gtk-boolean)))
+   ((button :pointer) (active gboolean)))
   (gtk-toggle-button-get-active
-   gtk-boolean
+   gboolean
    ((button :pointer)))
   (gtk-check-button-new :pointer ())
   (gtk-radio-button-new
@@ -53,24 +53,24 @@
   (gtk-spin-button-new
    :pointer
    ((adjustment :pointer)
-    (climb-rate :double)
-    (digits :unsigned-int)))
+    (climb-rate gdouble)
+    (digits guint)))
   (gtk-spin-button-new-with-range
    :pointer
-   ((minval :double)
-    (maxval :double)
-    (step :double)))
+   ((minval gdouble)
+    (maxval gdouble)
+    (step gdouble)))
   (gtk-spin-button-set-value :void
-    ((spin-button :pointer) (value :double)))
+                             ((spin-button :pointer) (value gdouble)))
   (gtk-spin-button-get-value
    :double
    ((spin-button :pointer)))
   (gtk-spin-button-get-value-as-int
-   :int
+   gint
    ((spin-button :pointer)))
   (gtk-spin-button-set-wrap
    :void
-   ((spin-button :pointer) (wrap gtk-boolean))))
+   ((spin-button :pointer) (wrap gboolean))))
 
 
 #+debugthis
