@@ -26,3 +26,10 @@
 
 ;;; features
 (pushnew :libcellsgtk *features*)
+
+;;; library path for MacPorts
+#+darwin (progn
+           (asdf:oos 'asdf:load-op :cffi)
+           (pushnew "/opt/local/lib/" (symbol-value (find-symbol "*FOREIGN-LIBRARY-DIRECTORIES*"
+                                                                 (find-package "CFFI")))
+                    :test #'string=))
