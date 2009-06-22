@@ -20,12 +20,22 @@
 
 (in-package :gtk-ffi)
 
-(defun gtk-signal-connect (widget signal fun &key (after t) data destroy-data)
-  #+shhtk (print (list "passing fun to gtk-signal-connect" signal fun))
-  (g-signal-connect-data widget signal fun data destroy-data after))
+(cffi:defcenum g-connect-flags
+  (:none 0)
+  (:after 1)
+  (:swapped 2)
+  (:after-swapped 3))
+
+(cffi:defcfun ("g_signal_connect_data" g_signal_connect_data) gulong
+  (instance :pointer)
+  (detailed-signal gtk-string)
+  (c-handler :pointer) 
+  (data :pointer)
+  (destroy-data :pointer)
+  (connct-flags g-connect-flags))
 
 (defun g-signal-connect-data (self detailed-signal c-handler data destroy-data after)
-  (uffi:with-cstrings ((c-detailed-signal detailed-signal))
+  (cffi:with-foreign-string (c-detailed-signal detailed-signal)
     (let ((p4 (or data +c-null+)))
       (g_signal_connect_data
        self
@@ -33,12 +43,11 @@
        (wrap-func c-handler)
        p4
        (or destroy-data +c-null+)
-       (if after 1 0)))))
+       (if after :after :none)))))
 
-(cffi:defcfun ("g_signal_connect_data" g_signal_connect_data)
-              :unsigned-long
-  (instance :pointer) (detailed-signal :pointer) (c-handler :pointer) 
-  (data :pointer) (destroy-data :pointer) (after :int))
+(defun gtk-signal-connect (widget signal fun &key (after t) data destroy-data)
+  #+shhtk (print (list "passing fun to gtk-signal-connect" signal fun))
+  (g-signal-connect-data widget signal fun data destroy-data after))
 
 (defun wrap-func (func-address) ;; vestigial. func would never be nil. i think.
   (or func-address 0))
@@ -49,13 +58,11 @@
 
 (defun gtk-object-set-property (obj property val-type val)
   (with-g-value (value)
-      (g-value-init value (value-type-as-int val-type))
-      (funcall (value-set-function val-type)
-        value val)
-
-      (g-object-set-property obj property value)
-
-      (g-value-unset value)))
+    (g-value-init value (value-type-as-int val-type))
+    (funcall (value-set-function val-type)
+             value val)
+    (g-object-set-property obj property value)
+    (g-value-unset value)))
 
 (defun get-gtk-string (pointer)
   (typecase pointer
