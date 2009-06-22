@@ -2,6 +2,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 
+#ifdef WIN32 // .drectve is an win32 extension
 asm (".section .drectve");
 asm (".ascii \"-export:gtk_adds_text_iter_new\"");
 asm (".ascii \" -export:gtk_adds_text_view_popup_menu\"");
@@ -16,6 +17,7 @@ asm (".ascii \" -export:gtk_adds_ok\"");
 asm (".ascii \" -export:gtk_adds_g_thread_supported\"");
 asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
+#endif
 /*  Return a pointer to the vbox of a dialog. 
  *  Useful for adding widgets to dialogs. For example,
  *  if you need a dialog with text entry capability. 
