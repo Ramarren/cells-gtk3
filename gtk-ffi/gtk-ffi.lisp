@@ -57,86 +57,11 @@
   (setf (cffi:mem-aref (cffi:foreign-slot-value obj obj-type slot) :int index)
     new-value))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-(cffi:define-foreign-library :gobject
-  (cffi-features:unix (:or "libgobject-2.0.so" "libgobject-2.0.so.0"))
-  (cffi-features:windows "libgobject-2.0-0.dll")
-  (cffi-features:darwin "libgobject-2.0-0.dylib"))
-
-(cffi:define-foreign-library :glib
-  (cffi-features:unix (:or "libglib-2.0.so" "libglib-2.0.so.0"))
-  (cffi-features:windows "libglib-2.0-0.dll")
-  (cffi-features:darwin "libglib-2.0-0.dylib"))
-
-(cffi:define-foreign-library :gthread
-  (cffi-features:unix (:or "libgthread-2.0.so" "libgthread-2.0.so.0"))
-  (cffi-features:windows "libgthread-2.0-0.dll")
-  (cffi-features:darwin "libgthread-2.0-0.dylib"))
-
-(cffi:define-foreign-library :gdk
-  (cffi-features:unix (:or "libgdk-x11-2.0.so" "libgdk-x11-2.0.so.0"))
-  (cffi-features:windows "libgdk-win32-2.0-0.dll")
-  (cffi-features:darwin "libgdk-win32-2.0-0.dylib")) ; pod ???
-
-(cffi:define-foreign-library :gtk
-  (cffi-features:unix (:or "libgtk-x11-2.0.so" "libgtk-x11-2.0.so.0"))
-  (cffi-features:windows "libgtk-win32-2.0-0.dll")
-  (cffi-features:darwin "libgtk-win32-2.0-0.dylib")) ; pod ???
-
-#+libcellsgtk
-(cffi:define-foreign-library :cgtk
-  (cffi-features:unix #.(merge-pathnames "libcellsgtk.so" *compile-file-pathname*))
-  (cffi-features:windows #.(merge-pathnames "libcellsgtk.dll" *compile-file-pathname*))
-  (cffi-features:darwin #.(merge-pathnames "libcellsgtk.dylib" *compile-file-pathname*)))
-) ;eval-when
-
-;;; After doing this, should be able to do (g-thread-init c-null)
-
-;;; LW Win32 is hanging on POD's machine only:
-;;; (fli:register-module "libgdk-win32-2.0-0.dll" :connection-style :immediate)
-;;; (fli:register-module "c:\\Program Files\\Common Files\\GTK\\2.0\\bin\\libgdk-win32-2.0-0.dll" 
-;;;                      :connection-style :immediate)
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun load-gtk-libs ()
-    (handler-bind ((style-warning #'muffle-warning))
-      (cffi:load-foreign-library :gobject)
-      (cffi:load-foreign-library :glib)
-      (cffi:load-foreign-library :gthread)
-      (cffi:load-foreign-library :gdk)
-      (cffi:load-foreign-library :gtk)
-      #+libcellsgtk
-      (cffi:load-foreign-library :cgtk)))
-) ; eval
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun gtk-function-name (lisp-name)
     (substitute #\_ #\- lisp-name))
-
   #+(or cmu clisp)(load-gtk-libs)
-
-  (defun ffi-to-uffi-type (clisp-type)
-    
-    (if (consp clisp-type)
-                (mapcar 'ffi-to-uffi-type clisp-type)
-	      (case clisp-type
-		((nil) :void)
-		(uint :UNSIGNED-INT)
-		(c-pointer :pointer-void)
-		(c-ptr-null '*)
-		(c-array-ptr '*)
-		(c-ptr '*)
-		(c-string :cstring)
-		(sint32 :int)
-		(uint32 :unsigned-int)
-		(uint8 :unsigned-byte)
-		(uint16 :short) ; no signed/unsigned types?
-		(boolean :unsigned-int)
-		(ulong :unsigned-long)
-		(int :int)
-		(long :long)
-		(single-float :float)
-		(double-float :double)
-		(otherwise clisp-type))))
 ) ;eval
 
 (eval-when (:compile-toplevel :load-toplevel)
@@ -171,16 +96,16 @@
        (defun ,name ,(mapcar 'car arguments)
 	 (when *gtk-debug*
 	   ,(when (with-debug-p name)
-		  `(format *trace-output* "~%Calling (~A ~{~A~^ ~})" 
-			   ,(string-downcase (string name)) (list ,@(mapcar 'car arguments)))))
+              `(format *trace-output* "~%Calling (~A ~{~A~^ ~})" 
+                       ,(string-downcase (string name)) (list ,@(mapcar 'car arguments)))))
 	 (let ((result ,(let ((fn `(,gtk-name ,@(mapcar #'car arguments))))
-			     #+cells-gtk-threads (if (with-gdk-threads-p name) `(with-gdk-threads ,fn) fn)
-			     #-cells-gtk-threads fn)))
+                          #+cells-gtk-threads (if (with-gdk-threads-p name) `(with-gdk-threads ,fn) fn)
+                          #-cells-gtk-threads fn)))
 	   (when *gtk-debug*
 	     ,(when (with-debug-p name)
-		    `(format *trace-output* "~%  (~A ~{~A~^ ~}) returns ~A" 
-			     ,(string-downcase (string name)) (list ,@(mapcar 'car arguments))
-			     result)))
+                `(format *trace-output* "~%  (~A ~{~A~^ ~}) returns ~A" 
+                         ,(string-downcase (string name)) (list ,@(mapcar 'car arguments))
+                         result)))
 	   result))
        (eval-when (:compile-toplevel :load-toplevel :execute)
 	 (export ',name)))))
