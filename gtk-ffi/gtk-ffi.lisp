@@ -45,53 +45,8 @@
 		      funcs))
 	     *standard-output*))))
 
-;;keep SBCL happy
-(defconstant +c-null+ 
-  (if (boundp '+c-null+)
-      (symbol-value '+c-null+)
-    (cffi:null-pointer)))
 
 (defvar *gtk-debug* nil)
-
-;;; ==============  Define CFFI types, and their translations.... 
-#+nil (eval-when (:compile-toplevel :load-toplevel :execute) 	; ph:  help SBCL
-  (cffi:defctype gtk-string :pointer "string type for cffi type translation")
-  (cffi:defctype gtk-boolean :pointer "boolean type for cffi type translation"))
-
-(cffi:define-foreign-type gtk-boolean-type ()
-  ()
-  (:actual-type :pointer)
-  #-sbcl (:simple-parser gtk-boolean))
-
-#+sbcl (cffi:define-parse-method gtk-boolean (&rest cffi::args)
-  (apply #'make-instance 'gtk-boolean-type cffi::args))
-
-(cffi:define-foreign-type gtk-string-type ()
-  ()
-  (:actual-type :pointer)
-  #-sbcl (:simple-parser gtk-string))
-
-#+sbcl (cffi:define-parse-method gtk-string (&rest cffi::args)
-  (apply #'make-instance 'gtk-string-type cffi::args))
-
-
-(defmethod cffi:translate-to-foreign (value (type gtk-boolean-type))
-  (cffi:make-pointer (if value 1 0)))
-
-(defmethod cffi:translate-from-foreign (value (type gtk-boolean-type))
-  #-clisp(not (zerop (cffi::pointer-address value))) ; pod strange!
-  #+clisp(if (null value) ; pod something really wrong here!
-	     nil
-	   (not (zerop (cffi::pointer-address value)))))
-
-(defmethod cffi:translate-to-foreign (value (type gtk-string-type))
-  (when (null value) (setf value "")) ; pod ??? 
-  (cffi:foreign-string-alloc value))
-
-(defmethod cffi:translate-from-foreign (value (type gtk-string-type))
-  (cffi:foreign-string-to-lisp value))
-
-
 
 (defun int-slot-indexed (obj obj-type slot index)
   (declare (ignorable obj-type))
