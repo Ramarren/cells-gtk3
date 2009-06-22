@@ -21,23 +21,23 @@
 (load-gtk-libs)
 
 (def-gtk-lib-functions :glib
-  (g-free :void ((data :pointer)))
-  (g-slist-free :void ((lst :pointer)))
-  (g-timeout-add :unsigned-int
-		 ((milliseconds :unsigned-int)
+    (g-free :void ((data gpointer)))
+  (g-slist-free :void ((lst (:pointer gslist))))
+  (g-timeout-add guint
+		 ((milliseconds guint)
 		  (func :pointer)
 		  (data :pointer)))
   (g-locale-from-utf8 gtk-string
-		      ((utf8-string :pointer)
-		       (len :int)
-		       (bytes-read :pointer)
-		       (bytes-written :pointer)
+		      ((utf8-string gtk-string)
+		       (len gssize)
+		       (bytes-read (:pointer gsize))
+		       (bytes-written (:pointer gsize))
 		       (gerror :pointer)))
-  (g-locale-to-utf8 :pointer
+  (g-locale-to-utf8 gtk-string
 		    ((local-string gtk-string)
-		     (len :int)
-		     (bytes-read :pointer)
-		     (bytes-written :pointer)
+		     (len gssize)
+		     (bytes-read (:pointer gsize))
+		     (bytes-written (:pointer gsize))
 		     (gerror :pointer))))
 
 (def-gtk-lib-functions :gthread (g-thread-init :void ((vtable :pointer))))
