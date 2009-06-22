@@ -21,8 +21,8 @@
 (def-gtk-lib-functions :gtk
   ;;list-store
   (gtk-list-store-newv :pointer
-		       ((n-columns :int)
-			(col-types :pointer)))
+		       ((n-columns gint)
+			(col-types (:pointer gtype))))
   (gtk-list-store-set-valist :void
 			     ((store :pointer)
 			      (iter :pointer)
@@ -30,7 +30,7 @@
   (gtk-list-store-set-value :void
 			    ((store :pointer)
 			     (iter :pointer)
-			     (column :int)
+			     (column gint)
 			     (value :pointer)))
   (gtk-list-store-append :void
 			 ((list-store :pointer)
@@ -39,8 +39,8 @@
 			((list-store :pointer)))
   ;;tre-store
   (gtk-tree-store-newv :pointer
-		       ((n-columns :int)
-			(col-types :pointer)))
+		       ((n-columns gint)
+			(col-types (:pointer gtype))))
   (gtk-tree-store-set-valist :void
 			     ((store :pointer)
 			      (iter :pointer)
@@ -48,13 +48,13 @@
   (gtk-tree-store-set-value :void
 			    ((store :pointer)
 			     (iter :pointer)
-			     (column :int)
+			     (column gint)
 			     (value :pointer)))
   (gtk-tree-store-append :void
 			 ((tree-store :pointer)
 			  (iter :pointer)
 			  (parent :pointer)))
-  (gtk-tree-store-remove gtk-boolean
+  (gtk-tree-store-remove gboolean
 			 ((tree-store :pointer)
 			  (iter :pointer)))
   (gtk-tree-store-clear :void
@@ -70,30 +70,29 @@
 			       ((tree-view
 				 :pointer)
 				(column :pointer)
-				(pos :int)))
+				(pos gint)))
   (gtk-tree-view-get-selection :pointer
-			       ((tree-view
-				 :pointer)))
-  (gtk-tree-view-get-path-at-pos gtk-boolean
+			       ((tree-view :pointer)))
+  (gtk-tree-view-get-path-at-pos gboolean
 				 ((tree-view :pointer)
-				  (x :int)
-				  (y :int)
+				  (x gint)
+				  (y gint)
 				  (path :pointer)
 				  (column :pointer)
 				  (cell-x :pointer)
 				  (cell-y :pointer)))
   (gtk-tree-view-widget-to-tree-coords :void
 				       ((tree-view :pointer)
-					(wx :int)
-					(wy :int)
-					(tx :pointer)
-					(ty :pointer)))
+					(wx gint)
+					(wy gint)
+					(tx (:pointer gint))
+					(ty (:pointer gint))))
   (gtk-tree-view-tree-to-widget-coords :void
 				       ((tree-view :pointer)
-					(wx :int)
-					(wy :int)
-					(tx :pointer)
-					(ty :pointer)))
+					(wx gint)
+					(wy gint)
+					(tx (:pointer gint))
+					(ty (:pointer gint))))
   (gtk-tree-view-expand-all :void
 			    ((tree-view :pointer)))
   ;;tree-iter
@@ -104,12 +103,12 @@
 		       (column :int)
 		       (data :pointer)
 		       (eof :int)))
-  (gtk-tree-model-get-iter gtk-boolean
+  (gtk-tree-model-get-iter gboolean
 			   ((tree-model :pointer)
 			    (iter :pointer)
 			    (path :pointer)))
   ;;tree-model
-  (gtk-tree-model-get-iter-from-string gtk-boolean
+  (gtk-tree-model-get-iter-from-string gboolean
 				       ((tree-model :pointer)
 					(iter :pointer)
 					(path gtk-string)))
@@ -126,7 +125,7 @@
   (gtk-tree-row-reference-new :pointer
 			      ((tree-model :pointer)
 			       (path :pointer)))
-  (gtk-tree-row-reference-valid gtk-boolean
+  (gtk-tree-row-reference-valid gboolean
 				((tree-row-reference :pointer)))
   (gtk-tree-row-reference-get-model :pointer
 				    ((tree-row-reference :pointer)))
@@ -137,13 +136,13 @@
   ;;tree-selection
   (gtk-tree-selection-set-mode :void
 			       ((sel :pointer)
-				(mode :int)))
+				(mode gtk-selection-mode)))
   (gtk-tree-selection-get-mode :int
 			       ((sel :pointer)))
   (gtk-tree-selection-select-path :void
 				  ((sel :pointer)
 				   (path :pointer)))
-  (gtk-tree-selection-get-selected gtk-boolean
+  (gtk-tree-selection-get-selected gboolean
 				   ((sel :pointer)
 				    (model :pointer)
 				    (iter :pointer)))
@@ -158,50 +157,48 @@
   (gtk-tree-view-column-pack-start :void
 				   ((tree-column :pointer)
 				    (renderer :pointer)
-				    (expand gtk-boolean)))
+				    (expand gboolean)))
   (gtk-tree-view-column-add-attribute :void
 				      ((tree-column :pointer)
 				       (renderer :pointer)
 				       (attribute gtk-string)
-				       (column :int)))
+				       (column gint)))
   (gtk-tree-view-column-set-spacing :void
 				    ((tree-column :pointer)
-				     (spacing :int)))
+				     (spacing gint)))
   (gtk-tree-view-column-set-visible :void
 				    ((tree-column :pointer)
-				     (spacing gtk-boolean)))
+				     (spacing gboolean)))
   (gtk-tree-view-column-set-reorderable :void
 					((tree-column :pointer)
-					 (resizable gtk-boolean)))
+					 (resizable gboolean)))
   (gtk-tree-view-column-set-sort-column-id :void
 					   ((tree-column :pointer)
-					    (col-id :int)))
+					    (col-id gint)))
   (gtk-tree-view-column-set-sort-indicator :void
 					   ((tree-column :pointer)
-					    (resizable gtk-boolean)))
+					    (resizable gboolean)))
   (gtk-tree-view-column-set-resizable :void 
 				      ((tree-column :pointer)
-				       (resizable gtk-boolean)))
+				       (resizable gboolean)))
   (gtk-tree-view-column-set-fixed-width :void
 					((tree-column :pointer)
-					 (fixed-width :int)))
+					 (fixed-width gint)))
   (gtk-tree-view-column-set-min-width :void
 				      ((tree-column :pointer)
-				       (min-width :int)))
+				       (min-width gint)))
   (gtk-tree-view-column-set-max-width :void
 				      ((tree-column :pointer)
-				       (max-width :int)))
+				       (max-width gint)))
   (gtk-tree-view-column-set-title :void
 				  ((tree-column :pointer)
 				   (title gtk-string)))
   (gtk-tree-view-column-set-expand :void
 				   ((tree-column :pointer)
-				    (expand gtk-boolean)))
+				    (expand gboolean)))
   (gtk-tree-view-column-set-clickable :void
-				      ((tree-column
-					:pointer)
-				       (clickable
-					gtk-boolean)))
+				      ((tree-column :pointer)
+				       (clickable gboolean)))
   (gtk-tree-view-column-set-cell-data-func :void
 					   ((tree-column :pointer)
 					    (cell-renderer :pointer)
@@ -213,9 +210,7 @@
   (gtk-cell-renderer-toggle-new :pointer ())
   (gtk-cell-renderer-pixbuf-new :pointer ())
   (gtk-cell-renderer-set-fixed-size :void
-				    ((cell
-				      :pointer)
-				     (width :int)
-				     (height
-				      :int))))
+				    ((cell :pointer)
+				     (width gint)
+				     (height gint))))
 
