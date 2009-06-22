@@ -25,17 +25,17 @@
    :void
    ((toolbar :pointer)
     (item :pointer)
-    (pos :int)))
+    (pos gint)))
   (gtk-toolbar-set-show-arrow
    :void
    ((toolbar :pointer)
-    (show-arrow gtk-boolean)))
+    (show-arrow gboolean)))
   (gtk-toolbar-set-orientation
    :void
    ((toolbar :pointer) (orientation :int)))
   (gtk-toolbar-set-tooltips
    :void
-   ((toolbar :pointer) (enable gtk-boolean)))
+   ((toolbar :pointer) (enable gboolean)))
   (gtk-toolbar-set-style
    :void
    ((toolbar :pointer) (style :int)))
@@ -63,10 +63,10 @@
   (gtk-tool-item-set-homogeneous
    :void
    ((tool-item :pointer)
-    (homogeneous gtk-boolean)))
+    (homogeneous gboolean)))
   (gtk-tool-item-set-expand
    :void
-   ((tool-item :pointer) (expand gtk-boolean)))
+   ((tool-item :pointer) (expand gboolean)))
   (gtk-tool-item-set-tooltip
    :void
    ((tool-item :pointer)
@@ -76,11 +76,11 @@
   (gtk-tool-item-set-is-important
    :void
    ((tool-item :pointer)
-    (is-important gtk-boolean)))
+    (is-important gboolean)))
   (gtk-separator-tool-item-new :pointer ())
   (gtk-separator-tool-item-set-draw
    :void
-   ((item :pointer) (draw gtk-boolean)))
+   ((item :pointer) (draw gboolean)))
 
   ;;tool-button
   (gtk-tool-button-new
@@ -95,7 +95,7 @@
   (gtk-tool-button-set-use-underline
    :void
    ((tool-button :pointer)
-    (use-underline gtk-boolean)))
+    (use-underline gboolean)))
   (gtk-tool-button-set-stock-id
    :void
    ((tool-button :pointer) (stock-id gtk-string)))
