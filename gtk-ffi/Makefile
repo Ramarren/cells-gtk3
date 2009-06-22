@@ -29,6 +29,10 @@ all:
 	gcc -fPIC -c gtk-adds.c `pkg-config --cflags --libs gtk+-2.0`
 	gcc -shared -o libcellsgtk.so gtk-adds.o `pkg-config --cflags --libs gtk+-2.0`
 
+macports:
+	gcc-mp-4.3 -fPIC -c gtk-adds.c `pkg-config --cflags --libs gtk+-2.0`
+	gcc-mp-4.3 -shared -o libcellsgtk.dylib gtk-adds.o `pkg-config --cflags --libs gtk+-2.0`
+
 solaris:
 	gcc -fPIC -R/opt/csw/lib -L/opt/csw/lib -c gtk-adds.c `pkg-config --cflags --libs gtk+-2.0 glib-2.0`
 	gcc -fPIC -R/opt/csw/lib -L/opt/csw/lib -shared -o libcellsgtk.so gtk-adds.o `pkg-config --cflags --libs gtk+-2.0 glib-2.0`
