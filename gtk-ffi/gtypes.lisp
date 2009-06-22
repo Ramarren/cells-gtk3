@@ -135,13 +135,13 @@
 
 ;;; unions
 
-(cffi:defcunion gvalue-data
-  (v_int gint)
-  (v_uint guint)
-  (v_long glong)
-  (v_ulong gulong)
-  (v_int64 gint64)
-  (v_uint64 guint64)
-  (v_float gfloat)
-  (v_double gdouble)
-  (v_pointer gpointer))
+(cffi:defcunion g-value-data
+  (v-int gint)
+  (v-uint guint)
+  (v-long glong)
+  (v-ulong gulong)
+  (v-int64 gint64)
+  (v-uint64 guint64)
+  (v-float gfloat)
+  (v-double gdouble)
+  (v-pointer gpointer))

@@ -227,11 +227,6 @@
     (gdouble (* 15 4))
     (gboolean (* 5 4))))
 
-(def-c-struct type-val
-  (type gtype)
-  (val gvalue-data)
-  (val2 gvalue-data))
-
 (def-c-struct gslist
   (data gpointer)
   (next gpointer))
