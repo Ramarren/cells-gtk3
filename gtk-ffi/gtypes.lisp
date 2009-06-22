@@ -133,6 +133,101 @@
   (:window_state 32)
   (:setting 33))
 
+(cffi:defcenum gtk-resize-mode
+  :parent
+  :queue
+  :immediate)
+
+(cffi:defcenum gtk-attach-options
+  (:expand 1)
+  (:shrink 2)
+  (:fill 4))
+
+(cffi:defcenum gtk-shadow-type
+  :none :in :out :etched-in :etched-out)
+
+(cffi:defcenum gtk-policy-type
+  :always :automatic :never)
+
+(cffi:defcenum gtk-corner-type
+  :top-left :bottom-left :top-right :bottom-right)
+
+(cffi:defcenum gtk-position-type
+  :left :right :top :bottom)
+
+(cffi:defcenum gtk-progress-bar-orientation
+  :left-to-right :right-to-left :bottom-to-top :top-to-bottom)
+
+(cffi:defcenum gtk-progress-bar-style
+  :continuous :discrete)
+
+(cffi:defcenum gtk-icon-size
+  :invalid :menu :small-toolbar :large-toolbar :button :dnd :dialog)
+
+(cffi:defcenum gtk-modifier-type
+  (:shift-mask     #.(ash 1 0))
+  (:lock-mask	  #.(ash 1 1))
+  (:control-mask   #.(ash 1 2))
+  (:mod1-mask	  #.(ash 1 3))
+  (:mod2-mask	  #.(ash 1 4))
+  (:mod3-mask	  #.(ash 1 5))
+  (:mod4-mask	  #.(ash 1 6))
+  (:mod5-mask	  #.(ash 1 7))
+  (:button1-mask   #.(ash 1 8))
+  (:button2-mask   #.(ash 1 9))
+  (:button3-mask   #.(ash 1 10))
+  (:button4-mask   #.(ash 1 11))
+  (:button5-mask   #.(ash 1 12))
+  (:super-mask     #.(ash 1 26))
+  (:hyper-mask     #.(ash 1 27))
+  (:meta-mask      #.(ash 1 28))
+  (:release-mask   #.(ash 1 30))
+  (:modifier-mask  #x5c001fff))
+
+(cffi:defcenum gtk-accel-flags
+  (:visible 1)
+  (:locked 2)
+  (:mask #x07))
+
+(cffi:defcenum gtk-window-position
+  :none :center :mouse :center-always :center-on-parent)
+
+(cffi:defcenum gtk-update-type
+  :continuous :discontinuous :delayed)
+
+(cffi:defcenum gtk-arrow-type
+  :up :down :left :right :none)
+
+(cffi:defcenum gtk-dialog-flags
+  (:modal 1)
+  (:destroy-with-parent 2)
+  (:no-separator 4))
+
+(cffi:defcenum gtk-message-type
+  :info :warning :question :error :other)
+
+(cffi:defcenum gtk-buttons-type
+  :none :ok :close :cancel :yes-no :ok-cancel)
+
+(cffi:defcenum gtk-file-chooser-action
+  :open :save :select-folder :create-folder)
+
+(cffi:defcenum gtk-wrap-mode
+  :none :char :word :word-char)
+
+(cffi:defcenum gtk-ui-manager-item-type
+  (:auto 0)
+  (:menubar #.(ash 1 0))
+  (:menu #.(ash 1 1))
+  (:toolbar #.(ash 1 2))
+  (:placeholder #.(ash 1 3))
+  (:popup #.(ash 1 4))
+  (:menuitem #.(ash 1 5))
+  (:toolitem #.(ash 1 6))
+  (:separator #.(ash 1 7))
+  (:accelerator #.(ash 1 8))
+  (:popup-with-accels #.(ash 1 9)))
+
 ;;; unions
 
 (cffi:defcunion g-value-data
