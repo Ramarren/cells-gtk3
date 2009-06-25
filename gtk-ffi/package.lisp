@@ -244,6 +244,7 @@
 	   #:gtk-text-tag-table-new #:gtk-combo-box-append-text #:gtk-signal-connect
 	   #:gtk-window-add-accel-group #:gtk-combo-box-get-active-iter #:gtk-combo-box-set-model
 	   #:gtk-progress-bar-set-pulse-step #:gtk-menu-bar-new #:g-slist-free
+           #:gtk-progress-bar-set-percentage #:gtk-progress-bar-set-value
 	   #:gdk-gl-config-new-by-mode #:gdk-event-motion-y #:gtk-tool-item-set-is-important
 	   #:gtk-tree-store-append #:g-signal-connect-closure #:gtk-container-remove
 	   #:gtk-misc-set-padding #:gtk-text-buffer-insert-at-cursor #:gtk-container-add
