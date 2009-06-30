@@ -37,6 +37,7 @@ From my testing, the example application runs on:
 ### x86 linux
 - SBCL 1.0.29 (tested with threading, it has been reported on the mailing list that 1.0.20 doesn't work)
 - CLISP 2.47-r2
+
 ### Intel MacOSX
  I tried only X11 GTK+ from MacPorts. It should be possible to use Quartz based version of GTK just by changing library names, but I have not tried it. There is not GTK-GL extension for Quartz.
 - SBCL 1.0.29 (from MacPorts)
