@@ -648,8 +648,8 @@
   (stock-fn nil :type (or null function))
   (arr nil :type simple-vector))
 
+(declaim (ftype (function (t &key (:element-type t) (:resize number) (:stock-fn t)) reslist) new-reslist))
 (defun new-reslist (size &key (element-type t) (resize 2.0) stock-fn)
-  (declare (values reslist))
   (let ((reslist (make-reslist
                  :arr (make-array size :element-type element-type)
                  :resize resize :stock-fn stock-fn))) ; pod compile it???
@@ -660,10 +660,10 @@
       (setf (reslist-fillptr reslist) size))
     reslist))
 
-(declaim (inline reslist-push))
+(declaim (inline reslist-push)
+         (ftype (function (t reslist) integer) reslist-push))
 (defun reslist-push (val reslist)
   (declare (type reslist reslist))
-  (declare (values integer))
   (let* ((arr (reslist-arr reslist))
          (size (array-total-size arr))
          (ptr (reslist-fillptr reslist)))
