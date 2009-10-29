@@ -40,7 +40,7 @@
    (populate-popup :accessor populate-popup :initarg :populate-popup :initform (c-in nil))
    (depopulate-popup :accessor depopulate-popup :initarg :depopulate-popup :initform (c-in nil))
    (old-popups :cell nil :accessor old-popups :initform nil))
-  ()
+  (wrap-mode)
   ()
   :kids (c? (when (buffer self) (list (buffer self))))
   :expand t
