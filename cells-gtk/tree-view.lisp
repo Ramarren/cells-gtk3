@@ -392,7 +392,8 @@
 	   (case col-type
 	     (:string (gtk-signal-connect renderer "edited" (cffi:get-callback 'tree-view-edit-cell-callback-string)))
 	     (:boolean (gtk-signal-connect renderer "toggled" (cffi:get-callback 'tree-view-edit-cell-callback-boolean)))))
-	 (gtk-tree-view-column-set-sort-column-id (id col) pos)
+	 (gtk-tree-view-column-set-sort-column-id (id col) (or (sort-column-id col)
+                                                               pos))
 	 (gtk-tree-view-insert-column (id self) (id col) pos))))
 
 (def-object tree-view-column ()
