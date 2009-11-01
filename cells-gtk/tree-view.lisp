@@ -343,12 +343,13 @@
 
 ;;; a tribute to static typing
 
-(cffi:defcallback tree-view-edit-cell-callback-string :int
-    ((renderer :pointer) (path :pointer) (new-value gtk-string))
+(cffi:defcallback tree-view-edit-cell-callback-string :void
+    ((renderer :pointer) (path :pointer) (new-value gtk-string) (user-data :pointer))
+  (declare (ignore :pointer))
   (tree-view-edit-cell-callback renderer path new-value)
   1)
 
-(cffi:defcallback tree-view-edit-cell-callback-boolean :int
+(cffi:defcallback tree-view-edit-cell-callback-boolean :void
     ((renderer :pointer) (path :pointer) (data :pointer))
   (declare (ignore data))
   (tree-view-edit-cell-callback renderer path nil)
