@@ -35,8 +35,12 @@ I cleaned up the library just in case I needed GUI in Lisp, but it turned out th
 
 From my testing, the example application runs on:
 ### x86 linux
-- SBCL 1.0.29 (tested with threading, it has been reported on the mailing list that 1.0.20 doesn't work)
+- SBCL 1.0.32 (tested with threading, it has been reported on the mailing list that 1.0.20 doesn't work)
 - CLISP 2.47-r2
+
+#### SBCL note
+
+GTK2 fails in some scenarios when invalid operation floating point trap is enabled. It will be automatically disabled on SBCL when loading the `features.lisp` file, which is triggered by loading the defsystem form (even if the systems themselves are not loaded).
 
 ### Intel MacOSX
  I tried only X11 GTK+ from MacPorts. It should be possible to use Quartz based version of GTK just by changing library names, but I have not tried it. There is not GTK-GL extension for Quartz.
