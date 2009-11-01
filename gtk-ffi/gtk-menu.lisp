@@ -87,7 +87,8 @@
   (gtk-radio-menu-item-new-from-widget :pointer
                                        ((group :pointer)))
   (gtk-radio-menu-item-new-with-label :pointer
-                                      ((group :pointer)))
+                                      ((group :pointer)
+                                       (label gtk-string)))
   (gtk-radio-menu-item-new-with-label-from-widget :pointer
                                                   ((radio :pointer)
                                                    (label gtk-string)))
