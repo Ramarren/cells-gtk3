@@ -389,7 +389,7 @@
   (gtk-widget-show-all :void ((widget :pointer)))
   (gtk-widget-hide :void ((widget :pointer)))
   (gtk-widget-hide-all :void ((widget :pointer)))
-  (gtk-widget-hide-on-delete :void
+  (gtk-widget-hide-on-delete gboolean
 			     ((widget :pointer)))
   (gtk-widget-destroy :void ((widget :pointer)))
   (gtk-widget-set-sensitive :void
