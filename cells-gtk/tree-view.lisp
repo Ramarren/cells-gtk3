@@ -72,7 +72,7 @@
    (tree-model :owning t :accessor tree-model :initarg :tree-model :initform nil))
   () ; gtk-slots
   () ; signal-slots
-  :on-select (lambda (self widget event data)
+  :on-select (lambda (self tree-selection data)
                (declare (ignore widget event data))
 	       (with-integrity (:change 'tree-view-select-cb)
 		(setf (value self) (get-selection self)))))
@@ -121,11 +121,11 @@
 	   (:multiple 3))))))
 
 (cffi:defcallback tree-view-select-handler :void
- ((column-widget :pointer) (event :pointer) (data :pointer))
-  (if-bind (tree-view (gtk-object-find column-widget))
-       (let ((cb (callback-recover tree-view :on-select)))
-         (funcall cb tree-view column-widget event data))
-       (trc "Clean up old widgets after runs" column-widget))
+    ((tree-selection :pointer) (data :pointer))
+  (if-bind (tree-view (gtk-object-find tree-selection))
+           (let ((cb (callback-recover tree-view :on-select)))
+             (funcall cb tree-view tree-selection data))
+           (trc "Clean up old widgets after runs" tree-selection))
   0)
 
 ;;; The check that previously was performed here (for a clos object) caused the handler
