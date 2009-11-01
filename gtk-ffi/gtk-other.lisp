@@ -35,10 +35,10 @@
   (gtk-quit-add guint
 		((main-level guint)
 		 (function :pointer)
-		 (data :pointer)))
+		 (data gpointer)))
   (gtk-quit-remove :void
 		   ((quit-handler-id guint)))
-  (gtk-main-level :int ())
+  (gtk-main-level guint ())
   (gtk-get-current-event-time guint32 ())
 
   ;; misc
