@@ -57,20 +57,10 @@
   `(call-with-g-value (lambda (,var) ,@body)))
 
 (defun call-with-g-value (fn)
-  (declare (optimize (speed 3) (safety 0) (space 0)))
-  (let ((gva (cffi:foreign-alloc 'g-value)))
-    (locally #+sbcl(declare (sb-ext:muffle-conditions sb-ext:compiler-note))
-             (unwind-protect
-                  (progn
-                    (setf (cffi:foreign-slot-value gva 'g-value 'g-type) 0)
-                    (let ((data (cffi:foreign-slot-value gva 'g-value 'g-data)))
-                      (dotimes (n 2)
-                        (setf (cffi:foreign-slot-value
-                               (aref data n)
-                               'g-value-data 'v-uint64)
-                              0)))
-                    (funcall fn gva))
-               (cffi:foreign-free gva)))))
+  (cffi:with-foreign-object (g-value 'g-value)
+    (loop for i from 0 below (cffi:foreign-type-size 'g-value)
+          do (setf (cffi:mem-aref g-value :uint8) 0))
+    (funcall fn g-value)))
 
 #+test
 (def-gtk-lib-functions :gobject
