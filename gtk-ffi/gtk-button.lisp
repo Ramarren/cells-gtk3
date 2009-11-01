@@ -28,7 +28,7 @@
    ((button :pointer) (label gtk-string)))
   (gtk-button-set-relief
    :void
-   ((button :pointer) (style :int)))
+   ((button :pointer) (style gtk-relief-style)))
   (gtk-button-set-use-stock
    :void
    ((button :pointer) (use-stock gboolean)))
@@ -63,7 +63,7 @@
   (gtk-spin-button-set-value :void
                              ((spin-button :pointer) (value gdouble)))
   (gtk-spin-button-get-value
-   :double
+   gdouble
    ((spin-button :pointer)))
   (gtk-spin-button-get-value-as-int
    gint
