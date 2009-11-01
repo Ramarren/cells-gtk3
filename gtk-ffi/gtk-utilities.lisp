@@ -104,25 +104,25 @@
   (with-g-value (value)
     (gvi :with-type-val)
     (loop for col from 0
-       for data in data-lst
-       for type in types-lst       
-       for str-ptr = nil #+not (when (or (eql type :string) (eql type :icon))
-				 (gvi :pre-cstring)
-				 (convert-to-cstring data))
-       do   
+          for data in data-lst
+          for type in types-lst
+          for str-ptr = nil #+not (when (or (eql type :string) (eql type :icon))
+                                    (gvi :pre-cstring)
+                                    (convert-to-cstring data))
+          do
        (gvi :pre-truvi)
        (g-value-init value (as-gtk-type type))
-       #+msg (format t "~&gtk-list-store-set:  setting value to ~A~%" data)
-       (funcall (intern (format nil "G-VALUE-SET-~a" (case type 
-						       (:date 'float)
-						       (:icon 'string)
-						       (t type))) 
-			:gtk-ffi)
-		value
-		(or str-ptr (and (eql type :date) (coerce data 'single-float)) data))
-       (gtk-list-store-set-value lstore iter col value)
-       (g-value-unset value)
-       #+not (when str-ptr (uffi:free-cstring str-ptr)))))
+          #+msg (format t "~&gtk-list-store-set:  setting value to ~A~%" data)
+                (funcall (intern (format nil "G-VALUE-SET-~a" (case type
+                                                                (:date 'float)
+                                                                (:icon 'string)
+                                                                (t type)))
+                                 :gtk-ffi)
+                         value
+                         (or str-ptr (and (eql type :date) (coerce data 'single-float)) data))
+                (gtk-list-store-set-value lstore iter col value)
+                (g-value-unset value)
+          #+not (when str-ptr (uffi:free-cstring str-ptr)))))
 
 (defun gtk-list-store-set-items (store types-lst data-lst)
   (with-tree-iter (iter)
