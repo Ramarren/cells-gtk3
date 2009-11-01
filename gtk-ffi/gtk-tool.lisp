@@ -56,7 +56,7 @@
    ((tooltips :pointer)))
   (gtk-tooltips-set-delay
    :void
-   ((tooltips :pointer) (delay :unsigned-int)))
+   ((tooltips :pointer) (delay guint)))
 
   ;;tool-item
   (gtk-tool-item-new :pointer ())

@@ -43,7 +43,7 @@ This is taken from
     (gtk-gl-init :void
 		 ((argc :pointer)
 		  (argv :pointer)))
-  (gtk-gl-init-check :boolean
+  (gtk-gl-init-check gboolean
 		     ((argc :pointer)
 		      (argv :pointer)))
   (gdk-gl-config-new-by-mode :pointer
@@ -51,20 +51,20 @@ This is taken from
   (gdk-gl-config-new-by-mode-for-screen :pointer
 					((screen :pointer)
 					 (mode gdk-gl-config-mode)))
-  (gtk-widget-set-gl-capability :boolean
+  (gtk-widget-set-gl-capability gboolean
 				((widget :pointer)
 				 (glconfig :pointer)
 				 (share-list :pointer)
-				 (direct :boolean)
+				 (direct gboolean)
 				 (render-type gdk-gl-render-type)))
-  (gdk-gl-config-is-rgba :boolean
+  (gdk-gl-config-is-rgba gboolean
 			 ((glconfig :pointer)))
-  (gdk-gl-config-is-double-buffered :boolean
+  (gdk-gl-config-is-double-buffered gboolean
 				    ((glconfig :pointer)))
   (gdk-gl-context-new :pointer
 		      ((drawable :pointer)
 		       (share-list :pointer)
-		       (direct :boolean)
+		       (direct gboolean)
 		       (render-type gdk-gl-render-type)))
   (gdk-gl-context-destroy :void
 			  ((context :pointer)))
@@ -79,12 +79,12 @@ This is taken from
 			     ((widget :pointer)))
   (gtk-widget-get-gl-window :pointer
 			    ((widget :pointer)))
-  (gdk-gl-drawable-gl-begin :boolean
+  (gdk-gl-drawable-gl-begin gboolean
 			    ((gldrawable :pointer)
 			     (glcontext :pointer)))
   (gdk-gl-drawable-gl-end :void
 			  ((gldrawable :pointer)))
-  (gdk-gl-drawable-is-double-buffered :boolean
+  (gdk-gl-drawable-is-double-buffered gboolean
 				      ((gldrawable :pointer)))
   (gdk-gl-drawable-swap-buffers :void
 				((gldrawable :pointer))))
