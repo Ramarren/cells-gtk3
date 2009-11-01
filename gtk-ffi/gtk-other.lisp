@@ -138,7 +138,7 @@
 			      (expanded gboolean)))
   (gtk-expander-set-spacing :void
 			    ((expander :pointer)
-			     (spacing :pointer)))
+			     (spacing gint)))
   (gtk-expander-set-label :void
 			  ((expander :pointer)
 			   (label gtk-string)))
