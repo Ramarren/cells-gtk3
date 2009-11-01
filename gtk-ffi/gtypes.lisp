@@ -206,6 +206,9 @@
 (cffi:defcenum gtk-window-position
   :none :center :mouse :center-always :center-on-parent)
 
+(cffi:defcenum gtk-window-type
+  :toplevel :popup)
+
 (cffi:defcenum gtk-update-type
   :continuous :discontinuous :delayed)
 

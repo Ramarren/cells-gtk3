@@ -420,7 +420,7 @@
   (gtk-widget-queue-draw :void ((widget :pointer)))
 
   ;;window
-  (gtk-window-new :pointer ((type :int)))
+  (gtk-window-new :pointer ((type gtk-window-type)))
   (gtk-window-set-title :void
 			((widget :pointer)
 			 (title gtk-string)))
