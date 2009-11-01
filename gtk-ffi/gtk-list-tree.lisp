@@ -187,7 +187,7 @@
 				       (max-width gint)))
   (gtk-tree-view-column-set-title :void
 				  ((tree-column :pointer)
-				   (title gtk-string)))
+				   (title :string)))
   (gtk-tree-view-column-set-expand :void
 				   ((tree-column :pointer)
 				    (expand gboolean)))
