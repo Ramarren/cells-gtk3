@@ -604,7 +604,7 @@
   (gtk-dialog-add-action-widget :void
 				((dialog :pointer)
 				 (child :pointer)
-				 (response-id :pointer)))
+				 (response-id gint)))
   (gtk-dialog-set-has-separator :void
 				((dialog :pointer)
 				 (has-separator gboolean)))
