@@ -237,7 +237,7 @@
 ;;; Cell rendering
 ;;; 
 
-(cffi:defcallback tree-view-render-cell-callback :int
+(cffi:defcallback tree-view-render-cell-callback :void
   ((tree-column :pointer) (cell-renderer :pointer) (tree-model :pointer) 
    (iter :pointer) (data :pointer))
   (if-bind (self (gtk-object-find tree-column))
