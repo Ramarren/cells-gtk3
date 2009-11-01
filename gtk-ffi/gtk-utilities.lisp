@@ -90,13 +90,11 @@
                            :data menu))
 
 (defun gtk-list-store-new (col-types)
-  (let ((c-types (cffi:foreign-alloc :int :count (length col-types))))
+  (cffi:with-foreign-object (c-types 'gtype (length col-types))
     (loop for type in col-types
           for n upfrom 0
-          do (setf (cffi:mem-aref c-types :int n) (coerce (as-gtk-type type) 'integer)))
-    (prog1
-        (gtk-list-store-newv (length col-types) c-types)
-      (cffi:foreign-free c-types))))
+          do (setf (cffi:mem-aref c-types 'gtype n) (coerce (as-gtk-type type) 'integer)))
+    (gtk-list-store-newv (length col-types) c-types)))
 
 
 (defun gvi (&optional (key :anon))
