@@ -106,9 +106,6 @@
     (loop for col from 0
           for data in data-lst
           for type in types-lst
-          for str-ptr = nil #+not (when (or (eql type :string) (eql type :icon))
-                                    (gvi :pre-cstring)
-                                    (convert-to-cstring data))
           do
        (gvi :pre-truvi)
        (g-value-init value (as-gtk-type type))
@@ -119,7 +116,9 @@
                                                                 (t type)))
                                  :gtk-ffi)
                          value
-                         (or str-ptr (and (eql type :date) (coerce data 'single-float)) data))
+                         (or (and (eql type :date)
+                                  (coerce data 'single-float))
+                             data))
                 (gtk-list-store-set-value lstore iter col value)
                 (g-value-unset value)
           #+not (when str-ptr (uffi:free-cstring str-ptr)))))
