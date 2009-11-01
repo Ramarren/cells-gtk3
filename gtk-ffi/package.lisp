@@ -235,9 +235,9 @@
 	   #:gtk-tree-model-get-path #:gtk-tree-view-column-set-sort-column-id
 	   #:gtk-combo-box-entry-get-text-column #:gtk-window-iconify #:long
 	   #:gtk-expander-set-label-widget #:gtk-menu-item-new-with-label #:gtk-tree-view-get-model
-	   #:gtk-tooltips-set-tip #:gtk-tree-store-set-valist #:gtk-notebook-popup-disable
+	   #:gtk-tooltips-set-tip #:gtk-notebook-popup-disable
 	   #:gtk-text-buffer-delete #:gtk-progress-bar-update #:g-cclosure-new
-	   #:gtk-toggle-button-get-active #:gtk-list-store-set-valist #:gtk-tree-selection-set-mode
+	   #:gtk-toggle-button-get-active #:gtk-tree-selection-set-mode
 	   #:gtk-text-buffer-create-mark #:gtk-file-chooser-get-filename #:uint #:gtk-alignment-set
 	   #:gtk-menu-popup #:gtk-event-box-set-visible-window #:gtk-progress-bar-set-fraction
 	   #:gtk-statusbar-remove #:uint8 #:gtk-notebook-set-homogeneous-tabs #:gvi

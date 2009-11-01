@@ -23,10 +23,6 @@
   (gtk-list-store-newv :pointer
 		       ((n-columns gint)
 			(col-types (:pointer gtype))))
-  (gtk-list-store-set-valist :void
-			     ((store :pointer)
-			      (iter :pointer)
-			      (data :pointer)))
   (gtk-list-store-set-value :void
 			    ((store :pointer)
 			     (iter :pointer)
@@ -41,10 +37,6 @@
   (gtk-tree-store-newv :pointer
 		       ((n-columns gint)
 			(col-types (:pointer gtype))))
-  (gtk-tree-store-set-valist :void
-			     ((store :pointer)
-			      (iter :pointer)
-			      (data :pointer)))
   (gtk-tree-store-set-value :void
 			    ((store :pointer)
 			     (iter :pointer)
