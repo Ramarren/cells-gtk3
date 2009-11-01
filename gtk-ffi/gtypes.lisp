@@ -166,6 +166,9 @@
 (cffi:defcenum gtk-position-type
   :left :right :top :bottom)
 
+(cffi:defcenum gtk-orientation
+  :horizontal :vertical)
+
 (cffi:defcenum gtk-relief-style
   :normal :half :none)
 

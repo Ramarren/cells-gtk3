@@ -32,7 +32,7 @@
     (show-arrow gboolean)))
   (gtk-toolbar-set-orientation
    :void
-   ((toolbar :pointer) (orientation :int)))
+   ((toolbar :pointer) (orientation gtk-orientation)))
   (gtk-toolbar-set-tooltips
    :void
    ((toolbar :pointer) (enable gboolean)))
