@@ -51,7 +51,7 @@
 			 (xpad gint)
 			 (ypad gint)))
   ;;container
-  (gtk-container-add :pointer
+  (gtk-container-add :void
 		     ((container :pointer)
 		      (widget :pointer)))
   (gtk-container-remove :void
