@@ -166,6 +166,9 @@
 (cffi:defcenum gtk-position-type
   :left :right :top :bottom)
 
+(cffi:defcenum gtk-relief-style
+  :normal :half :none)
+
 (cffi:defcenum gtk-progress-bar-orientation
   :left-to-right :right-to-left :bottom-to-top :top-to-bottom)
 
