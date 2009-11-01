@@ -97,7 +97,7 @@
   (g-value-unset :void ((value :pointer)))
   (g-value-set-string :void
 		      ((value :pointer)
-                       (str gtk-string)))
+                       (str :string)))
   (g-value-set-int :void ((value :pointer)
                           (int gint)))
   (g-value-set-long :void ((value :pointer) (long glong)))
