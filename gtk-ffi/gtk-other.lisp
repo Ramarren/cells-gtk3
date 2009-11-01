@@ -799,7 +799,7 @@
 			      (where :pointer)))
   ;;text iter
   (gtk-text-iter-free :void ((iter :pointer)))
-  (gtk-text-iter-get-offset :int
+  (gtk-text-iter-get-offset gint
 			    ((iter :pointer)))
 
   ;;text-tag-table
