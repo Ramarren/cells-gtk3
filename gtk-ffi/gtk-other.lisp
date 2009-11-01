@@ -654,7 +654,8 @@
   (gtk-file-chooser-get-uri gtk-string
 			    ((chooser :pointer)))
   (gtk-file-chooser-select-uri gboolean
-			       ((chooser :pointer)))
+			       ((chooser :pointer)
+                                (uri :string)))
   (gtk-file-chooser-get-uris :pointer
 			     ((chooser :pointer)))
   (gtk-file-chooser-set-current-folder-uri gboolean
