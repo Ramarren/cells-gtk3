@@ -178,7 +178,7 @@
 (cffi:defcenum gtk-icon-size
   :invalid :menu :small-toolbar :large-toolbar :button :dnd :dialog)
 
-(cffi:defcenum gtk-modifier-type
+(cffi:defcenum gdk-modifier-type
   (:shift-mask     #.(ash 1 0))
   (:lock-mask	  #.(ash 1 1))
   (:control-mask   #.(ash 1 2))

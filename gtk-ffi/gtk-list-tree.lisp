@@ -58,7 +58,7 @@
 			    (model :pointer)))
   (gtk-tree-view-get-model :pointer
 			   ((tree-view :pointer)))
-  (gtk-tree-view-insert-column :int
+  (gtk-tree-view-insert-column gint
 			       ((tree-view
 				 :pointer)
 				(column :pointer)
@@ -129,7 +129,7 @@
   (gtk-tree-selection-set-mode :void
 			       ((sel :pointer)
 				(mode gtk-selection-mode)))
-  (gtk-tree-selection-get-mode :int
+  (gtk-tree-selection-get-mode gtk-selection-mode
 			       ((sel :pointer)))
   (gtk-tree-selection-select-path :void
 				  ((sel :pointer)
@@ -141,10 +141,10 @@
   (gtk-tree-selection-selected-foreach :void
 				       ((sel :pointer)
 					(callback-f :pointer)
-					(data :pointer)))
+					(data gpointer)))
   ;;tre-view-column
   (gtk-tree-view-column-new :pointer ())
-  (gtk-tree-view-remove-column :int ((tree-view :pointer)
+  (gtk-tree-view-remove-column gint ((tree-view :pointer)
 				(column :pointer)))
   (gtk-tree-view-column-pack-start :void
 				   ((tree-column :pointer)
@@ -195,7 +195,7 @@
 					   ((tree-column :pointer)
 					    (cell-renderer :pointer)
 					    (func :pointer)
-					    (data :pointer)
+					    (data gpointer)
 					    (destroy :pointer)))
   ;;cell-renderer
   (gtk-cell-renderer-text-new :pointer ())

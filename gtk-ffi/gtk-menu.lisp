@@ -77,7 +77,7 @@
   (gtk-accel-map-add-entry :void
                            ((accel-path gtk-string)
                             (accel-key guint)
-                            (accel-mods gtk-modifier-type)))
+                            (accel-mods gdk-modifier-type)))
   (gtk-check-menu-item-new :pointer ())
   (gtk-check-menu-item-new-with-label :pointer
                                       ((label :pointer)))

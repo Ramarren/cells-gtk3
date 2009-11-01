@@ -406,7 +406,7 @@
 			       (gsignal gtk-string)
 			       (accel-group :pointer)
 			       (key guint)
-			       (mods gtk-modifier-type)
+			       (mods gdk-modifier-type)
 			       (flags gtk-accel-flags)))
   (gtk-widget-grab-focus :void
 			 ((widget :pointer)))
