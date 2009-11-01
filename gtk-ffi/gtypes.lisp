@@ -169,6 +169,9 @@
 (cffi:defcenum gtk-orientation
   :horizontal :vertical)
 
+(cffi:defcenum gtk-toolbar-style
+  :icons :text :both :both-horiz)
+
 (cffi:defcenum gtk-relief-style
   :normal :half :none)
 

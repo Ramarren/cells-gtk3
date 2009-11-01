@@ -38,7 +38,7 @@
    ((toolbar :pointer) (enable gboolean)))
   (gtk-toolbar-set-style
    :void
-   ((toolbar :pointer) (style :int)))
+   ((toolbar :pointer) (style gtk-toolbar-style)))
 
   ;;tooltips
   (gtk-tooltips-new :pointer ())
