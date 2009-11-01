@@ -337,14 +337,7 @@
   (gtk-progress-bar-update :void
 			   ((pbar :pointer)
 			    (percentage gdouble)))
-  (gtk-progress-bar-set-value :void
-			   ((pbar :pointer)
-			    (percentage gdouble)))
-  (gtk-progress-bar-set-percentage :void
-			   ((pbar :pointer)
-			    (percentage gdouble)))
   
-
   ;;image
   (gtk-image-new-from-file :pointer
 			   ((filename gtk-string)))
