@@ -58,6 +58,9 @@
 			    (model :pointer)))
   (gtk-tree-view-get-model :pointer
 			   ((tree-view :pointer)))
+  (gtk-tree-view-append-column gint
+                               ((tree-view :pointer)
+                                (column :pointer)))
   (gtk-tree-view-insert-column gint
 			       ((tree-view
 				 :pointer)
