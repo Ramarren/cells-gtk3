@@ -26,7 +26,7 @@
   (g-timeout-add guint
 		 ((milliseconds guint)
 		  (func :pointer)
-		  (data :pointer)))
+		  (data gpointer)))
   (g-locale-from-utf8 gtk-string
 		      ((utf8-string gtk-string)
 		       (len gssize)
@@ -86,21 +86,17 @@
   ;; callbacks
   (g-cclosure-new :pointer
 		  ((callback-f :pointer)
-		   (user-data :pointer)
+		   (user-data gpointer)
 		   (destroy-data :pointer)))
   (g-cclosure-new-swap :pointer
 		       ((callback-f :pointer)
-			(user-data :pointer)
+			(user-data gpointer)
 			(destroy-data :pointer)))
   (g-signal-connect-closure gulong
-			    ((instance :pointer)
+			    ((instance gpointer)
 			     (detailed-signal gtk-string)
 			     (closure :pointer)
 			     (after gboolean)))
-  (g-object-set-valist :void
-		       ((object :pointer)
-			(first-prop gtk-string)
-			(varargs :pointer)))
   (g-object-set-property :void
 			 ((object :pointer)
 			  (property-name gtk-string)

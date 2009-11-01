@@ -130,7 +130,7 @@
 	   #:gtk-combo-box-entry-set-text-column #:g-thread-init #:gtk-event-box-new
 	   #:gtk-label-set-text-with-mnemonic #:gtk-entry-set-text #:gtk-hpaned-new #:gtk-paned-add2
 	   #:gtk-frame-set-label-widget #:gtk-arrow-set #:gtk-menu-item-get-submenu #:g-timeout-add
-	   #:gtk-calendar-get-date #:g-object-set-valist #:gtk-button-set-use-stock
+	   #:gtk-calendar-get-date #:gtk-button-set-use-stock
 	   #:gtk-text-view-scroll-mark-onscreen #:gtk-widget-grab-focus #:gtk-drawing-area-new
 	   #:gtk-adds-text-view-popup-menu #:gtk-widget-queue-draw #:gtk-hscale-new-with-range
 	   #:gtk-adds-dialog-vbox #:gtk-file-chooser-get-uri #:gtk-dialog-new #:gtk-menu-item-new
