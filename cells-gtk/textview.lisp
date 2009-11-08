@@ -18,7 +18,7 @@
 
 (in-package :cgtk)
 
-(def-object text-buffer ()
+(def-gtk g-object text-buffer ()
   ((text :accessor text :initarg :text :initform nil)
    (tag-table :accessor tag-table :initarg :tag-table :initform (c-in nil))
    (markup :cell nil :accessor markup :initform nil))

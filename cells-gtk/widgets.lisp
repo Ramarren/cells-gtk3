@@ -19,9 +19,17 @@
 (in-package :cgtk)
 
 (defmodel g-object (family)
-  ((new-function-name :accessor new-function-name :initarg :new-function-name
-                      :initform (c-in nil))
+  ((def-gobject-class-name :accessor def-gobject-class-name :initarg :def-gobject-class-name :initform nil)
+   (new-function-name :accessor new-function-name :initarg :new-function-name 
+		      :initform (c_1 (intern (format nil "GTK-~a-NEW~a"
+						     (def-gobject-class-name self)
+						     (or (new-tail self) ""))
+					     :gtk-ffi)))
    (new-args :accessor new-args :initarg :new-args :initform nil)
+   (new-tail :accessor new-tail :initarg :new-tail :initform nil)
+   (callbacks :cell nil :accessor callbacks
+	      :initform nil
+	      :documentation "assoc of event-name, callback closures to handle widget events")
    (id :initarg :id :accessor id 
        :initform (c? (without-c-dependency
                        (unless (new-function-name self)
@@ -36,30 +44,20 @@
                          id))))))
 
 (defmethod not-to-be :around ((self g-object))
-  (trc nil "gtk-object not-to-be :around" (md-name self) self)
+  (trc nil "g-object not-to-be :around" (md-name self) self)
   (trc nil "  store-remove")
   (when (eql (store-lookup (md-name self) *widgets*) self)
     (store-remove (md-name self) *widgets*))
   (trc nil "  object-forget")
   (gtk-object-forget (id self) self)
-  (g-object-unref (id-self))
+  (g-object-unref (id self))
 
   (trc nil "  call-next-method")
   (call-next-method)
   (trc nil "  done"))
 
 (defmodel gtk-object (g-object)
-  ((container :cell nil :initarg :container :accessor container :initform nil)
-   (def-gtk-class-name :accessor def-gtk-class-name :initarg :def-gtk-class-name :initform nil)
-   (new-function-name :accessor new-function-name :initarg :new-function-name 
-		      :initform (c_1 (intern (format nil "GTK-~a-NEW~a"
-						     (def-gtk-class-name self)
-						     (or (new-tail self) ""))
-					     :gtk-ffi)))
-   (new-tail :accessor new-tail :initarg :new-tail :initform nil)
-   (callbacks :cell nil :accessor callbacks
-	      :initform nil
-	      :documentation "assoc of event-name, callback closures to handle widget events"))
+  ((container :cell nil :initarg :container :accessor container :initform nil))
   (:default-initargs
       :md-name nil ;; kwt: was (c-in nil), but this is not a cell
     :value (c-in nil)))
@@ -279,7 +277,7 @@
              (defmodel ,class ,(or superclasses (list gtk-superclass))
                (,@(append std-slots slots signals-slots))
                (:default-initargs
-                   :def-gtk-class-name ',class
+                   :def-gobject-class-name ',class
                  ,@defclass-options))
              (eval-now!
                (export ',class))
@@ -404,11 +402,12 @@
     (gtk-widget-hide (id self))))
 
 (defmethod not-to-be :around ((self widget))
-  (trc nil "  widget-destroy")
+  (trc t "  widget-destroy")
   (when  *gtk-debug*
-    (trc nil "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
+    (trc t "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
     (force-output))
   (gtk-widget-destroy (slot-value self 'id))
+  (call-next-method)
   (trc nil "  done"))
 
 
