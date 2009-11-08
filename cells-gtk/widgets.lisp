@@ -43,22 +43,6 @@
                            (g-object-ref-sink id))
                          id))))))
 
-(defmethod not-to-be :around ((self g-object))
-  (trc nil "g-object not-to-be :around" (md-name self) self)
-  (trc nil "  store-remove")
-  (when (eql (store-lookup (md-name self) *widgets*) self)
-    (store-remove (md-name self) *widgets*))
-  (trc nil "  object-forget")
-  (gtk-object-forget (id self) self)
-  (when  *gtk-debug*
-    (trc "OBJECT UNREF" (slot-value self '.md-name) (type-of self) self)
-    (force-output))
-  (g-object-unref (id self))
-
-  (trc nil "  call-next-method")
-  (call-next-method)
-  (trc nil "  done"))
-
 (defmodel gtk-object (g-object)
   ((container :cell nil :initarg :container :accessor container :initform nil))
   (:default-initargs
@@ -403,6 +387,22 @@
   (if new-value 
       (gtk-widget-show (id self))
     (gtk-widget-hide (id self))))
+
+(defmethod not-to-be :around ((self g-object))
+  (trc nil "g-object not-to-be :around" (md-name self) self)
+  (trc nil "  store-remove")
+  (when (eql (store-lookup (md-name self) *widgets*) self)
+    (store-remove (md-name self) *widgets*))
+  (trc nil "  object-forget")
+  (gtk-object-forget (id self) self)
+  (when  *gtk-debug*
+    (trc "OBJECT UNREF" (slot-value self '.md-name) (type-of self) self)
+    (force-output))
+  (g-object-unref (id self))
+
+  (trc nil "  call-next-method")
+  (call-next-method)
+  (trc nil "  done"))
 
 (defmethod not-to-be :around ((self widget))
   (trc nil "  widget-destroy")
