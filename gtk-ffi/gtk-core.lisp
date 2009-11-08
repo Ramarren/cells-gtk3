@@ -59,7 +59,7 @@
 (defun call-with-g-value (fn)
   (cffi:with-foreign-object (g-value 'g-value)
     (loop for i from 0 below (cffi:foreign-type-size 'g-value)
-          do (setf (cffi:mem-aref g-value :uint8) 0))
+          do (setf (cffi:mem-aref g-value :uint8 i) 0))
     (funcall fn g-value)))
 
 #+test
