@@ -18,8 +18,37 @@
 
 (in-package :cgtk)
 
+(defmodel g-object (family)
+  ((new-function-name :accessor new-function-name :initarg :new-function-name
+                      :initform (c-in nil))
+   (new-args :accessor new-args :initarg :new-args :initform nil)
+   (id :initarg :id :accessor id 
+       :initform (c? (without-c-dependency
+                       (unless (new-function-name self)
+                         (error "No constructor specified for type ~a" (type-of self)))
+                       (when *gtk-debug* 
+                         (trc "NEW ID" (new-function-name self) (new-args self)) (force-output))
+                       (let ((id (apply (symbol-function (new-function-name self))
+                                        (new-args self))))
+                         (gtk-object-store id self)
+                         (when (g-object-is-floating id)
+                           (g-object-ref-sink id))
+                         id))))))
 
-(defmodel gtk-object (family)
+(defmethod not-to-be :around ((self g-object))
+  (trc nil "gtk-object not-to-be :around" (md-name self) self)
+  (trc nil "  store-remove")
+  (when (eql (store-lookup (md-name self) *widgets*) self)
+    (store-remove (md-name self) *widgets*))
+  (trc nil "  object-forget")
+  (gtk-object-forget (id self) self)
+  (g-object-unref (id-self))
+
+  (trc nil "  call-next-method")
+  (call-next-method)
+  (trc nil "  done"))
+
+(defmodel gtk-object (g-object)
   ((container :cell nil :initarg :container :accessor container :initform nil)
    (def-gtk-class-name :accessor def-gtk-class-name :initarg :def-gtk-class-name :initform nil)
    (new-function-name :accessor new-function-name :initarg :new-function-name 
@@ -27,17 +56,7 @@
 						     (def-gtk-class-name self)
 						     (or (new-tail self) ""))
 					     :gtk-ffi)))
-   (new-args :accessor new-args :initarg :new-args :initform nil)
    (new-tail :accessor new-tail :initarg :new-tail :initform nil)
-   (id :initarg :id :accessor id 
-       :initform (c? (without-c-dependency 
-		       (when *gtk-debug* 
-			 (trc "NEW ID" (new-function-name self) (new-args self)) (force-output))
-		       (let ((id (apply (symbol-function (new-function-name self))
-					(new-args self))))
-			 (gtk-object-store id self)
-			 id))))
-   
    (callbacks :cell nil :accessor callbacks
 	      :initform nil
 	      :documentation "assoc of event-name, callback closures to handle widget events"))
@@ -384,17 +403,7 @@
       (gtk-widget-show (id self))
     (gtk-widget-hide (id self))))
 
-(defmethod not-to-be :around ((self gtk-object))
-  (trc nil "gtk-object not-to-be :around" (md-name self) self)
-  (trc nil "  store-remove")
-  (when (eql (store-lookup (md-name self) *widgets*) self)
-    (store-remove (md-name self) *widgets*))
-  (trc nil "  object-forget")
-  (gtk-object-forget (id self) self)
-
-  (trc nil "  call-next-method")
-  (call-next-method)
-
+(defmethod not-to-be :around ((self widget))
   (trc nil "  widget-destroy")
   (when  *gtk-debug*
     (trc nil "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)

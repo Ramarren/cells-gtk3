@@ -73,6 +73,15 @@
   :return-type nil :call-direct t)
 
 (def-gtk-lib-functions :gobject
+  ;; memory managment
+  (g-object-ref :pointer
+                ((object :pointer)))
+  (g-object-unref :void
+                  ((object :pointer)))
+  (g-object-ref-sink :pointer
+                     ((object :pointer)))
+  (g-object-is-floating gboolean
+                        ((object :pointer)))
   ;; callbacks
   (g-cclosure-new :pointer
 		  ((callback-f :pointer)
