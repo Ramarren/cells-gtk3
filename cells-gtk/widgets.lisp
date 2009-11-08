@@ -50,6 +50,9 @@
     (store-remove (md-name self) *widgets*))
   (trc nil "  object-forget")
   (gtk-object-forget (id self) self)
+  (when  *gtk-debug*
+    (trc "OBJECT UNREF" (slot-value self '.md-name) (type-of self) self)
+    (force-output))
   (g-object-unref (id self))
 
   (trc nil "  call-next-method")
@@ -402,11 +405,15 @@
     (gtk-widget-hide (id self))))
 
 (defmethod not-to-be :around ((self widget))
-  (trc t "  widget-destroy")
+  (trc nil "  widget-destroy")
   (when  *gtk-debug*
     (trc t "WIDGET DESTROY" (slot-value self '.md-name) (type-of self) self)
     (force-output))
+  ;; it will be unrefed in call-next-method
+  (g-object-ref (id self))
+  ;; this also drops one reference
   (gtk-widget-destroy (slot-value self 'id))
+  ;; and call-next-method will drop the last one
   (call-next-method)
   (trc nil "  done"))
 
