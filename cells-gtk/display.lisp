@@ -99,7 +99,7 @@
   ((text :accessor text :initarg :text :initform nil))
   ()
   ()
-  :id (c_1 (gtk-accel-label-new (text self))))
+  :new-args (c? (list (text self))))
 
 (def-widget image (widget misc)
   ((filename :accessor filename :initarg :filename :initform nil)
