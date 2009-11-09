@@ -258,9 +258,13 @@
     (gtk-container-add (id self) (id new-value))))
     
 (defobserver accel-label-widget ((self menu-item))
-  (when new-value
-    (gtk-accel-label-set-accel-widget (id new-value) (id self))
-    (gtk-container-add (id self) (id new-value))))
+  (let ((id (id self)))
+    (let ((child (gtk-bin-get-child id)))
+      (unless (cffi:null-pointer-p child)
+        (gtk-container-remove id child)))
+    (when new-value
+      (gtk-accel-label-set-accel-widget (id new-value) id)
+      (gtk-container-add id (id new-value)))))
 
 (def-widget check-menu-item (menu-item)
   ((init :accessor init :initarg :init :initform nil))

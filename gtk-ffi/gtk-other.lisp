@@ -67,6 +67,8 @@
 				  (mode gtk-resize-mode)))
   (gtk-container-get-resize-mode gtk-resize-mode
 				 ((container :pointer)))
+  ;;bin
+  (gtk-bin-get-child :pointer ((bin :pointer)))
   ;;box
   (gtk-box-pack-start :void
 		      ((box :pointer)
