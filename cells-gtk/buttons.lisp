@@ -27,7 +27,8 @@
   (activate clicked enter leave pressed released)
   :kids (c-in nil)
   :on-clicked (callback (widget event data)
-                (trc "button clicked" widget)
+                (when *gtk-debug*
+                  (trc "button clicked" widget))
                 (with-integrity (:change 'button-clicked-cb)
                   (setf (clicked self) t))))
 
@@ -58,7 +59,8 @@
   (toggled)
   :active (c-in nil)
   :on-toggled (callback (widget event data)
-                (trc "toggle-button toggled" widget)
+                (when *gtk-debug*
+                  (trc "toggle-button toggled" widget))
                 (with-integrity (:change 'tggle-button-on-toggled-cb)
                   (let ((state (gtk-toggle-button-get-active widget)))
                     (setf (value self) state)))))
