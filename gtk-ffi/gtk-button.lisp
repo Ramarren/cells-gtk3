@@ -32,6 +32,9 @@
   (gtk-button-set-use-stock
    :void
    ((button :pointer) (use-stock gboolean)))
+  (gtk-button-set-use-underline
+   :void
+   ((button :pointer) (use-underline gboolean)))
   (gtk-toggle-button-new :pointer ())
   (gtk-toggle-button-set-mode
    :void

@@ -23,7 +23,7 @@
    (markup :accessor markup :initarg :markup :initform nil)
    (label :accessor label :initarg :label :initform (c-in nil))
    (clicked :accessor clicked :initform (c-in nil) :cell :ephemeral))
-  (relief use-stock)
+  (relief use-stock use-underline)
   (activate clicked enter leave pressed released)
   :kids (c-in nil)
   :on-clicked (callback (widget event data)
