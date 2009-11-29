@@ -1,9 +1,10 @@
 (in-package :cl)
 
-;;; GTK fails on SBCL with FLOATING-POINT-INVALID-OPERATION trap enabled
+;;; GTK fails on SBCL with FLOATING-POINT-INVALID-OPERATION trap enabled on Linux
 
 #+(and sbcl
-       ieee-floating-point)
+       ieee-floating-point
+       (not darwin))
 (sb-int:set-floating-point-modes
  :traps (remove :invalid (getf (sb-int:get-floating-point-modes) :traps)))
 
