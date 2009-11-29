@@ -45,5 +45,5 @@ GTK2 fails in some scenarios when invalid operation floating point trap is enabl
 ### Intel MacOSX
  I tried only X11 GTK+ from MacPorts. It should be possible to use Quartz based version of GTK just by changing library names, but I have not tried it. There is not GTK-GL extension for Quartz.
 
-- SBCL 1.0.29 (from MacPorts)
+- SBCL 1.0.30 (from MacPorts)
 - CCL 1.3 (from MacPorts)
