@@ -115,6 +115,7 @@
 
 (def-widget frame (container)
   ((shadow :accessor shadow? :initarg :shadow :initform nil)
+   (markup :accessor markup :initarg :markup :initform nil)
    (label :accessor label :initarg :label :initform (c-in nil)))
   (label-widget label-align shadow-type)
   ()
@@ -124,6 +125,10 @@
 (defobserver label ((self frame))
   (when new-value
     (gtk-frame-set-label (id self) new-value)))
+
+(defobserver markup ((self frame))
+  (when new-value
+    (gtk-frame-set-label-widget (id self) (id (mk-label :markup new-value)))))
 
 (defobserver shadow ((self frame))
   (when new-value

@@ -11,6 +11,10 @@
                :init t
                :label "Cool")
              (mk-frame
+	      :markup (with-markup ()
+			  (with-markup (:foreground :green)
+			    "Colorfull")
+			"frame labels")
               :kids (test-entry-2))
              (mk-hbox
               :kids (kids-list?
