@@ -13,7 +13,7 @@
              (mk-frame
 	      :markup (with-markup ()
 			  (with-markup (:foreground :green)
-			    "Colorfull")
+			    "Colorful")
 			"frame labels")
               :kids (test-entry-2))
              (mk-hbox
