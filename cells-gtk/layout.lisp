@@ -116,11 +116,14 @@
 (def-widget frame (container)
   ((shadow :accessor shadow? :initarg :shadow :initform nil)
    (markup :accessor markup :initarg :markup :initform nil)
+   (markup-label-widget :accessor markup-label-widget :owning t :initarg :markup-label-widget)
    (label :accessor label :initarg :label :initform (c-in nil)))
   (label-widget label-align shadow-type)
   ()
   :shadow-type (c-in nil)
-  :new-args (c_1 (list nil)))
+  :new-args (c_1 (list nil))
+  :markup-label-widget (c? (when (markup self)
+                             (mk-label :markup (markup self)))))
 
 (defobserver label ((self frame))
   (when new-value
@@ -128,7 +131,8 @@
 
 (defobserver markup ((self frame))
   (when new-value
-    (gtk-frame-set-label-widget (id self) (id (mk-label :markup new-value)))))
+    (with-integrity (:change 'frame-markup)
+      (setf (label-widget self) (id (markup-label-widget self))))))
 
 (defobserver shadow ((self frame))
   (when new-value
