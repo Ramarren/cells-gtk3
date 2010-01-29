@@ -35,8 +35,9 @@ I cleaned up the library just in case I needed GUI in Lisp, but it turned out th
 
 From my testing, the example application runs on:
 ### x86 linux
-- SBCL 1.0.32 (tested with threading, it has been reported on the mailing list that 1.0.20 doesn't work)
+- SBCL 1.0.34 (tested with threading, it has been reported on the mailing list that 1.0.20 doesn't work)
 - CLISP 2.47-r2
+- ECL 9.12.3 (with threads and unicode)
 
 #### SBCL note
 
