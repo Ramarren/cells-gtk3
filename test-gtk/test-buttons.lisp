@@ -36,7 +36,9 @@
 						      (error 'gtk-continuable-error :text "Oops!")))
 			     (mk-button :label "Lisp error (Div 0)"
 					:on-clicked (callback (widget event data)
-						      (print (/ 3 0))))
+						      (print (let ((a 3)
+                                                                   (b 0))
+                                                               (/ a b)))))
                              (mk-toggle-button :md-name :toggled-button
 					       :markup (c? (with-markup (:foreground (if (value self) :red :blue))
 							     "_Toggled Button")))
