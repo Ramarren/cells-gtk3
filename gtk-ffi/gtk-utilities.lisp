@@ -199,16 +199,17 @@
     (gtk-tree-model-get model iter col return-buffer -1)
     (cffi:mem-ref return-buffer (as-gtk-type-name col-type))))
 
+;;; These seem both overly convoluted, not used in other code and not exported. Remove?
 (progn
   (defun alloc-col-type-buffer (col-type)
     (ecase col-type
-      ((:string :icon) (uffi:allocate-foreign-object '(:array :cstring) 1))
-      (:boolean (uffi:allocate-foreign-object '(:array :unsigned-byte) 1)) ;;guess
-      (:date (uffi:allocate-foreign-object '(:array :float) 1))
-      (:int (uffi:allocate-foreign-object '(:array :int) 1))
-      (:long (uffi:allocate-foreign-object '(:array :long) 1))
-      (:float (uffi:allocate-foreign-object '(:array :float) 1))
-      (:double (uffi:allocate-foreign-object '(:array :double) 1))))
+      ((:string :icon) (cffi:foreign-alloc '(:array :pointer 1)))
+      (:boolean (cffi:foreign-alloc '(:array :unsigned-char 1))) ;;guess
+      (:date (cffi:foreign-alloc '(:array :float 1)))
+      (:int (cffi:foreign-alloc '(:array :int 1)))
+      (:long (cffi:foreign-alloc '(:array :long 1)))
+      (:float (cffi:foreign-alloc '(:array :float 1)))
+      (:double (cffi:foreign-alloc '(:array :double 1)))))
   
   (defun deref-col-type-buffer (col-type buffer)
     (ecase col-type
