@@ -27,12 +27,12 @@
                      (setf (value self) (get-date self))))
 
 (defmethod get-date ((self calendar))
-  (cffi:with-foreign-objects ((year gtk-ffi::guint) (month gtk-ffi::guint) (day gtk-ffi::guint))
+  (cffi:with-foreign-objects ((year 'gtk-ffi::guint) (month 'gtk-ffi::guint) (day 'gtk-ffi::guint))
     (gtk-calendar-get-date (id self) year month day)
     (encode-universal-time 0 0 0
-                           (cffi:mem-ref day gtk-ffi::guint)
-                           (1+ (cffi:mem-ref month gtk-ffi::guint))
-                           (cffi:mem-ref year gtk-ffi::guint))))
+                           (cffi:mem-ref day 'gtk-ffi::guint)
+                           (1+ (cffi:mem-ref month 'gtk-ffi::guint))
+                           (cffi:mem-ref year 'gtk-ffi::guint))))
 
 (defobserver init ((self calendar))
   (when new-value
