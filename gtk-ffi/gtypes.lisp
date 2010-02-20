@@ -55,11 +55,11 @@
 (cffi:defctype guint64 :uint64)
 (cffi:defctype gfloat :float)
 (cffi:defctype gdouble :double)
-(cffi:defctype gsize :ulong)
-(cffi:defctype gssize :long)
+(cffi:defctype gsize :uint)
+(cffi:defctype gssize :int)
 (cffi:defctype goffset gint64)
-(cffi:defctype gintptr :long)
-(cffi:defctype guintptr :ulong)
+(cffi:defctype gintptr :int)
+(cffi:defctype guintptr :uint)
 
 ;;; types with translation
 
