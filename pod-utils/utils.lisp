@@ -38,7 +38,7 @@
 	   clear-memoize defun-memoize VARS mac mac2 load-ht when-bind if-bind when-bind* 
 	   substring remove-extra-spaces break-line-at read-string-to-list split 
 	   name2initials c-name2lisp lisp-name2c single-p mklist longer group prune find2 before 
-	   duplicate split-if mvb mvs dbind decode-time-interval strcat tree-search depth-first-search 
+	   duplicate split-if mvs dbind decode-time-interval strcat tree-search depth-first-search 
 	   prepend breadth-first-search update with-stack-size pprint-without-strings chop setx
 	   reuse-cons intersect-predicates
 	   defmemo system-clear-memoized-fns system-add-memoized-fn system-list-memoized-fns
@@ -446,9 +446,6 @@
       (push (car src) acc))))
 
 ;;; Why waste your life away typing?
-(defmacro mvb (vars form &body body)
-  `(multiple-value-bind ,vars ,form ,@body))
-
 (defmacro mvs (vars form &body body)
   `(multiple-value-setq ,vars ,form ,@body))
 
