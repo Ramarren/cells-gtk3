@@ -50,9 +50,9 @@
 
 #+libcellsgtk
 (cffi:define-foreign-library :cgtk
-  (cffi-features:darwin #.(merge-pathnames "libcellsgtk.dylib" *compile-file-pathname*))
-  (cffi-features:unix #.(merge-pathnames "libcellsgtk.so" *compile-file-pathname*))
-  (cffi-features:windows #.(merge-pathnames "libcellsgtk.dll" *compile-file-pathname*)))
+  (cffi-features:darwin #.(namestring (merge-pathnames "libcellsgtk.dylib" *compile-file-pathname*)))
+  (cffi-features:unix #.(namestring (merge-pathnames "libcellsgtk.so" *compile-file-pathname*)))
+  (cffi-features:windows #.(namestring (merge-pathnames "libcellsgtk.dll" *compile-file-pathname*))))
 
 ;;; comment moved from gtk-ffi.lisp
 ;;; LW Win32 is hanging on POD's machine only:
