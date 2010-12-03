@@ -8,7 +8,8 @@
 	       :gtk-ffi
 	       :ph-maths
 	       #+cells-gtk-cairo :cl-cairo2
-	       #+cells-gtk-cairo :cl-cairo2-xlib
+	       #+(and cells-gtk-cairo unix) :cl-cairo2-xlib
+	       #+(and cells-gtk-cairo win32) :cl-cairo2-win32
 	       #+cells-gtk-threads :bordeaux-threads
 	       #+cells-gtk-opengl :cl-opengl
 	       #+cells-gtk-opengl :cl-glu
