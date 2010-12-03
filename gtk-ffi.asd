@@ -7,6 +7,7 @@
   :depends-on (:cells
 	       :pod-utils
 	       :cffi
+               :trivial-features
 	       :utils-kt
 	       #+cells-gtk-threads :bordeaux-threads
 	       )
