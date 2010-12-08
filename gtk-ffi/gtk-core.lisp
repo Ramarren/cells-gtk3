@@ -41,6 +41,7 @@
 		     (gerror :pointer))))
 
 (def-gtk-lib-functions :gthread
+    (g-thread-get-initialized gboolean nil)
     (g-thread-init :void ((vtable :pointer))))
 
 (def-gtk-lib-functions :gdk

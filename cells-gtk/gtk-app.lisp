@@ -135,9 +135,6 @@
 
 ;;; Initialize GDK
 
-;;; When we have libcellsgtk, we can use a glib function to check whether
-;;; is initialized.  Otherwise we need a variable
-
 (defvar *gtk-loaded* #+clisp t #-clisp nil) ;; kt: looks like CLisp does this on its own
 
 (defun cells-gtk-init ()
@@ -148,26 +145,23 @@
     (setf *gtk-loaded* t))
   (gtk-reset))
 
-(let (#-libcellsgtk (threading-initialized nil))
-  (defun init-gtk (&key close-all-windows)
-    "Replacement for cells-gtk-init. Threadsafe. Use to reset cells-gtk to a defined state."    
-    (unless *gtk-loaded*		; make sure gtk is loaded
-      (gtk-ffi:load-gtk-libs)
-      (setf *gtk-loaded* t))
-    (when close-all-windows
-      (gtk-main-quit))
-    (when #+libcellsgtk (= 0 (gtk-adds-g-thread-supported)) ; init only once
-	  #-libcellsgtk (not threading-initialized)
-	  (with-trcs
-            #+cells-gtk-threads
-            (progn
-              (g-thread-init +c-null+)	; init threading
-              (gdk-threads-init))
-	    (assert (gtk-init-check +c-null+ +c-null+))
-	    (gtk-init +c-null+ +c-null+)
-	    #+cells-gtk-opengl (gl-init)
-	    (gtk-reset)
-	    #-libcellsgtk (setf threading-initialized t)))))
+(defun init-gtk (&key close-all-windows)
+  "Replacement for cells-gtk-init. Threadsafe. Use to reset cells-gtk to a defined state."    
+  (unless *gtk-loaded*                  ; make sure gtk is loaded
+    (gtk-ffi:load-gtk-libs)
+    (setf *gtk-loaded* t))
+  (when close-all-windows
+    (gtk-main-quit))
+  (unless (g-thread-get-initialized)    ; init only once
+    (with-trcs
+      #+cells-gtk-threads
+      (progn
+        (g-thread-init +c-null+)	; init threading
+        (gdk-threads-init))
+      (assert (gtk-init-check +c-null+ +c-null+))
+      (gtk-init +c-null+ +c-null+)
+      #+cells-gtk-opengl (gl-init)
+      (gtk-reset))))
 
 ;;;  Instantiate and show app (show splash)
 
