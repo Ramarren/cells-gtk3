@@ -48,12 +48,6 @@
   (:unix (:or "libgtk-x11-2.0.so" "libgtk-x11-2.0.so.0"))
   (:windows "libgtk-win32-2.0-0.dll"))
 
-#+libcellsgtk
-(cffi:define-foreign-library :cgtk
-  (:darwin #.(namestring (merge-pathnames "libcellsgtk.dylib" *compile-file-pathname*)))
-  (:unix #.(namestring (merge-pathnames "libcellsgtk.so" *compile-file-pathname*)))
-  (:windows #.(namestring (merge-pathnames "libcellsgtk.dll" *compile-file-pathname*))))
-
 ;;; comment moved from gtk-ffi.lisp
 ;;; LW Win32 is hanging on POD's machine only:
 ;;; (fli:register-module "libgdk-win32-2.0-0.dll" :connection-style :immediate)
@@ -66,5 +60,4 @@
     (cffi:load-foreign-library :glib)
     (cffi:load-foreign-library :gthread)
     (cffi:load-foreign-library :gdk)
-    (cffi:load-foreign-library :gtk)
-    #+libcellsgtk (cffi:load-foreign-library :cgtk)))
+    (cffi:load-foreign-library :gtk)))
