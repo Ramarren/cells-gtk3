@@ -70,12 +70,11 @@
            collect `(funcall #'make-instance 'populate-adds ,@args))))
 
 (cffi:defcallback text-view-populate-popup-handler :void
-                  ((widget :pointer) (signal :pointer) (data :pointer))
+                  ((widget :pointer) (popup-menu :pointer) (data :pointer))
   (declare (ignore data signal))
-  (let ((popup-menu (gtk-adds-text-view-popup-menu widget)))
-    (when-bind (text-view (gtk-object-find widget))
-      (when-bind (cb (callback-recover text-view :populate-popup))
-        (funcall cb popup-menu))))
+  (when-bind (text-view (gtk-object-find widget))
+    (when-bind (cb (callback-recover text-view :populate-popup))
+      (funcall cb popup-menu)))
   1)
 
 (defobserver populate-popup ((self text-view))

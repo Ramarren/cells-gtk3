@@ -19,16 +19,6 @@ asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
 
-/*  Return a pointer to the popup_menu of a textview. 
- *  Useful if you need to add to the default textview menu
- *  on a populate-popup event. 
- */
-
-GtkWidget *
-gtk_adds_text_view_popup_menu (GtkWidget *text_view)
-{
-  return GTK_TEXT_VIEW(text_view)->popup_menu;
-}
 
 /* C programmers allocate iters on the stack. We use this.
    Free it with gtk-text-iter-free */

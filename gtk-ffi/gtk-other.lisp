@@ -870,8 +870,6 @@
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk
-  (gtk-adds-text-view-popup-menu :pointer
-				 ((treeview :pointer)))
   (gtk-adds-text-iter-new :pointer ())
   (gtk-adds-tree-iter-new :pointer ())
   (gtk-adds-widget-visible-p :int
@@ -904,7 +902,6 @@
 #-libcellsgtk
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (you-need-libcellsgtk
-   gtk-adds-text-view-popup-menu
    gtk-adds-text-iter-new
    gtk-adds-tree-iter-new
    gtk-adds-widget-mapped-p
