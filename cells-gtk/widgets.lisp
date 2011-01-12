@@ -347,8 +347,7 @@
   (declare (ignore data event))
   (trc nil "reshape" widget)
   (bwhen (self (gtk-object-find widget))
-    (let ((new-width (gtk-adds-widget-width widget))
-	  (new-height (gtk-adds-widget-height widget)))
+    (multiple-value-bind (new-width new-height) (gtk-widget-size widget)
       (trc nil "reshape widget to new size" self widget new-width new-height)
       (with-integrity (:change :adjust-widget-size)
 	(setf (allocated-width self) new-width

@@ -871,7 +871,7 @@
     (gtk-widget-get-mapped gboolean ((widget :pointer)))
     (gtk-widget-get-visible gboolean ((widget :pointer)))
     (gtk-widget-get-window :pointer ((widget :pointer)))
-    (gtk-widget-get-allocation :pointer ((widget :pointer))))
+    (gtk-widget-get-allocation :pointer ((widget :pointer) (allocation :pointer))))
 
 ;; not sure if this is right, but the auxiliary C code does something equivalent
 
@@ -895,7 +895,17 @@
   (height gint))
 
 (defun gtk-adds-widget-width (widget)
-  (cffi:foreign-slot-value (gtk-widget-get-allocation widget) 'gtk-allocation 'width))
+  (cffi:with-foreign-object (allocation 'gtk-allocation)
+    (gtk-widget-get-allocation widget allocation)
+    (cffi:foreign-slot-value allocation 'gtk-allocation 'width)))
 
 (defun gtk-adds-widget-height (widget)
-  (cffi:foreign-slot-value (gtk-widget-get-allocation widget) 'gtk-allocation 'height))
+  (cffi:with-foreign-object (allocation 'gtk-allocation)
+    (gtk-widget-get-allocation widget allocation)
+    (cffi:foreign-slot-value allocation 'gtk-allocation 'height)))
+
+(defun gtk-widget-size (widget)
+  (cffi:with-foreign-object (allocation 'gtk-allocation)
+    (gtk-widget-get-allocation widget allocation)
+    (values (cffi:foreign-slot-value allocation 'gtk-allocation 'width)
+            (cffi:foreign-slot-value allocation 'gtk-allocation 'height))))

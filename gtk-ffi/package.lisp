@@ -187,6 +187,7 @@
 	   #:gtk-text-buffer-get-iter-at-offset #:gtk-label-set-text #:gtk-tree-model-get-iter
 	   #:gtk-tool-button-set-use-underline #:gtk-ui-manager-new
 	   #:gtk-radio-menu-item-new-from-widget #:gtk-dialog-run #:gtk-adds-widget-width
+           #:gtk-widget-size
 	   #:gtk-radio-menu-item-new-with-label-from-widget #:gtk-tree-store-new
 	   #:gtk-image-get-pixbuf #:gtk-window-unfullscreen #:gtk-text-view-scroll-to-iter
 	   #:gtk-notebook-set-show-tabs #:gtk-list-store-new #:gtk-notebook-append-page
