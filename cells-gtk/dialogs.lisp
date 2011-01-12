@@ -48,7 +48,7 @@
 (defobserver content-area ((self message-dialog))
   (when new-value
     (trc "adding content area" self)
-    (let ((vbox (gtk-adds-dialog-vbox (id self))))
+    (let ((vbox (gtk-dialog-get-content-area (id self))))
         (gtk-box-pack-start vbox (id new-value) nil nil 5))))
 
 (defobserver buttons ((self message-dialog))

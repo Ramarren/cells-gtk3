@@ -18,15 +18,6 @@ asm (".ascii \" -export:gtk_adds_g_thread_supported\"");
 asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
-/*  Return a pointer to the vbox of a dialog. 
- *  Useful for adding widgets to dialogs. For example,
- *  if you need a dialog with text entry capability. 
- */
-GtkWidget *
-gtk_adds_dialog_vbox (GtkWidget *dialog)
-{
-  return GTK_DIALOG(dialog)->vbox;
-}
 
 /*  Return a pointer to the popup_menu of a textview. 
  *  Useful if you need to add to the default textview menu

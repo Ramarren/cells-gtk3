@@ -863,11 +863,13 @@
   (gtk-widget-create-pango-layout :pointer
 				  ((widget :pointer)
 				   (text gtk-string))))
+;;; replacements for libcellsgtk
+(def-gtk-lib-functions :cgtk
+    (gtk-dialog-get-content-area :pointer ((dialog :pointer))))
+
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk
-  (gtk-adds-dialog-vbox :pointer
-			((dialog :pointer)))
   (gtk-adds-text-view-popup-menu :pointer
 				 ((treeview :pointer)))
   (gtk-adds-text-iter-new :pointer ())
@@ -902,7 +904,6 @@
 #-libcellsgtk
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (you-need-libcellsgtk
-   gtk-adds-dialog-vbox
    gtk-adds-text-view-popup-menu
    gtk-adds-text-iter-new
    gtk-adds-tree-iter-new
