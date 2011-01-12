@@ -257,4 +257,13 @@
 	   #:gtk-widget-add-accelerator #:gtk-widget-get-parent-window #:gtk-tree-view-insert-column
 	   #:gtk-action-group-remove-action #:gtk-spin-button-set-value #:gtk-frame-set-label-align
 	   #:gtk-widget-hide #:gtk-tooltips-disable #:gtk-range-set-increments
-	   #:gtk-notebook-prepend-page-menu #:gdk-gl-window-destroy))
+	   #:gtk-notebook-prepend-page-menu #:gdk-gl-window-destroy
+           #:gtk-text-iter-copy #:gtk-widget-get-allocation
+           #:g-object-ref-sink
+           #:gtk-bin-get-child
+           #:gtk-button-set-use-underline
+           #:g-object-unref
+           #:g-object-is-floating #:g-object-ref
+           #:gtk-tree-view-append-column
+           #:g-thread-get-initialized
+           #:gtk-tree-iter-copy))
