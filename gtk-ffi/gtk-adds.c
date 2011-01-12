@@ -19,22 +19,6 @@ asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
 
-/* You can run this one without having gtk running, to be sure the library was loaded. */
-int
-gtk_adds_ok ()
-{
-  return 1;
-}
-
-/* This macro tells us whether g_thread_init has already been called from this session
-   This is important to avoid double initialization, which kills the current lisp session */
-
-int
-gtk_adds_g_thread_supported ()
-{
-  return g_thread_supported ();
-}
-
 /* This is to return the new allocated height/width after the user reshapes a widget */
 int
 gtk_adds_widget_height (GtkWidget *wid)

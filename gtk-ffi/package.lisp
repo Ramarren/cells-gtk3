@@ -172,7 +172,7 @@
 	   #:c-pointer #:g-value-set-float #:gtk-tree-model-get-iter-from-string #:uint32
 	   #:gtk-tree-path-free #:gtk-text-buffer-get-end-iter #:gtk-scrolled-window-set-policy
 	   #:gtk-drawing-set-handlers #:single-float #:gtk-scrolled-window-new
-	   #:gtk-adds-g-thread-supported #:int #:gtk-file-chooser-widget-new #:gtk-accel-label-new
+           #:int #:gtk-file-chooser-widget-new #:gtk-accel-label-new
 	   #:gtk-spin-button-new #:gtk-separator-menu-item-new #:gdk-gl-config-is-rgba
 	   #:gtk-box-pack-start #:gtk-accel-label-set-accel-widget #:gtk-widget-add-events
 	   #:with-g-value #:with-tree-iter #:gtk-check-menu-item-get-active
