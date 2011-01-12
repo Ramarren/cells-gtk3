@@ -125,7 +125,7 @@
 	   #:gtk-action-group-set-visible #:gtk-action-group-add-action-with-accel
 	   #:gdk-event-button-y #:col-type-to-ffi-type #:gtk-cell-renderer-toggle-new #:sint32
 	   #:gtk-statusbar-pop #:gtk-adds-ok #:gtk-box-pack-start-defaults
-	   #:gtk-tree-view-column-set-visible #:gtk-adds-widget-visible-p #:make-gtk-tree-iter
+	   #:gtk-tree-view-column-set-visible #:gtk-widget-get-visible #:make-gtk-tree-iter
 	   #:gboolean #:gtk-ui-manager-set-add-tearoffs #:gtk-file-chooser-get-current-folder
 	   #:gtk-combo-box-entry-set-text-column #:g-thread-init #:gtk-event-box-new
 	   #:gtk-label-set-text-with-mnemonic #:gtk-entry-set-text #:gtk-hpaned-new #:gtk-paned-add2
@@ -225,7 +225,7 @@
 	   #:gtk-window-set-default-size #:gtk-list-store-newv #:gtk-progress-bar-pulse
 	   #:with-gtk-string #:gdk-gl-drawable-gl-end #:gtk-list-store-clear #:gtk-widget-set-events
 	   #:gdk-gl-config-is-double-buffered #:gtk-adds-color-set-rgb #:gtk-expander-set-expanded
-	   #:gtk-entry-completion-new #:g-value-unset #:gtk-adds-widget-mapped-p
+	   #:gtk-entry-completion-new #:g-value-unset #:gtk-widget-get-mapped
 	   #:gtk-tree-row-reference-valid #:gtk-image-new-from-stock #:g-locale-to-utf8
 	   #:gtk-progress-bar-set-orientation #:gtk-range-set-value #:gtk-quit-add
 	   #:gtk-tree-view-column-set-clickable #:gtk-file-filter-new #:gtk-tree-view-set-model
