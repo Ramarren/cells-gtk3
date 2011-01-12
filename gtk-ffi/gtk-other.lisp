@@ -889,29 +889,6 @@
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk
-  (gtk-adds-color-new :pointer ())
-  (gtk-adds-color-set-rgb :void
-			  ((gdkcolor :pointer)
-			   (red :unsigned-int)
-			   (green :unsigned-int)
-			   (blue :unsigned-int)))
   (gtk-adds-ok :int ())
   (gtk-adds-widget-width :int ((widget :pointer)))
   (gtk-adds-widget-height :int ((widget :pointer))))
-
-
-#-libcellsgtk
-(defmacro you-need-libcellsgtk (&body names)
-  `(progn
-     ,@(loop for name in names
-           collect `(progn
-                      (export '(,name))
-                      (defun ,name (&rest ignore) 
-                        (declare (ignore ignore))
-                        (error "You need libcellsgtk.so to use function ~A." ',name))))))
-
-#-libcellsgtk
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (you-need-libcellsgtk
-   gtk-adds-color-new
-   gtk-adds-color-set-rgb))

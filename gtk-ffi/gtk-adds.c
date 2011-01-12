@@ -19,20 +19,6 @@ asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
 
-GdkColor *
-gtk_adds_color_new ()
-{
-    return ((GdkColor *)malloc(sizeof(GdkColor)));
-}
-
-void
-gtk_adds_color_set_rgb (GdkColor* color, guint r, guint g, guint b)
-{
-    color->red = r;
-    color->green = g;
-    color->blue = b;
-}
-
 /* You can run this one without having gtk running, to be sure the library was loaded. */
 int
 gtk_adds_ok ()
