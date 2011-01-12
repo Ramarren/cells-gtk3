@@ -870,7 +870,8 @@
     (gtk-tree-iter-copy :pointer ((iter :pointer)))
     (gtk-widget-get-mapped gboolean ((widget :pointer)))
     (gtk-widget-get-visible gboolean ((widget :pointer)))
-    (gtk-widget-get-window :pointer ((widget :pointer))))
+    (gtk-widget-get-window :pointer ((widget :pointer)))
+    (gtk-widget-get-allocation :pointer ((widget :pointer))))
 
 ;; not sure if this is right, but the auxiliary C code does something equivalent
 
@@ -886,9 +887,15 @@
   (cffi:with-foreign-pointer (dummy 4096)
     (gtk-tree-iter-copy dummy)))
 
-;;; t3
-#+libcellsgtk
-(def-gtk-lib-functions :cgtk
-  (gtk-adds-ok :int ())
-  (gtk-adds-widget-width :int ((widget :pointer)))
-  (gtk-adds-widget-height :int ((widget :pointer))))
+;; since this is in documentation I assume the layout is stable
+(cffi:defcstruct gtk-allocation
+  (x gint)
+  (y gint)
+  (width gint)
+  (height gint))
+
+(defun gtk-adds-widget-width (widget)
+  (cffi:foreign-slot-value (gtk-widget-get-allocation widget) 'gtk-allocation 'width))
+
+(defun gtk-adds-widget-height (widget)
+  (cffi:foreign-slot-value (gtk-widget-get-allocation widget) 'gtk-allocation 'height))
