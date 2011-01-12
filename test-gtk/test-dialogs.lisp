@@ -29,8 +29,6 @@
 	     (mk-hbox
 	      :kids (kids-list?
 		     (append
-		      #-libcellsgtk nil
-		      #+libcellsgtk 
 		      (list 
 		       (mk-button :label "Query for text"
 				  :on-clicked 

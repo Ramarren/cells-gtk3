@@ -18,20 +18,19 @@
 	      :kids (kids-list?
 		     (mk-text-view 	      
 		      :buffer (c? (buffer (upper self test-textview)))
-                       #+libcellsgtk :populate-popup
-                       #+libcellsgtk 
-                       (c?
-                         (def-populate-adds
-                           (:menu-item :label "Mark something yellow"
-                                       :owner self
-                                       :on-activate 
-                                       (callback (w e d)
-                                         (let ((buf (buffer (owner self))))
-                                           (setf (markup buf) ; implementation idea... ;^)
-                                                   (list 
-                                                    (make-instance 'color-tag :start 10 :end 20
-                                                                   :name :yellow-background)))
-                                           (apply-markup (first (markup buf)) buf))))))))))))
+                      :populate-popup
+                      (c?
+                        (def-populate-adds
+                          (:menu-item :label "Mark something yellow"
+                                      :owner self
+                                      :on-activate 
+                                      (callback (w e d)
+                                        (let ((buf (buffer (owner self))))
+                                          (setf (markup buf) ; implementation idea... ;^)
+                                                (list 
+                                                 (make-instance 'color-tag :start 10 :end 20
+                                                                :name :yellow-background)))
+                                          (apply-markup (first (markup buf)) buf))))))))))))
                                          
 (defmethod xtv-create-tag-table ((self text-buffer))
   (let ((ht (make-hash-table)))
@@ -78,5 +77,3 @@
       (with-text-iters (iter)
         (gtk-text-buffer-get-iter-at-offset buf iter pos)
         (setf c-ptr (gtk-text-buffer-create-mark buf (symbol-name (gensym)) iter t))))))
-
-

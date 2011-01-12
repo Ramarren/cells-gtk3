@@ -145,7 +145,6 @@
                                      (mk-label 
                                       :text (c? (format nil "Combo value ~a" (value (fm^ :combo)))))))
                              (mk-hseparator :padding 5)
-                             #+libcellsgtk
                              (mk-hbox
                               :kids (kids-list?
                                      (mk-combo-box 

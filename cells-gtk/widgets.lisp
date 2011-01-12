@@ -342,7 +342,6 @@
   ;; this is called unless the user overwrites this routine
   )
 
-#+libcellsgtk
 (cffi:defcallback reshape-widget-handler :int ((widget :pointer) (event :pointer) (data :pointer))
   (declare (ignore data event))
   (trc nil "reshape" widget)
@@ -354,10 +353,8 @@
 	      (allocated-height self) new-height))))
   0)
 
-#+libcellsgtk
 (defmethod md-awaken :after ((self widget))
   (gtk-signal-connect-swap (id self) "configure-event" (cffi:get-callback 'reshape-widget-handler) :data (id self)))
-
 
 (defmethod focus ((self widget))
   (gtk-widget-grab-focus (id self)))
