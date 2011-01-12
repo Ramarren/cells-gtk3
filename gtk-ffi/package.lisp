@@ -133,7 +133,7 @@
 	   #:gtk-calendar-get-date #:gtk-button-set-use-stock
 	   #:gtk-text-view-scroll-mark-onscreen #:gtk-widget-grab-focus #:gtk-drawing-area-new
 	   #:gtk-adds-text-view-popup-menu #:gtk-widget-queue-draw #:gtk-hscale-new-with-range
-	   #:gtk-adds-dialog-vbox #:gtk-file-chooser-get-uri #:gtk-dialog-new #:gtk-menu-item-new
+	   #:gtk-dialog-get-content-area #:gtk-file-chooser-get-uri #:gtk-dialog-new #:gtk-menu-item-new
 	   #:gtk-spin-button-get-value #:gtk-range-get-value #:gtk-tooltips-enable
 	   #:gtk-notebook-new #:gtk-icon-set-new-from-pixbuf #:gtk-widget-set-gl-capability
 	   #:g-value-set-boolean #:gtk-window-unmaximize #:gtk-entry-completion-set-model
