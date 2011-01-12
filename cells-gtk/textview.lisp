@@ -161,12 +161,3 @@
 
 (defmethod (setf text-buffer-modified-p) (val (buffer text-buffer))
   (gtk-text-buffer-set-modified (id buffer) val))
-
-
-
-
-
-
-
-
-
