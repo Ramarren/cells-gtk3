@@ -20,24 +20,6 @@ asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
 
 
-/* C programmers allocate iters on the stack. We use this.
-   Free it with gtk-text-iter-free */
-GtkTextIter *
-gtk_adds_text_iter_new ()
-{
-  GtkTextIter example;
-  return gtk_text_iter_copy(&example);
-}
-
-/* C programmers allocate iters on the stack. We use this.
-   Free it with gtk-tree-iter-free */
-
-GtkTreeIter *
-gtk_adds_tree_iter_new ()
-{
-  GtkTreeIter example;
-  return gtk_tree_iter_copy(&example);
-}
 
 int gtk_adds_widget_mapped_p (GtkWidget *wid)
 { 

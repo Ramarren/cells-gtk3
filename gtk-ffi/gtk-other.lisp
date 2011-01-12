@@ -865,13 +865,27 @@
 				   (text gtk-string))))
 ;;; replacements for libcellsgtk
 (def-gtk-lib-functions :cgtk
-    (gtk-dialog-get-content-area :pointer ((dialog :pointer))))
+    (gtk-dialog-get-content-area :pointer ((dialog :pointer)))
+    (gtk-text-iter-copy :pointer ((iter :pointer)))
+    (gtk-tree-iter-copy :pointer ((iter :pointer))))
+
+;; not sure if this is right, but the auxiliary C code does something equivalent
+
+;; This allocates an iterator of proper size copying random memory spot. Not sure why the iterator
+;; cannot be allocated directly, but GTK does not expose a 'new' function, and C code is supposed to
+;; allocate iterators on stack. The 'copy' function is provided for language bindings, but I do not
+;; see where to get size information, so I allocate a dummy block.
+(defun gtk-adds-text-iter-new ()
+  (cffi:with-foreign-pointer (dummy 4096)
+    (gtk-text-iter-copy dummy)))
+
+(defun gtk-adds-tree-iter-new ()
+  (cffi:with-foreign-pointer (dummy 4096)
+    (gtk-tree-iter-copy dummy)))
 
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk
-  (gtk-adds-text-iter-new :pointer ())
-  (gtk-adds-tree-iter-new :pointer ())
   (gtk-adds-widget-visible-p :int
 			     ((widget :pointer)))
   (gtk-adds-widget-mapped-p :int
@@ -902,8 +916,6 @@
 #-libcellsgtk
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (you-need-libcellsgtk
-   gtk-adds-text-iter-new
-   gtk-adds-tree-iter-new
    gtk-adds-widget-mapped-p
    gtk-adds-widget-visible-p
    gtk-adds-widget-window
