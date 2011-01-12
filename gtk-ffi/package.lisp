@@ -118,7 +118,7 @@
 	   #:gtk-widget-destroy #:gtk-main #:gtk-window-deiconify #:gtk-notebook-prepend-page
 	   #:gtk-window-set-resizable #:gtk-range-set-range #:gtk-tree-store-set-cell
 	   #:gtk-file-chooser-set-select-multiple #:gtk-menu-item-set-submenu
-	   #:gtk-adds-widget-window #:gdk-event-button-x #:gtk-tool-item-set-homogeneous
+	   #:gtk-widget-get-window #:gdk-event-button-x #:gtk-tool-item-set-homogeneous
 	   #:gtk-text-buffer-get-iter-at-mark #:gtk-tool-item-set-expand
 	   #:gtk-menu-item-remove-submenu #:gtk-check-menu-item-new-with-label
 	   #:gtk-notebook-insert-page #:gtk-tree-view-column-set-expand

@@ -19,24 +19,6 @@ asm (".ascii \" -export:gtk_adds_widget_height\"");
 asm (".ascii \" -export:gtk_adds_widget_width\"");
 #endif
 
-
-
-int gtk_adds_widget_mapped_p (GtkWidget *wid)
-{ 
-    return ((GTK_WIDGET_FLAGS (wid) & GTK_MAPPED) != 0) ? 1 : 0;
-}
-
-int gtk_adds_widget_visible_p (GtkWidget *wid)
-{ 
-    return ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0) ? 1 : 0;
-}
-
-GdkWindow * 
-gtk_adds_widget_window (GtkWidget *wid)
-{
-    return wid->window;
-}
-
 GdkColor *
 gtk_adds_color_new ()
 {

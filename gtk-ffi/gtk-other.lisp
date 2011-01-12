@@ -869,7 +869,8 @@
     (gtk-text-iter-copy :pointer ((iter :pointer)))
     (gtk-tree-iter-copy :pointer ((iter :pointer)))
     (gtk-widget-get-mapped gboolean ((widget :pointer)))
-    (gtk-widget-get-visible gboolean ((widget :pointer))))
+    (gtk-widget-get-visible gboolean ((widget :pointer)))
+    (gtk-widget-get-window :pointer ((widget :pointer))))
 
 ;; not sure if this is right, but the auxiliary C code does something equivalent
 
@@ -888,8 +889,6 @@
 ;;; t3
 #+libcellsgtk
 (def-gtk-lib-functions :cgtk
-  (gtk-adds-widget-window :pointer
-			  ((widget :pointer)))
   (gtk-adds-color-new :pointer ())
   (gtk-adds-color-set-rgb :void
 			  ((gdkcolor :pointer)
@@ -914,6 +913,5 @@
 #-libcellsgtk
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (you-need-libcellsgtk
-   gtk-adds-widget-window
    gtk-adds-color-new
    gtk-adds-color-set-rgb))
