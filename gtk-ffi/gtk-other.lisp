@@ -881,10 +881,12 @@
 ;; see where to get size information, so I allocate a dummy block.
 (defun gtk-adds-text-iter-new ()
   (cffi:with-foreign-pointer (dummy 4096)
+    (loop for i from 0 below 512 do (setf (cffi:mem-aref dummy :uint64 i) 0))
     (gtk-text-iter-copy dummy)))
 
 (defun gtk-adds-tree-iter-new ()
   (cffi:with-foreign-pointer (dummy 4096)
+    (loop for i from 0 below 512 do (setf (cffi:mem-aref dummy :uint64 i) 0))
     (gtk-tree-iter-copy dummy)))
 
 ;; since this is in documentation I assume the layout is stable
