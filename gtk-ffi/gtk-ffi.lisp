@@ -204,18 +204,8 @@
   (data gpointer)
   (next gpointer))
 
-(def-c-struct gtk-tree-iter
-  (stamp gint)
-  (user-data gpointer)
-  (user-data2 gpointer)
-  (user-data3 gpointer))
-
 (defmacro with-tree-iter ((iter-var) &body body)
-  `(cffi:with-foreign-object (,iter-var 'gtk-tree-iter)
-     (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'stamp) 0)
-     (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data) +c-null+)
-     (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data2) +c-null+)
-     (setf (cffi:foreign-slot-value ,iter-var 'gtk-tree-iter 'user-data3) +c-null+)
+  `(let ((,iter-var (gtk-adds-tree-iter-new)))
      ,@body))
 
 (defun as-gtk-type-name (type)
