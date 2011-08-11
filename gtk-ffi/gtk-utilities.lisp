@@ -133,11 +133,11 @@
       (gvi :post-set))))
 
 (defun gtk-tree-store-new (col-types)
-  (let ((gtk-types (cffi:foreign-alloc :int :count (length col-types))))
+  (cffi:with-foreign-object (c-types 'gtype (length col-types))
     (loop for type in col-types
-          for tn upfrom 0
-          do (setf (cffi:mem-aref gtk-types :int tn) (coerce (as-gtk-type type) 'integer)))
-    (gtk-tree-store-newv (length col-types) gtk-types)))
+          for n upfrom 0
+          do (setf (cffi:mem-aref c-types 'gtype n) (coerce (as-gtk-type type) 'integer)))
+    (gtk-tree-store-newv (length col-types) c-types)))
 
 (defun gtk-tree-store-set-cell (tstore iter col type data)
   "Sets the value of one cell in a row referenced by iter and a col referenced by col."
