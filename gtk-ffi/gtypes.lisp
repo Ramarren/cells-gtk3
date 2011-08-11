@@ -103,7 +103,8 @@
 
 ;;; gobject
 
-(cffi:defctype gtype gsize)
+#+cells-gtk-gtype-is-gulong (cffi:defctype gtype gulong)
+#-cells-gtk-gtype-is-gulong (cffi:defctype gtype gsize)
 
 ;;; enums
 

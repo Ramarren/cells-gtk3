@@ -16,6 +16,9 @@
 ;;; drawing-area widget using OpenGL (requires libgtkglext1)
 (pushnew :cells-gtk-opengl *features*)
 
+;;; gtype with size
+(pushnew :cells-gtk-gtype-is-gulong *features*)
+
 ;;; library path for MacPorts
 #+darwin (progn
            (asdf:oos 'asdf:load-op :cffi)
