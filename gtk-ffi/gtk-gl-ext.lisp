@@ -20,9 +20,18 @@ This is taken from
 (cffi:define-foreign-library libgtkglext
   (:darwin "libgtkglext-x11-1.0.dylib")
   (:unix (:or "libgtkglext-x11-1.0.so" "libgtkglext-x11-1.0.so.0"))
+  (:windows "libgtkglext-win32-1.0-0.dll")
   (t (:default "libgtkglext")))
    
 (cffi:use-foreign-library libgtkglext)
+
+(cffi:define-foreign-library libgdkglext
+  (:darwin "libgdkglext-x11-1.0.dylib")
+  (:unix (:or "libgdkglext-x11-1.0.so" "libgdkglext-x11-1.0.so.0"))
+  (:windows "libgdkglext-win32-1.0-0.dll")
+  (t (:default "libgdkglext")))
+
+(cffi:use-foreign-library libgdkglext)
 
 (cffi:defbitfield gdk-gl-config-mode
   (:gdk-gl-mode-rgba 0)
@@ -37,26 +46,14 @@ This is taken from
 
 (cffi:defcenum gdk-gl-render-type
     (:gdk-gl-rgba-type #x8014)
-  (:gdk-gl-color-index-type #x8015))
+    (:gdk-gl-color-index-type #x8015))
 
-(def-gtk-lib-functions :gtkglext
-    (gtk-gl-init :void
-		 ((argc :pointer)
-		  (argv :pointer)))
-  (gtk-gl-init-check gboolean
-		     ((argc :pointer)
-		      (argv :pointer)))
+(def-gtk-lib-functions :gdkglext
   (gdk-gl-config-new-by-mode :pointer
 			     ((mode gdk-gl-config-mode)))
   (gdk-gl-config-new-by-mode-for-screen :pointer
 					((screen :pointer)
 					 (mode gdk-gl-config-mode)))
-  (gtk-widget-set-gl-capability gboolean
-				((widget :pointer)
-				 (glconfig :pointer)
-				 (share-list :pointer)
-				 (direct gboolean)
-				 (render-type gdk-gl-render-type)))
   (gdk-gl-config-is-rgba gboolean
 			 ((glconfig :pointer)))
   (gdk-gl-config-is-double-buffered gboolean
@@ -75,10 +72,6 @@ This is taken from
 		      (attrib-list :pointer)))
   (gdk-gl-window-destroy :void
 			 ((window :pointer)))
-  (gtk-widget-get-gl-context :pointer
-			     ((widget :pointer)))
-  (gtk-widget-get-gl-window :pointer
-			    ((widget :pointer)))
   (gdk-gl-drawable-gl-begin gboolean
 			    ((gldrawable :pointer)
 			     (glcontext :pointer)))
@@ -88,6 +81,24 @@ This is taken from
 				      ((gldrawable :pointer)))
   (gdk-gl-drawable-swap-buffers :void
 				((gldrawable :pointer))))
+
+(def-gtk-lib-functions :gtkglext
+  (gtk-gl-init :void
+		 ((argc :pointer)
+		  (argv :pointer)))
+  (gtk-gl-init-check gboolean
+		     ((argc :pointer)
+		      (argv :pointer)))
+  (gtk-widget-set-gl-capability gboolean
+				((widget :pointer)
+				 (glconfig :pointer)
+				 (share-list :pointer)
+				 (direct gboolean)
+				 (render-type gdk-gl-render-type)))
+  (gtk-widget-get-gl-context :pointer
+			     ((widget :pointer)))
+  (gtk-widget-get-gl-window :pointer
+			    ((widget :pointer))))
 
 (defmacro with-gl-drawable (widget &rest body)
   (let ((context (gensym)) (drawable (gensym)))
