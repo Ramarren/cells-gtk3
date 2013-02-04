@@ -136,6 +136,7 @@
 ;;; Initialize GDK
 
 (defvar *gtk-loaded* #+clisp t #-clisp nil) ;; kt: looks like CLisp does this on its own
+(defvar *gtk-initialized* nil)
 
 (defun cells-gtk-init ()
   "initialize cells-gtk.  DO NOT USE WITH THREADING"
@@ -152,16 +153,16 @@
     (setf *gtk-loaded* t))
   (when close-all-windows
     (gtk-main-quit))
-  (unless (g-thread-get-initialized)    ; init only once
+  (unless *gtk-initialized*    ; init only once
     (with-trcs
       #+cells-gtk-threads
       (progn
         (g-thread-init +c-null+)	; init threading
         (gdk-threads-init))
       (assert (gtk-init-check +c-null+ +c-null+))
-      (gtk-init +c-null+ +c-null+)
       #+cells-gtk-opengl (gl-init)
-      (gtk-reset))))
+      (gtk-reset)
+      (setf *gtk-initialized* t))))
 
 ;;;  Instantiate and show app (show splash)
 
